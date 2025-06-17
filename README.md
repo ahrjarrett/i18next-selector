@@ -1,6 +1,6 @@
 # i18next-codemod
 
-This is the jscodeshift codemod that accompanies (this PR)[https://github.com/i18next/i18next/pull/2322], 
+This is the jscodeshift codemod that accompanies [this PR](https://github.com/i18next/i18next/pull/2322),
 which adds a "selector" API to i18next.
 
 The goals of the PR are to:
