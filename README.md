@@ -1,7 +1,8 @@
 # i18next-codemod
 
-This is the jscodeshift codemod that accompanies [this PR](https://github.com/i18next/i18next/pull/2322),
-which adds a "selector" API to i18next.
+This is the jscodeshift codemod that accompanies [this PR](https://github.com/i18next/i18next/pull/2322), which adds a "selector" API to i18next.
+
+## Goals
 
 The goals of the PR are to:
 
@@ -9,3 +10,16 @@ The goals of the PR are to:
 2. decrease the occurence of OOM (out-of-memory) errors when using i18next with tools such as `@typescript-eslint`
 3. improve DX by supporting "go-to definition", allowing users to quickly find, navigate, and troubleshoot their translations
 4. preserve JSDoc annotations at the call-site, making translations easier to understand and share
+
+To see how the codemod behaves, check out the [tests](https://github.com/ahrjarrett/i18next-codemod/blob/main/packages/i18next-codemod/test/transform.test.ts).
+
+## Todos
+
+1. Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
+2. Add support for `react-i18next`
+3. Add support for making translations "zero-cost"
+  - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
+  - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
+    would users to pre-compile translations into the format TypeScript expects
+  - Doing this would allow `i18next` to support translations for TypeScript users at any scale, and would bring allocations
+    down to almost zero
