@@ -20,8 +20,11 @@ To see how the codemod behaves, check out the [tests](https://github.com/ahrjarr
    - This would allow the codemod to adapt to options such as `nsSeparator` and `keySeparator`
 3. Use [`fast-check`](https://github.com/dubzzz/fast-check) to make the test suite more robust
    - That way we get all the bugs out of the way _before_ publishing, rather than having to fix bugs for users over time
-4. Add support for `react-i18next`
-5. Add support for making translations "zero-cost"
+4. Add GitHub Actions to CI/CD pipeline to handle:
+   1. package publishing 
+   2. build artifacts for ESM/CJS
+5. Add support for `react-i18next`
+6. Add support for making translations "zero-cost"
    - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
    - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
     would users to pre-compile translations into the format TypeScript expects
