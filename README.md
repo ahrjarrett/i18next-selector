@@ -18,8 +18,8 @@ To see how the codemod behaves, check out the [tests](https://github.com/ahrjarr
 1. Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
 2. Add support for `react-i18next`
 3. Add support for making translations "zero-cost"
-  - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
-  - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
+   - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
+   - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
     would users to pre-compile translations into the format TypeScript expects
-  - Doing this would allow `i18next` to support translations for TypeScript users at any scale, and would bring allocations
+   - Doing this would allow `i18next` to support translations for TypeScript users at any scale, and would bring allocations
     down to almost zero
