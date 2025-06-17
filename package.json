@@ -29,8 +29,7 @@
     "reboot": "./bin/reboot.ts",
     "test": "vitest run -- --skipTypes && tsc -b tsconfig.json",
     "test:cov": "pnpm vitest run --coverage",
-    "test:watch": "pnpm vitest --coverage",
-    "test:watch:no-cov": "pnpm vitest",
+    "test:watch": "pnpm vitest",
     "workspace:new": "./bin/workspace-create.ts",
     "workspace:rm": "./bin/workspace-cleanup.ts",
     "bench_": "pnpm vitest bench --outputJson benchmarks/benchmark--$(date -Iseconds).json"

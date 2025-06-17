@@ -1,36 +1,34 @@
 import * as vi from 'vitest'
-import { transform } from '@i18next-codemod'
-import * as fs from 'node:fs'
-import * as path from 'node:path'
 import { applyTransform } from 'jscodeshift/src/testUtils.js'
 
-const PATH = {
-  transformer: path.join(path.resolve(), 'packages', 'i18next-codemod', 'src', 'transform.ts'),
-  source1: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-1.ts'),
-  source2: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-2.ts'),
-  source3: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-3.ts'),
-  source4: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-4.ts'),
-  source5: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-5.ts'),
-  source6: path.join(path.resolve(), 'packages', 'i18next-codemod', 'test', 'sourceFile-6.ts'),
-}
+import { transform } from '@i18next-codemod'
 
-const CODE = {
-  transformer: fs.readFileSync(PATH.transformer).toString('utf8'),
-  source1: fs.readFileSync(PATH.source1).toString('utf8'),
-  source2: fs.readFileSync(PATH.source2).toString('utf8'),
-  source3: fs.readFileSync(PATH.source3).toString('utf8'),
-  source4: fs.readFileSync(PATH.source4).toString('utf8'),
-  source5: fs.readFileSync(PATH.source5).toString('utf8'),
-  source6: fs.readFileSync(PATH.source6).toString('utf8'),
-}
+const module = { default: transform, parser: 'ts' as const }
+const options = {}
 
 vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
-  vi.it('〖⛳️〗› ❲transform❳', () => {
-
+  vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is a named import', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source1, source: CODE.source1 })
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `import { t } from "i18next"`,
+          ``,
+          `t("abc.def.ghi")`,
+          ``,
+          `t("ns1:abc.def.ghi")`,
+          ``,
+          `t("bob:abc.def.ghi")`,
+          ``,
+          `t("abc.def.ghi", "default value")`,
+          ``,
+          `t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `t("ns1:abc.def.ghi", "default value", { val: "some val" })`,
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "import { t } from 'i18next'
+      "import { t } from "i18next"
 
       t($ => $.abc.def.ghi)
 
@@ -43,25 +41,45 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       })
 
       t($ => $.abc.def.ghi, {
-        defaultValue: 'default value'
+        defaultValue: "default value"
       })
 
       t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        ns: 'ns1'
+        defaultValue: "default value",
+        ns: "ns1"
       })
 
       t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        val: 'some val',
+        defaultValue: "default value",
+        val: "some val",
         ns: 'ns1'
       })"
     `)
+  })
 
+  vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is used as a default import', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source2, source: CODE.source2 })
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `import i18next from "i18next"`,
+          ``,
+          `i18next.t("abc.def.ghi")`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi")`,
+          ``,
+          `i18next.t("bob:abc.def.ghi")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })`,
+          ``,
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "import i18next from 'i18next'
+      "import i18next from "i18next"
 
       i18next.t($ => $.abc.def.ghi)
 
@@ -74,25 +92,45 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value'
+        defaultValue: "default value"
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        ns: 'ns1'
+        defaultValue: "default value",
+        ns: "ns1"
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        val: 'some val',
+        defaultValue: "default value",
+        val: "some val",
         ns: 'ns1'
       })"
     `)
+  })
 
+  vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is a namespace import', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source3, source: CODE.source3 })
+      applyTransform(
+        module, options, {
+        path: '',
+        source: [
+          `import * as i18next from "i18next"`,
+          ``,
+          `i18next.t("abc.def.ghi")`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi")`,
+          ``,
+          `i18next.t("bob:abc.def.ghi")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })`,
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "import * as i18next from 'i18next'
+      "import * as i18next from "i18next"
 
       i18next.t($ => $.abc.def.ghi)
 
@@ -105,77 +143,169 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value'
+        defaultValue: "default value"
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        ns: 'ns1'
+        defaultValue: "default value",
+        ns: "ns1"
       })
 
       i18next.t($ => $.abc.def.ghi, {
-        defaultValue: 'default value',
-        val: 'some val',
+        defaultValue: "default value",
+        val: "some val",
         ns: 'ns1'
       })"
     `)
+  })
 
+  vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a local function', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source4, source: CODE.source4 })
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `function t(x: string, y?: unknown, z?: unknown) { return x }`,
+          ``,
+          `t("abc.def.ghi")`,
+          ``,
+          `t("ns1:abc.def.ghi")`,
+          ``,
+          `t("bob:abc.def.ghi")`,
+          ``,
+          `t("abc.def.ghi", "default value")`,
+          ``,
+          `t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `t("ns1:abc.def.ghi", "default value", { val: "some val" })`,
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "function t(x: string, y?: unknown, z?: unknown) {
-        return x
-      }
+      "function t(x: string, y?: unknown, z?: unknown) { return x }
 
-      t('abc.def.ghi')
+      t("abc.def.ghi")
 
-      t('ns1:abc.def.ghi')
+      t("ns1:abc.def.ghi")
 
-      t('bob:abc.def.ghi')
+      t("bob:abc.def.ghi")
 
-      t('abc.def.ghi', 'default value')
+      t("abc.def.ghi", "default value")
 
-      t('abc.def.ghi', 'default value', { ns: 'ns1' })
+      t("abc.def.ghi", "default value", { ns: "ns1" })
 
-      t('ns1:abc.def.ghi', 'default value', { val: 'some val' })"
+      t("ns1:abc.def.ghi", "default value", { val: "some val" })"
     `)
+  })
 
+  vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a named import from somewhere besides `i18next`', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source5, source: CODE.source5 })
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `import { t } from "not-i18next"`,
+          ``,
+          `t("abc.def.ghi")`,
+          ``,
+          `t("ns1:abc.def.ghi")`,
+          ``,
+          `t("bob:abc.def.ghi")`,
+          ``,
+          `t("abc.def.ghi", "default value")`,
+          ``,
+          `t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `t("ns1:abc.def.ghi", "default value", { val: "some val" })`,
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "import { t } from './dummy-t.js'
+      "import { t } from "not-i18next"
 
-      t('abc.def.ghi')
+      t("abc.def.ghi")
 
-      t('ns1:abc.def.ghi')
+      t("ns1:abc.def.ghi")
 
-      t('bob:abc.def.ghi')
+      t("bob:abc.def.ghi")
 
-      t('abc.def.ghi', 'default value')
+      t("abc.def.ghi", "default value")
 
-      t('abc.def.ghi', 'default value', { ns: 'ns1' })
+      t("abc.def.ghi", "default value", { ns: "ns1" })
 
-      t('ns1:abc.def.ghi', 'default value', { val: 'some val' })"
+      t("ns1:abc.def.ghi", "default value", { val: "some val" })"
     `)
+  })
 
+  vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a default import from somewhere besides `i18next`', () => {
     vi.expect(
-      applyTransform({ default: transform, parser: 'ts' }, {}, { path: PATH.source6, source: CODE.source6 })
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `import i18next from "not-i18next"`,
+          ``,
+          `i18next.t("abc.def.ghi")`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi")`,
+          ``,
+          `i18next.t("bob:abc.def.ghi")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })`
+        ].join('\r')
+      })
     ).toMatchInlineSnapshot(`
-      "import * as i18next from './dummy-t.js'
+      "import i18next from "not-i18next"
 
-      i18next.t('abc.def.ghi')
+      i18next.t("abc.def.ghi")
 
-      i18next.t('ns1:abc.def.ghi')
+      i18next.t("ns1:abc.def.ghi")
 
-      i18next.t('bob:abc.def.ghi')
+      i18next.t("bob:abc.def.ghi")
 
-      i18next.t('abc.def.ghi', 'default value')
+      i18next.t("abc.def.ghi", "default value")
 
-      i18next.t('abc.def.ghi', 'default value', { ns: 'ns1' })
+      i18next.t("abc.def.ghi", "default value", { ns: "ns1" })
 
-      i18next.t('ns1:abc.def.ghi', 'default value', { val: 'some val' })"
+      i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })"
     `)
+  })
 
+
+  vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a namespace import from somewhere besides `i18next`', () => {
+    vi.expect(
+      applyTransform(module, options, {
+        path: '',
+        source: [
+          `import * as i18next from "not-i18next"`,
+          ``,
+          `i18next.t("abc.def.ghi")`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi")`,
+          ``,
+          `i18next.t("bob:abc.def.ghi")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value")`,
+          ``,
+          `i18next.t("abc.def.ghi", "default value", { ns: "ns1" })`,
+          ``,
+          `i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })`
+        ].join('\r')
+      })
+    ).toMatchInlineSnapshot(`
+      "import * as i18next from "not-i18next"
+
+      i18next.t("abc.def.ghi")
+
+      i18next.t("ns1:abc.def.ghi")
+
+      i18next.t("bob:abc.def.ghi")
+
+      i18next.t("abc.def.ghi", "default value")
+
+      i18next.t("abc.def.ghi", "default value", { ns: "ns1" })
+
+      i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })"
+    `)
   })
 })
 
