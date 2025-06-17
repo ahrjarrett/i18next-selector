@@ -16,8 +16,10 @@ To see how the codemod behaves, check out the [tests](https://github.com/ahrjarr
 ## Todos
 
 1. Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
-2. Add support for `react-i18next`
-3. Add support for making translations "zero-cost"
+2. Add parameter for users to provide a path to their `i18next` config file
+   - This would allow the codemod to adapt to options such as `nsSeparator` and `keySeparator`
+3. Add support for `react-i18next`
+4. Add support for making translations "zero-cost"
    - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
    - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
     would users to pre-compile translations into the format TypeScript expects
