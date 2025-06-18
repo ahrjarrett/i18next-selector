@@ -15,29 +15,31 @@ function keyToSelector(key: string, j: j.JSCodeshift) {
   return j.arrowFunctionExpression([j.identifier('$')], expr)
 }
 
-const splitNs = (key: string) => {
+function splitNs(key: string) {
   const [maybeNs, ...rest] = key.split(':')
   return rest.length
     ? { ns: maybeNs, bare: rest.join(':') }
     : { ns: null, bare: maybeNs }
 }
 
+function isStringLiteralNode(x: { type: unknown } | null): x is j.StringLiteral {
+  return x !== null && x.type === 'StringLiteral'
+}
 
-const isStringLiteralNode = (x: { type: unknown } | null): x is j.StringLiteral => x !== null && x.type === 'StringLiteral'
-
-const clone = (node: unknown) => JSON.parse(JSON.stringify(node))
-
-// const default
+/** 
+ * TODO: See if jscodeshift has native utilities for cloning AST nodes (since 
+ * {@link globalThis.structuredClone `structuredClone`} doesn't work here).
+ */
+function clone(node: unknown) {
+  return JSON.parse(JSON.stringify(node))
+}
 
 export function transform(file: j.FileInfo, api: j.API) {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  /* ──────────────────────────────────────────────────────────
-   * 1️⃣  Collect local bindings that come from 'i18next'
-   * ────────────────────────────────────────────────────────── */
-  const i18nAliases = new Set() // e.g. i18next, i18n
-  const tAliases = new Set()    // e.g. t, translate
+  const i18nAliases = new Set()
+  const tAliases = new Set()
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
@@ -59,9 +61,6 @@ export function transform(file: j.FileInfo, api: j.API) {
 
   if (i18nAliases.size === 0 && tAliases.size === 0) return file.source // nothing to do
 
-  /* ──────────────────────────────────────────────────────────
-   * 2️⃣  Helpers
-   * ────────────────────────────────────────────────────────── */
   const isOurT = (callee: ExpressionKind) =>
     (callee.type === 'Identifier' && tAliases.has(callee.name)) ||
     (
@@ -73,10 +72,6 @@ export function transform(file: j.FileInfo, api: j.API) {
       i18nAliases.has(callee.object.name)
     )
 
-
-  /* ──────────────────────────────────────────────────────────
-   * 3️⃣  Transform calls
-   * ────────────────────────────────────────────────────────── */
   root
     .find(j.CallExpression)
     .filter(p => isOurT(p.node.callee))
@@ -84,7 +79,6 @@ export function transform(file: j.FileInfo, api: j.API) {
       const { node } = p
       const [arg0, arg1, arg2] = node.arguments
 
-      /* ── 3a. Array‑of‑keys syntax ───────────────────────── */
       if (
         arg0 &&
         arg0.type === 'ArrayExpression' &&
@@ -93,16 +87,16 @@ export function transform(file: j.FileInfo, api: j.API) {
       ) {
         const keys = arg0.elements.map(el => el?.value)
 
-        /* Gather default value + extra option props (if any) */
-        let explicitDefault = null           // StringLiteral (2nd positional string arg)
-        let optionObject = null              // first ObjectExpression arg, if any
+        // Gather default value + extra option props (if any)
+        let explicitDefault = null  // StringLiteral (2nd positional string arg)
+        let optionObject = null     // first ObjectExpression arg, if any
         if (arg1 && arg1.type === 'StringLiteral') explicitDefault = arg1
         if (arg1 && arg1.type === 'ObjectExpression') optionObject = arg1
         if (!optionObject && arg2 && arg2.type === 'ObjectExpression') optionObject = arg2
 
-        // context, val, etc. (but NOT defaultValue)
+        // options object properties (e.g., context, val, etc.,but NOT defaultValue)
         let extraTopProps = Array.of<j.Property | j.ObjectProperty>()
-        // defaultValue property inside the object
+        // case: defaultValue passed in the options object
         let optionDefault = null
         if (optionObject) {
           optionObject.properties.forEach(prop => {
@@ -122,8 +116,7 @@ export function transform(file: j.FileInfo, api: j.API) {
 
         const finalDefault = optionDefault || explicitDefault // option wins over positional
 
-        /* Recursively build nested t() chain */
-        // const calleeClone = clone(node.callee)
+        // Recursively build nested t() calls
         const calleeClone = clone(node.callee)
 
         const buildCall = (idx: number) => {
@@ -131,15 +124,12 @@ export function transform(file: j.FileInfo, api: j.API) {
 
           const props = []
 
-          // ns for THIS selector
           if (ns) props.push(j.property(
             'init',
             j.identifier('ns'),
             j.literal(ns)
           ))
 
-
-          // defaultValue: nested call OR final default
           if (idx < keys.length - 1) {
             props.push(
               j.property(
@@ -158,7 +148,7 @@ export function transform(file: j.FileInfo, api: j.API) {
             )
           }
 
-          // top‑level extra props go only on the outermost selector
+          // top-level extra props go only on the outermost selector
           if (idx === 0 && extraTopProps.length) {
             props.push(...extraTopProps)
           }
@@ -186,7 +176,7 @@ export function transform(file: j.FileInfo, api: j.API) {
       // positional defaultValue (string)
       if (arg1 && arg1.type === 'StringLiteral') opts.defaultValue = arg1
 
-      // object‑style options (2nd or 3rd arg)
+      // object-style options (2nd or 3rd arg)
       const optObj = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
       if (optObj) {
         optObj.properties.forEach(prop => {
@@ -215,5 +205,10 @@ export function transform(file: j.FileInfo, api: j.API) {
       node.arguments = newArgs
     })
 
-  return prettier.format(root.toSource(), { parser: 'typescript', arrowParens: 'avoid', singleQuote: true })
+  return prettier.format(
+    root.toSource(), {
+    parser: 'typescript',
+    arrowParens: 'avoid',
+    singleQuote: true,
+  })
 };
