@@ -26,7 +26,8 @@ To see how the codemod behaves, check out the [tests](https://github.com/ahrjarr
    2. build artifacts for ESM/CJS
 6. [ ] Add support for `react-i18next`
 7. [ ] Allow user to provide custom prettier options (forward them along)
-8. [ ] Add support for making translations "zero-cost"
+8. [ ] Fix weird formatting bug when nesting `t` calls
+9. [ ] Add support for making translations "zero-cost"
    - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
    - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
     would users to pre-compile translations into the format TypeScript expects
