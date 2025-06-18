@@ -4,6 +4,57 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@arktype/attest':
+      specifier: ^0.46.0
+      version: 0.46.0
+    '@babel/cli':
+      specifier: ^7.25.9
+      version: 7.27.2
+    '@babel/core':
+      specifier: ^7.26.0
+      version: 7.27.4
+    '@babel/plugin-transform-export-namespace-from':
+      specifier: ^7.25.9
+      version: 7.27.1
+    '@babel/plugin-transform-modules-commonjs':
+      specifier: ^7.25.9
+      version: 7.27.1
+    '@changesets/changelog-github':
+      specifier: ^0.5.0
+      version: 0.5.1
+    '@changesets/cli':
+      specifier: ^2.27.9
+      version: 2.29.4
+    '@types/node':
+      specifier: ^22.9.0
+      version: 22.15.32
+    '@vitest/coverage-v8':
+      specifier: 3.1.1
+      version: 3.1.1
+    '@vitest/ui':
+      specifier: 3.1.1
+      version: 3.1.1
+    babel-plugin-annotate-pure-calls:
+      specifier: ^0.4.0
+      version: 0.4.0
+    i18next:
+      specifier: ^25.2.1
+      version: 25.2.1
+    madge:
+      specifier: ^8.0.0
+      version: 8.0.0
+    typescript:
+      specifier: 5.8.3
+      version: 5.8.3
+    vite:
+      specifier: ^6.3.5
+      version: 6.3.5
+    vitest:
+      specifier: ^3.0.4
+      version: 3.2.4
+
 importers:
 
   .:
@@ -87,9 +138,6 @@ importers:
 
   packages/i18next-codemod:
     dependencies:
-      ast-types:
-        specifier: 0.16.1
-        version: 0.16.1
       jscodeshift:
         specifier: ^17.3.0
         version: 17.3.0
@@ -100,6 +148,9 @@ importers:
       '@types/jscodeshift':
         specifier: ^17.3.0
         version: 17.3.0
+      ast-types:
+        specifier: 0.16.1
+        version: 0.16.1
     publishDirectory: dist
 
 packages:
