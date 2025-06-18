@@ -34,11 +34,13 @@
     "clean:deps": "rm -rf node_modules",
     "test": "vitest"
   },
-  "peerDependencies": {
-  },
   "devDependencies": {
+    "@prettier/sync": "^0.5.2",
     "@types/jscodeshift": "^17.3.0",
     "jscodeshift": "^17.3.0",
     "ts-morph": "^26.0.0"
+  },
+  "dependencies": {
+    "ast-types": "0.16.1"
   }
 }

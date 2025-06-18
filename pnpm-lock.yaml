@@ -137,7 +137,14 @@ importers:
         version: 11.0.3
 
   packages/i18next-codemod:
+    dependencies:
+      ast-types:
+        specifier: 0.16.1
+        version: 0.16.1
     devDependencies:
+      '@prettier/sync':
+        specifier: ^0.5.2
+        version: 0.5.5(prettier@3.5.3)
       '@types/jscodeshift':
         specifier: ^17.3.0
         version: 17.3.0
