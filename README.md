@@ -15,16 +15,19 @@ To see how the codemod behaves, check out the [tests](https://github.com/ahrjarr
 
 ## Todos
 
-1. Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
-2. Add parameter for users to provide a path to their `i18next` config file
+1. [ ] Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
+2. [x] Add support for transforming an array of keys to nested `t` calls with default values
+3. [ ] Add parameter for users to provide a path to their `i18next` config file
    - This would allow the codemod to adapt to options such as `nsSeparator` and `keySeparator`
-3. Use [`fast-check`](https://github.com/dubzzz/fast-check) to make the test suite more robust
+4. [ ] Use [`fast-check`](https://github.com/dubzzz/fast-check) to make the test suite more robust
    - That way we get all the bugs out of the way _before_ publishing, rather than having to fix bugs for users over time
-4. Add GitHub Actions to CI/CD pipeline to handle:
+5. [ ] Add GitHub Actions to CI/CD pipeline to handle:
    1. package publishing 
    2. build artifacts for ESM/CJS
-5. Add support for `react-i18next`
-6. Add support for making translations "zero-cost"
+6. [ ] Add support for `react-i18next`
+7. [ ] Allow user to provide custom prettier options (forward them along)
+8. [ ] Fix weird formatting bug when nesting `t` calls
+9. [ ] Add support for making translations "zero-cost"
    - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
    - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
     would users to pre-compile translations into the format TypeScript expects
