@@ -77,7 +77,7 @@ const WorkspaceEnv = {
   Node: 'node',
 } as const
 
-export interface CleanupOptions extends globalThis.Pick<Options, 'pkgName' | 'force'> {}
+export interface CleanupOptions extends Pick<Options, 'pkgName' | 'force'> {}
 export interface Options {
   pkgName: string,
   description?: string,
@@ -134,7 +134,6 @@ namespace vitest {
     `  defineConfig({`,
     `    plugins: [react()],`,
     `    test: {`,
-    // `      environment: 'jsdom',`,
     `      globals: false,`,
     `    },`,
     `  }),`,
@@ -404,10 +403,6 @@ namespace write {
           name: pkg.name.concat($.pkgName),
           private: $.private ?? true,
           description: $.description ?? '',
-          repository: {
-            ...pkg.repository,
-            directory: pkg.repository.directory + $.pkgName,
-          },
           publishConfig: $.private ? { access: 'private' } : {
             access: 'public',
             directory: 'dist',
@@ -485,20 +480,6 @@ namespace write {
         : fs.rimraf(path.join(PATH.packages, $.pkgName, 'README.md')),
   )
 
-  // export const workspaceReadme = defineEffect(
-  //   ($) => pipe(
-  //     [
-  //       `# ${SCOPE}/${$.pkgName}`
-  //     ].join('\n'),
-  //     $.dryRun ? tap(`\n\n[CREATE #14]: workspaceReadme\n`, globalThis.String)
-  //       : fs.writeString(path.join(PATH.packages, $.pkgName, 'README.md')),
-  //   ),
-  //   ($) =>
-  //     $.dryRun
-  //       ? tap(`\n\n[CLEANUP #14]: workspaceReadme\n`, globalThis.String)
-  //       : fs.rimraf(path.join(PATH.packages, $.pkgName, 'README.md')),
-  // )
-
   export const workspaceSrcVersion = defineEffect(
     ($) => pipe(
       [
@@ -543,11 +524,11 @@ namespace write {
   export const workspaceTsConfig = defineEffect(
     ($) => pipe(
       {
-        'extends': '../../tsconfig.base.json',
-        'include': [],
-        'references': [
-          { 'path': 'tsconfig.src.json' },
-          { 'path': 'tsconfig.test.json' },
+        "extends": "../../tsconfig.base.json",
+        "include": [],
+        "references": [
+          { "path": "tsconfig.src.json" },
+          { "path": "tsconfig.test.json" },
         ],
       },
       $.dryRun ? tap(`\n\n[CREATE #16]: workspaceTsConfig\n`)
@@ -562,15 +543,15 @@ namespace write {
   export const workspaceTsConfigBuild = defineEffect(
     ($) => pipe(
       {
-        'extends': './tsconfig.src.json',
-        'compilerOptions': {
-          'tsBuildInfoFile': '.tsbuildinfo/build.tsbuildinfo',
-          'types': ['node'],
-          'declarationDir': 'build/dts',
-          'outDir': 'build/esm',
-          'stripInternal': true,
+        "extends": "./tsconfig.src.json",
+        "compilerOptions": {
+          "tsBuildInfoFile": ".tsbuildinfo/build.tsbuildinfo",
+          "types": ["node"],
+          "declarationDir": "build/dts",
+          "outDir": "build/esm",
+          "stripInternal": true,
         },
-        'references': make.refs($),
+        "references": make.refs($),
       },
       $.dryRun
         ? tap(`\n\n[CREATE #17]: workspaceTsConfigBuild\n`)
@@ -585,17 +566,17 @@ namespace write {
   export const workspaceTsConfigSrc = defineEffect(
     ($) => pipe(
       {
-        'extends': '../../tsconfig.base.json',
-        'compilerOptions': {
-          'tsBuildInfoFile': '.tsbuildinfo/src.tsbuildinfo',
-          'rootDir': 'src',
-          'types': ['node'],
-          'outDir': 'build/src'
+        "extends": "../../tsconfig.base.json",
+        "compilerOptions": {
+          "tsBuildInfoFile": ".tsbuildinfo/src.tsbuildinfo",
+          "rootDir": "src",
+          "types": ["node"],
+          "outDir": "build/src"
         },
-        'references': [
+        "references": [
           ...make.refs($),
         ],
-        'include': ['src']
+        "include": ["src"]
       },
       $.dryRun
         ? tap(`\n\n[CREATE #18]: workspaceTsConfigSrc\n`)
@@ -610,18 +591,18 @@ namespace write {
   export const workspaceTsConfigTest = defineEffect(
     ($) => pipe(
       {
-        'extends': '../../tsconfig.base.json',
-        'compilerOptions': {
-          'tsBuildInfoFile': '.tsbuildinfo/test.tsbuildinfo',
-          'rootDir': 'test',
-          'types': ['node'],
-          'noEmit': true,
+        "extends": "../../tsconfig.base.json",
+        "compilerOptions": {
+          "tsBuildInfoFile": ".tsbuildinfo/test.tsbuildinfo",
+          "rootDir": "test",
+          "types": ["node"],
+          "noEmit": true,
         },
-        'references': [
-          { 'path': 'tsconfig.src.json' },
+        "references": [
+          { "path": "tsconfig.src.json" },
           ...make.refs($),
         ],
-        'include': ['test'],
+        "include": ["test"],
       },
       $.dryRun
         ? tap(`\n\n[CREATE #19]: workspaceTsConfigTest\n`)

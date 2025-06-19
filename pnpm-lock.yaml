@@ -153,6 +153,9 @@ importers:
         version: 0.16.1
     publishDirectory: dist
 
+  packages/i18next-vite-plugin:
+    publishDirectory: dist
+
 packages:
 
   '@ampproject/remapping@2.3.0':

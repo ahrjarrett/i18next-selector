@@ -1,5 +1,8 @@
 {
   "extends": "./tsconfig.base.json",
   "include": [],
-  "references": []
+  "references": [
+    { "path": "packages/i18next-codemod/tsconfig.build.json" },
+    { "path": "packages/i18next-vite-plugin/tsconfig.build.json" }
+  ]
 }

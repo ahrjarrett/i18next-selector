@@ -33,14 +33,6 @@ export const PackageJson = S.Struct({
   private: S
     .optional(S.Boolean)
     .pipe(S.withConstructorDefault(() => false)),
-  repository: S.Union(
-    S.String,
-    S.Struct({
-      type: S.String,
-      url: S.String,
-      directory: S.String,
-    }),
-  ),
   sideEffects: S.optional(S.Array(S.String)).pipe(S.withConstructorDefault(() => [])),
   dependencies: S
     .optional(S.Record({ key: S.String, value: S.String })),

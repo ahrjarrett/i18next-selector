@@ -28,8 +28,10 @@
     "noErrorTruncation": true,
     "skipLibCheck": true,
     "paths": {
+      "@i18next-vite-plugin": ["packages/i18next-vite-plugin/src/index.js"],
+      "@i18next-vite-plugin/*": ["packages/i18next-vite-plugin/*.js"],
       "@i18next-codemod": ["packages/i18next-codemod/src/index.js"],
-      "@i18next-codemod/*": ["packages/i18next-codemod/src/*.js"],
+      "@i18next-codemod/*": ["packages/i18next-codemod/src/*.js"]
     }
   }
 }
