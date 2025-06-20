@@ -61,15 +61,6 @@ export function i18nextSelectorPlugin({
 }
 
 export declare namespace i18nextSelectorPlugin {
-  type Json =
-    | undefined
-    | null
-    | boolean
-    | number
-    | string
-    | readonly Json[]
-    | { [x: string]: Json }
-
   type Options = {
     targetFile: string
     sourceFile: string
