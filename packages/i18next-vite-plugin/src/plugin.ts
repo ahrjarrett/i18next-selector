@@ -19,12 +19,12 @@ import { transformToTypeScript } from './transform.js'
  * - [ ]: Support async?
  */
 
-export function i18nextSelectorPlugin({
+export function i18nextVitePlugin({
   targetFile,
   sourceFile,
   i18nextConfig,
   formatter,
-}: i18nextSelectorPlugin.Options): Plugin {
+}: i18nextVitePlugin.Options): Plugin {
   const config = {
     ...i18nextConfig,
     ...formatter && { formatter }
@@ -60,7 +60,7 @@ export function i18nextSelectorPlugin({
   }
 }
 
-export declare namespace i18nextSelectorPlugin {
+export declare namespace i18nextVitePlugin {
   type Options = {
     targetFile: string
     sourceFile: string
