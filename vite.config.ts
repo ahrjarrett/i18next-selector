@@ -9,7 +9,7 @@ function createAlias(pkgName: string) {
   }
 }
 
-let ALIASES = [...PACKAGES]
+const ALIASES = [...PACKAGES]
   .filter((v) => v.startsWith('packages/'))
   .map(v => v.slice('packages/'.length))
   .map(createAlias)

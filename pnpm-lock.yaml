@@ -164,6 +164,9 @@ importers:
       '@traversable/registry':
         specifier: ^0.0.24
         version: 0.0.24
+      vite:
+        specifier: 'catalog:'
+        version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
     publishDirectory: dist
 
 packages:

@@ -33,10 +33,3 @@ export function right<R, L>(x: R): Either<L, R> { return { _tag: RightURI, right
 export function either<L, R, T>(onLeft: (x: L) => T, onRight: (x: R) => T): (x: Either<L, R>) => T {
   return (x) => isLeft(x) ? onLeft(x.left) : onRight(x.right)
 }
-
-export type Options = {
-  pluralSeparator?: string
-  contextSeparator?: string
-}
-
-export type Config = Required<Options>

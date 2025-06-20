@@ -1,17 +1,17 @@
 import prettier from '@prettier/sync'
 import { Json } from '@traversable/json'
+import type { TOptions } from 'i18next'
 
 import * as T from './options.js'
 
 const defaultFormatter = (
   (x) => prettier.format(x, { parser: 'typescript' })
-) satisfies transformToTypeScript.Config['formatter']
+) satisfies transformToTypeScript.Options['formatter']
 
 export const defaultOptions = {
   pluralSeparator: '_',
-  contextSeparator: '_',
   formatter: defaultFormatter,
-} satisfies transformToTypeScript.Config
+} satisfies transformToTypeScript.Options
 
 export const pluralSuffixes = [
   'zero',
@@ -22,27 +22,27 @@ export const pluralSuffixes = [
   'other',
 ]
 
-export const isPluralKey = (key: string, { pluralSeparator }: T.Config) => pluralSuffixes
+export const isPluralKey = (key: string, { pluralSeparator = defaultOptions.pluralSeparator }: TOptions) => pluralSuffixes
   .map((suffix) => `${pluralSeparator}${suffix}`)
   .some((suffix) => key.endsWith(suffix))
 
 export const isPluralEntry
-  : (config: T.Config) => (entry: [string, unknown]) => entry is [string, Json.Scalar]
-  = (config) => (entry): entry is never => Json.isScalar(entry[1]) && isPluralKey(entry[0], config)
+  : (options: transformToTypeScript.Options) => (entry: [string, unknown]) => entry is [string, Json.Scalar]
+  = (options) => (entry): entry is never => Json.isScalar(entry[1]) && isPluralKey(entry[0], options)
 
-export function rmPluralization(entry: [string, unknown], config: T.Config): T.Maybe<string> {
-  if (!isPluralEntry(config)(entry)) return T.nothing()
+export function rmPluralization(entry: [string, unknown], options: transformToTypeScript.Options): T.Maybe<string> {
+  if (!isPluralEntry(options)(entry)) return T.nothing()
   else {
     const [key] = entry
-    const index = key.lastIndexOf(config.pluralSeparator)
+    const index = key.lastIndexOf(options.pluralSeparator ?? defaultOptions.pluralSeparator)
     return T.just(key.slice(0, index))
   }
 }
 
-export function groupPluralKeys(entries: [string, unknown][], config: T.Config): Record<string, T.Either<string[], unknown>> {
+export function groupPluralKeys(entries: [string, unknown][], options: transformToTypeScript.Options): Record<string, T.Either<string[], unknown>> {
   return entries.reduce(
     (acc, [k, v]) => {
-      const maybe = rmPluralization([k, v], config)
+      const maybe = rmPluralization([k, v], options)
       if (T.isNothing(maybe)) {
         acc[k] = T.right(v)
         return acc
@@ -59,11 +59,10 @@ export function groupPluralKeys(entries: [string, unknown][], config: T.Config):
               \'groupPluralKeys\' received a non-JSON value.\n\r'
             console.error(
               msg + '\n\r\
-              If the value logged below is in fact, JSON, this is probably a bug.\
+              If the value logged below is in fact a valid JSON value, this is probably a bug.\
               Value:\n\r',
               either.right,
             )
-
             throw Error(msg)
           }
         } else {
@@ -76,8 +75,8 @@ export function groupPluralKeys(entries: [string, unknown][], config: T.Config):
   )
 }
 
-export function parse(x: Json, $: T.Config): string | readonly Json[] | { [x: string]: T.Either<string[], Json> }
-export function parse(x: Json, $: T.Config) {
+export function parse(x: Json, $: transformToTypeScript.Options): string | readonly Json[] | { [x: string]: T.Either<string[], Json> }
+export function parse(x: Json, $: transformToTypeScript.Options) {
   return unparse(Json.fold((x) => {
     switch (true) {
       default: return x satisfies never
@@ -127,11 +126,10 @@ export function stringify(xs: unknown): string {
   })(xs as never)
 }
 
-export function transformToJson(json: { [x: string]: Json } | readonly Json[] | string, options?: T.Options) {
+export function transformToJson(json: { [x: string]: Json } | readonly Json[] | string, options?: transformToTypeScript.Options) {
   const config = {
-    contextSeparator: options?.contextSeparator || defaultOptions.contextSeparator,
     pluralSeparator: options?.pluralSeparator || defaultOptions.pluralSeparator,
-  } satisfies T.Config
+  } satisfies TOptions
 
   if (typeof json !== 'string') return stringify(parse(json, config))
   else {
@@ -161,8 +159,8 @@ export function transformToTypeScript(
 }
 
 export declare namespace transformToTypeScript {
-  interface Options extends T.Options {
+  interface Options extends TOptions {
+    pluralSeparator?: string
     formatter?(x: string): string
   }
-  interface Config extends Required<Options> {}
 }

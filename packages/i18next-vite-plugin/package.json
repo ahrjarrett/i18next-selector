@@ -46,6 +46,7 @@
   "dependencies": {
     "@prettier/sync": "^0.6.1",
     "@traversable/json": "^0.0.25",
-    "@traversable/registry": "^0.0.24"
+    "@traversable/registry": "^0.0.24",
+    "vite": "catalog:"
   }
 }

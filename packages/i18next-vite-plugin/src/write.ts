@@ -14,7 +14,7 @@ export function writeFromFile(options: writeFromFile.Options): () => void {
 }
 
 export declare namespace writeFromFile {
-  export interface Options extends T.Options {
+  export interface Options extends transformToTypeScript.Options {
     sourceFile: string
     targetFile: fs.PathOrFileDescriptor
   }
@@ -28,7 +28,7 @@ export function writeFromSource(options: writeFromSource.Options): () => void {
 }
 
 export declare namespace writeFromSource {
-  export interface Options extends T.Options {
+  export interface Options extends transformToTypeScript.Options {
     source: string | readonly Json[] | { [x: string]: Json }
     targetFile: fs.PathOrFileDescriptor
   }
@@ -41,7 +41,7 @@ export function writeFromAsyncSource(options: writeFromAsyncSource.Options) {
 }
 
 export declare namespace writeFromAsyncSource {
-  export interface Options extends T.Options {
+  export interface Options extends transformToTypeScript.Options {
     source: Promise<string | readonly Json[] | { [x: string]: Json }>
     targetFile: fs.PathOrFileDescriptor
   }
