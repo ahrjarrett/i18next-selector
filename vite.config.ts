@@ -1,7 +1,6 @@
 import * as path from 'node:path'
 import { defineConfig } from 'vitest/config'
 import { PACKAGES } from './config/__generated__/package-list.js'
-import { default as REPO } from './config/__generated__/repo.json'
 
 function createAlias(pkgName: string) {
   return {
@@ -10,7 +9,7 @@ function createAlias(pkgName: string) {
   }
 }
 
-let ALIASES = [...PACKAGES]
+const ALIASES = [...PACKAGES]
   .filter((v) => v.startsWith('packages/'))
   .map(v => v.slice('packages/'.length))
   .map(createAlias)

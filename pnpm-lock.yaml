@@ -153,6 +153,22 @@ importers:
         version: 0.16.1
     publishDirectory: dist
 
+  packages/i18next-vite-plugin:
+    dependencies:
+      '@prettier/sync':
+        specifier: ^0.6.1
+        version: 0.6.1(prettier@3.5.3)
+      '@traversable/json':
+        specifier: ^0.0.25
+        version: 0.0.25(@traversable/registry@0.0.24)(fast-check@3.23.2)
+      '@traversable/registry':
+        specifier: ^0.0.24
+        version: 0.0.24
+      vite:
+        specifier: 'catalog:'
+        version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
+    publishDirectory: dist
+
 packages:
 
   '@ampproject/remapping@2.3.0':
@@ -786,6 +802,11 @@ packages:
     peerDependencies:
       prettier: '*'
 
+  '@prettier/sync@0.6.1':
+    resolution: {integrity: sha512-yF9G8vK/LYUTF3Cijd7VC9La3b20F20/J/fgoR4H0B8JGOWnZVZX6+I6+vODPosjmMcpdlUV+gUqJQZp3kLOcw==}
+    peerDependencies:
+      prettier: '*'
+
   '@rollup/rollup-android-arm-eabi@4.43.0':
     resolution: {integrity: sha512-Krjy9awJl6rKbruhQDgivNbD1WuLb8xAclM4IR4cN5pHGAs2oIMMQJEiC3IC/9TZJ+QZkmZhlMO/6MBGxPidpw==}
     cpu: [arm]
@@ -888,6 +909,18 @@ packages:
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+
+  '@traversable/json@0.0.25':
+    resolution: {integrity: sha512-fvIFkPJKNMnU3oj/Lz++45An8/MZNmAvoNF0u3mQ24nR2ms9lIjhpkcH80eO6XAcQ71uDvmdBwhOLQYFUop88A==}
+    peerDependencies:
+      '@traversable/registry': ^0.0.24
+      fast-check: ^3
+    peerDependenciesMeta:
+      fast-check:
+        optional: true
+
+  '@traversable/registry@0.0.24':
+    resolution: {integrity: sha512-7z/Dx/yNbfh+9QjiPHppvGa1u71H4bv4nQiVN99a7xw5OaLFM8ds2do9C4Rg1SntcOCo5jroXJh9ixEjUUllEw==}
 
   '@ts-graphviz/adapter@2.0.6':
     resolution: {integrity: sha512-kJ10lIMSWMJkLkkCG5gt927SnGZcBuG0s0HHswGzcHTgvtUe7yk5/3zTEr0bafzsodsOq5Gi6FhQeV775nC35Q==}
@@ -1746,6 +1779,9 @@ packages:
 
   make-synchronized@0.4.2:
     resolution: {integrity: sha512-EwEJSg8gSGLicKXp/VzNi1tvzhdmNBxOzslkkJSoNUCQFZKH/NIUIp7xlfN+noaHrz4BJDN73gne8IHnjl/F/A==}
+
+  make-synchronized@0.8.0:
+    resolution: {integrity: sha512-DZu4lwc0ffoFz581BSQa/BJl+1ZqIkoRQ+VejMlH0VrP4E86StAODnZujZ4sepumQj8rcP7wUnUBGM8Gu+zKUA==}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -3176,6 +3212,11 @@ snapshots:
       make-synchronized: 0.4.2
       prettier: 3.5.3
 
+  '@prettier/sync@0.6.1(prettier@3.5.3)':
+    dependencies:
+      make-synchronized: 0.8.0
+      prettier: 3.5.3
+
   '@rollup/rollup-android-arm-eabi@4.43.0':
     optional: true
 
@@ -3237,6 +3278,14 @@ snapshots:
     optional: true
 
   '@standard-schema/spec@1.0.0': {}
+
+  '@traversable/json@0.0.25(@traversable/registry@0.0.24)(fast-check@3.23.2)':
+    dependencies:
+      '@traversable/registry': 0.0.24
+    optionalDependencies:
+      fast-check: 3.23.2
+
+  '@traversable/registry@0.0.24': {}
 
   '@ts-graphviz/adapter@2.0.6':
     dependencies:
@@ -4171,6 +4220,8 @@ snapshots:
       semver: 7.7.2
 
   make-synchronized@0.4.2: {}
+
+  make-synchronized@0.8.0: {}
 
   merge2@1.4.1: {}
 
