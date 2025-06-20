@@ -1,11 +1,10 @@
 export * from './version.js'
 export {
   groupPluralKeys,
-  // parseEntries,
-  transformToJson,
-  transformToTypeScript,
   parse,
   stringify,
+  transformToJson,
+  transformToTypeScript,
 } from './transform.js'
 export {
   writeFromAsyncSource,
