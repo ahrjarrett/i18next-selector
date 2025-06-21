@@ -503,6 +503,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
   })
 
   vi.describe('〖⛳️〗‹‹‹ ❲useTranslation❳', () => {
+
     vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` and `t` are destructured', () => {
       vi.expect(
         applyTransform(module, options, {
@@ -510,7 +511,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
           source: [
             `import { useTranslation } from "react-i18next"`,
             ``,
-            `const t = useTranslation()`,
+            `const { t } = useTranslation()`,
             ``,
             `t("abc.def.ghi")`,
             ``,
@@ -531,7 +532,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         (`
         "import { useTranslation } from 'react-i18next';
 
-        const t = useTranslation();
+        const { t } = useTranslation();
 
         t($ => $.abc.def.ghi);
 
@@ -620,6 +621,210 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         });"
       `)
     })
+
+    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation as useT } from "react-i18next"`,
+            ``,
+            `const t = useT().t`,
+            ``,
+            `t("abc.def.ghi")`,
+            ``,
+            `t("ns1:abc.def.ghi")`,
+            ``,
+            `t("bob:abc.def.ghi")`,
+            ``,
+            `t("abc.^~ !.ghi")`,
+            ``,
+            `t("abc.def.ghi", "default value")`,
+            ``,
+            `t("abc.def.ghi", "default value", { ns: "ns1" })`,
+            ``,
+            `t("ns1:abc.def.ghi", "default value", { val: "some val" })`
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation as useT } from 'react-i18next';
+
+        const t = useT().t;
+
+        t($ => $.abc.def.ghi);
+
+        t($ => $.abc.def.ghi, {
+          ns: 'ns1',
+        });
+
+        t($ => $.abc.def.ghi, {
+          ns: 'bob',
+        });
+
+        t($ => $.abc['^~ !'].ghi);
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+        });
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          ns: 'ns1',
+        });
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          val: 'some val',
+          ns: 'ns1',
+        });"
+      `)
+    })
+
+  })
+
+  vi.describe('〖⛳️〗‹‹‹ ❲useTranslation❳', () => {
+
+    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is renamed when pulled off of `useTranslation`', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const T = useTranslation().t`,
+            ``,
+            `T("abc.def.ghi")`,
+            ``,
+            `T("ns1:abc.def.ghi")`,
+            ``,
+            `T("bob:abc.def.ghi")`,
+            ``,
+            `T("abc.^~ !.ghi")`,
+            ``,
+            `T("abc.def.ghi", "default value")`,
+            ``,
+            `T("abc.def.ghi", "default value", { ns: "ns1" })`,
+            ``,
+            `T("ns1:abc.def.ghi", "default value", { val: "some val" })`
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const T = useTranslation().t;
+
+        T($ => $.abc.def.ghi);
+
+        T($ => $.abc.def.ghi, {
+          ns: 'ns1',
+        });
+
+        T($ => $.abc.def.ghi, {
+          ns: 'bob',
+        });
+
+        T($ => $.abc['^~ !'].ghi);
+
+        T($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+        });
+
+        T($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          ns: 'ns1',
+        });
+
+        T($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          val: 'some val',
+          ns: 'ns1',
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation as useT } from "react-i18next"`,
+            ``,
+            `const t = useT().t`,
+            ``,
+            `t("abc.def.ghi")`,
+            ``,
+            `t("ns1:abc.def.ghi")`,
+            ``,
+            `t("bob:abc.def.ghi")`,
+            ``,
+            `t("abc.^~ !.ghi")`,
+            ``,
+            `t("abc.def.ghi", "default value")`,
+            ``,
+            `t("abc.def.ghi", "default value", { ns: "ns1" })`,
+            ``,
+            `t("ns1:abc.def.ghi", "default value", { val: "some val" })`
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation as useT } from 'react-i18next';
+
+        const t = useT().t;
+
+        t($ => $.abc.def.ghi);
+
+        t($ => $.abc.def.ghi, {
+          ns: 'ns1',
+        });
+
+        t($ => $.abc.def.ghi, {
+          ns: 'bob',
+        });
+
+        t($ => $.abc['^~ !'].ghi);
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+        });
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          ns: 'ns1',
+        });
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: 'default value',
+          val: 'some val',
+          ns: 'ns1',
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it does not apply selector to the namespace passed to `useTranslation`', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `t("abc.def.ghi")`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        t($ => $.abc.def.ghi);"
+      `)
+    })
+
   })
 
 })

@@ -37,6 +37,10 @@ function isCallExpressionNode(x: unknown): x is j.CallExpression {
   return has('type', type => type === 'CallExpression')(x)
 }
 
+function isObjectPatternNode(x: unknown): x is j.ObjectPattern {
+  return has('type', type => type === 'ObjectPattern')(x)
+}
+
 function keyToSelector(key: string, j: j.JSCodeshift) {
   const path = key.split('.')
   const expr = path.reduce<j.Identifier | j.MemberExpression>(
@@ -53,14 +57,17 @@ function keyToSelector(key: string, j: j.JSCodeshift) {
   return j.arrowFunctionExpression([j.identifier('$')], expr)
 }
 
-type SeparatedNamespace = { ns: string | null, path: string }
+type SeparatedNamespace = {
+  ns?: string
+  path: string
+}
+
 function separateNamespaceFromPath(key: string): SeparatedNamespace {
   const [head, ...tail] = key.split(':')
   return tail.length
     ? { ns: head, path: tail.join(':') }
-    : { ns: null, path: head }
+    : { path: head }
 }
-
 
 function templateLiteralToTokens(template: j.TemplateLiteral) {
   let tokens: (ExpressionKind | TSTypeKind | string)[] = []
@@ -102,34 +109,21 @@ function clone(node: unknown) {
 interface Context {
   tAliases: Set<string | IdentifierKind>
   i18nAliases: Set<string | IdentifierKind>
-  useTranslationAliases: Set<string | IdentifierKind>
 }
 
-function is18nextTFunction(callee: ExpressionKind, { tAliases, i18nAliases }: Context): boolean {
-  return (isIdentifierNode(callee) && tAliases.has(callee.name)) ||
-    (
-      isMemberExpressionNode(callee) &&
-      !callee.computed &&
-      isIdentifierNode(callee.property) &&
-      callee.property.name === 't' &&
-      isIdentifierNode(callee.object) &&
-      i18nAliases.has(callee.object.name)
-    )
+function is18nextTFunction(
+  callee: ExpressionKind,
+  { tAliases, i18nAliases }: Context
+): boolean {
+  return (isIdentifierNode(callee) && tAliases.has(callee.name)) || (
+    isMemberExpressionNode(callee) &&
+    !callee.computed &&
+    isIdentifierNode(callee.property) &&
+    callee.property.name === 't' &&
+    isIdentifierNode(callee.object) &&
+    i18nAliases.has(callee.object.name)
+  )
 }
-
-function isUseTranslationTFunction(callee: ExpressionKind, { tAliases, i18nAliases, useTranslationAliases }: Context) {
-  return (isIdentifierNode(callee) && useTranslationAliases.has(callee.name)) ||
-    (
-      isMemberExpressionNode(callee) &&
-      !callee.computed &&
-      isIdentifierNode(callee.property) &&
-      callee.property.name === 't' &&
-      isIdentifierNode(callee.object) &&
-      i18nAliases.has(callee.object.name)
-    )
-}
-
-
 
 export function transform(file: j.FileInfo, api: j.API) {
   const j = api.jscodeshift
@@ -138,6 +132,10 @@ export function transform(file: j.FileInfo, api: j.API) {
   const i18nAliases = new Set<string | IdentifierKind>()
   const tAliases = new Set<string | IdentifierKind>()
   const useTranslationAliases = new Set<string | IdentifierKind>()
+  const context = {
+    i18nAliases,
+    tAliases,
+  }
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
@@ -178,24 +176,32 @@ export function transform(file: j.FileInfo, api: j.API) {
       const init = p.node.init
       const id = p.node.id
 
+
       /**
        * @example
        * const { t } = useTranslation()
        */
       if (
-        isIdentifierNode(id) &&
+        isObjectPatternNode(id) &&
         isCallExpressionNode(init) &&
         isIdentifierNode(init.callee) &&
         useTranslationAliases.has(init.callee.name)
       ) {
-        tAliases.add(id.name)
+        id.properties.forEach(prop => {
+          if (
+            has('value', isIdentifierNode)(prop) && (
+              has('key', 'name', (name) => name === 't')(prop)
+              || has('key', 'value', (value) => value === 't')(prop)
+            )
+          ) {
+            tAliases.add(prop.value.name)
+          }
+        })
       }
 
       /**
        * @example
        * const t = useTranslation().t
-       * // or:
-       * const someOtherName = useTranslation().t
        */
       if (
         isIdentifierNode(id) &&
@@ -212,11 +218,7 @@ export function transform(file: j.FileInfo, api: j.API) {
 
   root
     .find(j.CallExpression)
-    .filter(
-      p =>
-        is18nextTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases })
-        || isUseTranslationTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases })
-    )
+    .filter(p => is18nextTFunction(p.node.callee, context))
     .forEach(p => {
       const { node } = p
       const [arg0, arg1, arg2] = node.arguments
@@ -257,9 +259,9 @@ export function transform(file: j.FileInfo, api: j.API) {
 
         const finalDefault = defaultValueFromOptions || positionalDefaultValue
 
-        /** Recursively build nested t() calls */
         const calleeClone = clone(node.callee)
 
+        /** Recursively build nested t() calls */
         const buildCall = (idx: number) => {
           const { ns, path } = separateNamespaceFromPath(keys[idx])
 
@@ -302,12 +304,13 @@ export function transform(file: j.FileInfo, api: j.API) {
 
         /** Replace the entire original call */
         j(p).replaceWith(buildCall(0))
+        /** return so we don't fall through and start evaluating other branches */
         return
       }
 
       root
         .find(j.CallExpression)
-        .filter(p => is18nextTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases }))
+        .filter(p => is18nextTFunction(p.node.callee, context))
         .forEach(p => {
           const { node } = p
           const [arg0, arg1, arg2] = p.node.arguments
