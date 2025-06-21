@@ -213,7 +213,8 @@ export function transform(file: j.FileInfo, api: j.API) {
   root
     .find(j.CallExpression)
     .filter(
-      p => is18nextTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases })
+      p =>
+        is18nextTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases })
         || isUseTranslationTFunction(p.node.callee, { tAliases, i18nAliases, useTranslationAliases })
     )
     .forEach(p => {
