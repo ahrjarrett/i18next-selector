@@ -235,7 +235,7 @@ export function transform(file: j.FileInfo, api: j.API) {
         if (isObjectExpressionNode(arg1)) optionsObject = arg1
         if (!optionsObject && isObjectExpressionNode(arg2)) optionsObject = arg2
 
-        /** options object properties (e.g., context, val, etc.,but NOT defaultValue) */
+        /** options object properties (e.g., context, val, etc., but NOT defaultValue) */
         let toplevelOptionProperties = Array.of<j.Property | j.ObjectProperty>()
         /** case: defaultValue passed in the options object */
         let defaultValueFromOptions = null
