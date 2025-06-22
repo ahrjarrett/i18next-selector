@@ -1,5 +1,6 @@
 import * as vi from 'vitest'
 import * as path from 'node:path'
+import * as fs from 'node:fs'
 
 import {
   groupPluralKeys,
@@ -11,8 +12,10 @@ import {
 
 const defaultOptions = { contextSeparator: '_', pluralSeparator: '_' }
 
+const DIR_PATH = path.join(path.resolve(), 'packages', 'vite-plugin', 'test', '__generated__')
+
 const PATH = {
-  targetFile: path.join(path.resolve(), 'packages', 'vite-plugin', 'test', '__generated__', 'writeFromSource.get.ts')
+  targetFile: path.join(DIR_PATH, 'writeFromSource.get.ts')
 }
 
 const input = {
@@ -320,6 +323,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
   })
 
   vi.it('〖⛳️〗› ❲writeFromSource❳', () => {
+    if (!fs.existsSync(DIR_PATH)) fs.mkdirSync(DIR_PATH)
+
     const write = writeFromSource({
       source: input,
       targetFile: PATH.targetFile,
