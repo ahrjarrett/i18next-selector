@@ -1,5 +1,5 @@
 {
-  "name": "i18next-codemod-bin",
+  "name": "i18next-selector-bin",
   "type": "module",
   "private": true,
   "dependencies": {

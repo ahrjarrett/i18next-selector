@@ -1,5 +1,6 @@
 import * as vi from 'vitest'
 import * as path from 'node:path'
+import * as fs from 'node:fs'
 
 import {
   groupPluralKeys,
@@ -7,12 +8,14 @@ import {
   transformToJson,
   transformToTypeScript,
   writeFromSource,
-} from '@i18next-vite-plugin'
+} from '@i18next-selector/vite-plugin'
 
 const defaultOptions = { contextSeparator: '_', pluralSeparator: '_' }
 
+const DIR_PATH = path.join(path.resolve(), 'packages', 'vite-plugin', 'test', '__generated__')
+
 const PATH = {
-  targetFile: path.join(path.resolve(), 'packages', 'i18next-vite-plugin', 'test', '__generated__', 'writeFromSource.get.ts')
+  targetFile: path.join(DIR_PATH, 'writeFromSource.get.ts')
 }
 
 const input = {
@@ -66,7 +69,7 @@ const input = {
   ]
 }
 
-vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
+vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
   vi.it('〖⛳️〗› ❲groupPluralKeys❳: handles empty case', () => {
     vi.expect(groupPluralKeys([], defaultOptions)).toMatchInlineSnapshot
       (`{}`)
@@ -85,11 +88,11 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
       (`
       {
         "beverage": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "any beverage",
         },
         "tea": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "some tea",
         },
       }
@@ -109,7 +112,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
       (`
       {
         "tea": {
-          "_tag": Symbol(i18next-vite-plugin/Left),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Left),
           "left": [
             "one cup of tea",
             "{{count}} cups of tea",
@@ -133,11 +136,11 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
       (`
       {
         "tea_one": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": [],
         },
         "tea_other": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": {},
         },
       }
@@ -157,11 +160,11 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
       (`
       {
         "beverage": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "{{count}} cups of tea",
         },
         "soda": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "one cup of tea",
         },
       }
@@ -188,29 +191,29 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
       (`
       {
         "espresso|americano": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "a hot americano",
         },
         "espresso|cappuccino": {
-          "_tag": Symbol(i18next-vite-plugin/Left),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Left),
           "left": [
             "a dry cappuccino",
             "{{count}} dry cappuccinos",
           ],
         },
         "espresso|latte": {
-          "_tag": Symbol(i18next-vite-plugin/Left),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Left),
           "left": [
             "a foamy latte",
             "{{count}} foamy lattes",
           ],
         },
         "shot": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": "a shot of espresso",
         },
         "some object": {
-          "_tag": Symbol(i18next-vite-plugin/Right),
+          "_tag": Symbol(@i18next-selector/vite-plugin/Right),
           "right": {
             "a": "hey",
             "b": "ho",
@@ -320,6 +323,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-vite-plugin❳', () => {
   })
 
   vi.it('〖⛳️〗› ❲writeFromSource❳', () => {
+    if (!fs.existsSync(DIR_PATH)) fs.mkdirSync(DIR_PATH)
+
     const write = writeFromSource({
       source: input,
       targetFile: PATH.targetFile,

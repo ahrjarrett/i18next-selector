@@ -4,8 +4,8 @@ import { PACKAGES } from './config/__generated__/package-list.js'
 
 function createAlias(pkgName: string) {
   return {
-    [`@${pkgName}/test`]: path.join(__dirname, 'packages', pkgName, 'test'),
-    [`@${pkgName}`]: path.join(__dirname, 'packages', pkgName, 'src'),
+    [`@i18next-selector/${pkgName}/test`]: path.join(__dirname, 'packages', pkgName, 'test'),
+    [`@i18next-selector/${pkgName}`]: path.join(__dirname, 'packages', pkgName, 'src'),
   }
 }
 

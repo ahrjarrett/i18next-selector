@@ -7,14 +7,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/traversable/schema.git",
+    "url": "https://github.com/ahrjarrett/i18next-selector.git",
     "directory": "packages/"
   },
   "bugs": {
-    "url": "https://github.com/traversable/schema/issues",
+    "url": "https://github.com/ahrjarrett/i18next-selector/issues",
     "email": "ahrjarrett@gmail.com"
   },
-  "i18next-codemod": {
+  "@i18next-selector": {
     "generateExports": { "include": ["**/*.ts"] },
     "generateIndex": { "include": ["**/*.ts"] }
   },

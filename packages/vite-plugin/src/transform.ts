@@ -55,7 +55,7 @@ export function groupPluralKeys(entries: [string, unknown][], options: transform
             return acc
           } else {
             const msg = '\n\r\
-              [@i18next-vite-plugin/transform]:\n\r\
+              [@i18next-selector/vite-plugin/transform]:\n\r\
               \'groupPluralKeys\' received a non-JSON value.\n\r'
             console.error(
               msg + '\n\r\
@@ -98,7 +98,7 @@ export function unparse(xs: unknown) {
         if (Json.isArray(x.left)) return x.left.join(' | ')
         else {
           const msg = '\n\r\
-          [@i18next-vite-plugin/transform]:\n\r\
+          [@i18next-selector/vite-plugin/transform]:\n\r\
           \'unparse\' received a left value that wasn\'t an array of string.\n\r'
           console.error(
             msg + '\n\r\
@@ -136,7 +136,7 @@ export function transformToJson(json: { [x: string]: Json } | readonly Json[] | 
     try { return transformToJson(JSON.parse(json)) }
     catch (e) {
       const msg = '\n\r\
-      [@i18next-vite-plugin/transform]:\n\r\
+      [@i18next-selector/vite-plugin/transform]:\n\r\
       \'transformToJson\' received a string, but failed to parse the string as JSON.\n\r'
       console.error(
         msg,

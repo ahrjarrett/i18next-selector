@@ -221,7 +221,7 @@ const prefix = `${REPO.scope}/`
 /**
  * @example
  *  assert.equal(
- *    withoutPrefix("i18next-codemod/core"),
+ *    withoutPrefix("@i18next-selector/core"),
  *    "core",
  *  )
  */
@@ -230,8 +230,8 @@ const withoutPrefix = (name: string) => name.substring(prefix.length)
 /**
  * @example
  *  assert.equal(
- *    wrap("i18next-codemod/core"),
- *    "core(i18next-codemod/core)",
+ *    wrap("@i18next-selector/core"),
+ *    "core(@i18next-selector/core)",
  *  )
  */
 const wrap = (name: string) => withoutPrefix(name).concat(`(${withoutPrefix(name)})`)
@@ -239,8 +239,8 @@ const wrap = (name: string) => withoutPrefix(name).concat(`(${withoutPrefix(name
 /**
  * @example
  *  assert.equal(
- *    bracket("i18next-codemod/core"),
- *    "[i18next-codemod/core](./packages/core)",
+ *    bracket("@i18next-selector/core"),
+ *    "[@i18next-selector/core](./packages/core)",
  *  )
  */
 const bracket = (name: string, version: string): `[${string}](./packages/${string})` =>
@@ -249,8 +249,8 @@ const bracket = (name: string, version: string): `[${string}](./packages/${strin
 /**
  * @example
  *  assert.equal(
- *    drawRelation({ name: "i18next-codemod/core" })("i18next-codemod/data"),
- *    "core(i18next-codemod/core) -.-> data(i18next-codemod/data)",
+ *    drawRelation({ name: "@i18next-selector/core" })("@i18next-selector/data"),
+ *    "core(@i18next-selector/core) -.-> data(@i18next-selector/data)",
  *  )
  */
 const drawRelation
@@ -258,7 +258,7 @@ const drawRelation
   = (pkg) => (dep) => wrap(pkg.name).concat(` -.-> `).concat(wrap(dep))
 
 export const drawChangelogLineItem = (pkg: { name: string, version: string }) => `${bracket(pkg.name, pkg.version)
-  } - [CHANGELOG](${`https://github.com/i18next-codemod/shared/blob/main/packages/${withoutPrefix(pkg.name)}/CHANGELOG.md`
+  } - [CHANGELOG](${`https://github.com/ahrjarrett/i18next-selector/shared/blob/main/packages/${withoutPrefix(pkg.name)}/CHANGELOG.md`
   })`
 
 export namespace Draw {

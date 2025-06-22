@@ -1,8 +1,8 @@
 export type JustURI = typeof JustURI
-export const JustURI = Symbol.for('i18next-vite-plugin/Just')
+export const JustURI = Symbol.for('@i18next-selector/vite-plugin/Just')
 
 export type NothingURI = typeof NothingURI
-export const NothingURI = Symbol.for('i18next-vite-plugin/Nothing')
+export const NothingURI = Symbol.for('@i18next-selector/vite-plugin/Nothing')
 
 export type Maybe<T> = Just<T> | Nothing
 export interface Just<T> { _tag: JustURI, value: T }
@@ -15,10 +15,10 @@ export function just<T>(x: T): Maybe<T> { return { _tag: JustURI, value: x } }
 export function nothing<T>(): Maybe<T> { return { _tag: NothingURI } }
 
 export type LeftURI = typeof LeftURI
-export const LeftURI = Symbol.for('i18next-vite-plugin/Left')
+export const LeftURI = Symbol.for('@i18next-selector/vite-plugin/Left')
 
 export type RightURI = typeof RightURI
-export const RightURI = Symbol.for('i18next-vite-plugin/Right')
+export const RightURI = Symbol.for('@i18next-selector/vite-plugin/Right')
 
 export type Either<L, R> = Left<L> | Right<R>
 export interface Left<L> { _tag: LeftURI, left: L }
