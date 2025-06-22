@@ -42,42 +42,38 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { t } from 'i18next';
+        "import { t } from "i18next"
 
-        t($ => $.abc.def.ghi);
-
-        t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        t($ => $.abc.def.ghi)
 
         t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        t($ => $.abc["^~ !"].ghi)
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });
+          defaultValue: "default value",
+          ns: "ns1"
+        })
 
-        function createTranslation1(key: string) {
-          return t($ => $.abc[key].ghi);
-        }
+        t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })
 
-        function createTranslation3(key: string) {
-          return t($ => $[key]);
-        }"
+        function createTranslation1(key: string) { return t($ => $.abc[key].ghi); }
+
+        function createTranslation3(key: string) { return t($ => $[key]); }"
       `)
     })
 
@@ -106,34 +102,34 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import i18next from 'i18next';
+        "import i18next from "i18next"
 
-        i18next.t($ => $.abc.def.ghi);
-
-        i18next.t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        i18next.t($ => $.abc.def.ghi)
 
         i18next.t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        i18next.t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        i18next.t($ => $.abc["^~ !"].ghi)
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        i18next.t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -162,34 +158,34 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import * as i18next from 'i18next';
+        "import * as i18next from "i18next"
 
-        i18next.t($ => $.abc.def.ghi);
-
-        i18next.t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        i18next.t($ => $.abc.def.ghi)
 
         i18next.t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        i18next.t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        i18next.t($ => $.abc["^~ !"].ghi)
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        i18next.t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -239,98 +235,98 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { t } from 'i18next';
+        "import { t } from "i18next"
 
-        t($ => $.abc.def);
+        t($ => $.abc.def)
 
         t($ => $.abc.def, {
-          defaultValue: t($ => $.ghi.jkl),
-        });
+          defaultValue: t($ => $.ghi.jkl)
+        })
 
         t($ => $.abc.def, {
           defaultValue: t($ => $.ghi.jkl, {
-            defaultValue: t($ => $.mno.pqr),
-          }),
-        });
+            defaultValue: t($ => $.mno.pqr)
+          })
+        })
 
         t($ => $.abc.def, {
-          ns: 'ns1',
-        });
+          ns: "ns1"
+        })
 
-        t($ => $.abc['^~ !'].ghi);
+        t($ => $.abc["^~ !"].ghi)
 
         t($ => $.abc.def, {
-          ns: 'ns1',
+          ns: "ns1",
 
           defaultValue: t($ => $.ghi.jkl, {
-            ns: 'ns2',
+            ns: "ns2",
 
             defaultValue: t($ => $.mno.pqr, {
-              ns: 'ns3',
-            }),
-          }),
-        });
+              ns: "ns3"
+            })
+          })
+        })
 
         t($ => $.abc.def, {
-          ns: 'ns1',
-
-          defaultValue: t($ => $.ghi.jkl, {
-            defaultValue: t($ => $.mno.pqr, {
-              ns: 'ns2',
-            }),
-          }),
-        });
-
-        t($ => $.abc.def, {
-          defaultValue: t($ => $.ghi.jkl, {
-            defaultValue: 'some default value',
-          }),
-        });
-
-        t($ => $.abc.def, {
-          ns: 'ns1',
+          ns: "ns1",
 
           defaultValue: t($ => $.ghi.jkl, {
             defaultValue: t($ => $.mno.pqr, {
-              ns: 'ns2',
-              defaultValue: 'some default value',
-            }),
-          }),
-        });
-
-        t($ => $.abc.def, {
-          ns: 'ns1',
-
-          defaultValue: t($ => $.ghi.jkl, {
-            defaultValue: t($ => $.mno.pqr, {
-              ns: 'ns2',
-              defaultValue: 'some default value',
-            }),
-          }),
-        });
-
-        t($ => $.abc.def, {
-          ns: 'ns1',
-
-          defaultValue: t($ => $.ghi.jkl, {
-            defaultValue: t($ => $.mno.pqr, {
-              ns: 'ns2',
-              defaultValue: 'some default value',
-            }),
-          }),
-
-          val: 'some val',
-        });
+              ns: "ns2"
+            })
+          })
+        })
 
         t($ => $.abc.def, {
           defaultValue: t($ => $.ghi.jkl, {
+            defaultValue: 'some default value'
+          })
+        })
+
+        t($ => $.abc.def, {
+          ns: "ns1",
+
+          defaultValue: t($ => $.ghi.jkl, {
             defaultValue: t($ => $.mno.pqr, {
-              defaultValue: 'some default value',
-            }),
+              ns: "ns2",
+              defaultValue: 'some default value'
+            })
+          })
+        })
+
+        t($ => $.abc.def, {
+          ns: "ns1",
+
+          defaultValue: t($ => $.ghi.jkl, {
+            defaultValue: t($ => $.mno.pqr, {
+              ns: "ns2",
+              defaultValue: 'some default value'
+            })
+          })
+        })
+
+        t($ => $.abc.def, {
+          ns: "ns1",
+
+          defaultValue: t($ => $.ghi.jkl, {
+            defaultValue: t($ => $.mno.pqr, {
+              ns: "ns2",
+              defaultValue: 'some default value'
+            })
           }),
 
-          val: 'some val',
-        });"
+          val: 'some val'
+        })
+
+        t($ => $.abc.def, {
+          defaultValue: t($ => $.ghi.jkl, {
+            defaultValue: t($ => $.mno.pqr, {
+              defaultValue: 'some default value'
+            })
+          }),
+
+          val: 'some val'
+        })"
       `)
     })
 
@@ -530,36 +526,36 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation();
+        const { t } = useTranslation()
 
-        t($ => $.abc.def.ghi);
-
-        t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        t($ => $.abc.def.ghi)
 
         t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        t($ => $.abc["^~ !"].ghi)
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -589,36 +585,36 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const T = useTranslation().t;
+        const T = useTranslation().t
 
-        T($ => $.abc.def.ghi);
-
-        T($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        T($ => $.abc.def.ghi)
 
         T($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        T($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        T($ => $.abc["^~ !"].ghi)
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        T($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -648,36 +644,36 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation as useT } from 'react-i18next';
+        "import { useTranslation as useT } from "react-i18next"
 
-        const t = useT().t;
+        const t = useT().t
 
-        t($ => $.abc.def.ghi);
-
-        t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        t($ => $.abc.def.ghi)
 
         t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        t($ => $.abc["^~ !"].ghi)
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -711,36 +707,36 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const T = useTranslation().t;
+        const T = useTranslation().t
 
-        T($ => $.abc.def.ghi);
-
-        T($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        T($ => $.abc.def.ghi)
 
         T($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        T($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        T($ => $.abc["^~ !"].ghi)
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        T($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -770,36 +766,36 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation as useT } from 'react-i18next';
+        "import { useTranslation as useT } from "react-i18next"
 
-        const t = useT().t;
+        const t = useT().t
 
-        t($ => $.abc.def.ghi);
-
-        t($ => $.abc.def.ghi, {
-          ns: 'ns1',
-        });
+        t($ => $.abc.def.ghi)
 
         t($ => $.abc.def.ghi, {
-          ns: 'bob',
-        });
-
-        t($ => $.abc['^~ !'].ghi);
+          ns: "ns1"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-        });
+          ns: "bob"
+        })
+
+        t($ => $.abc["^~ !"].ghi)
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          ns: 'ns1',
-        });
+          defaultValue: "default value"
+        })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: 'default value',
-          val: 'some val',
-          ns: 'ns1',
-        });"
+          defaultValue: "default value",
+          ns: "ns1"
+        })
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: "default value",
+          val: "some val",
+          ns: "ns1"
+        })"
       `)
     })
 
@@ -819,13 +815,13 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
-        t($ => $.abc.def.ghi, i18nextOptions);"
+        t($ => $.abc.def.ghi, i18nextOptions)"
       `)
     })
 
@@ -845,16 +841,16 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
         t($ => $.abc.def.ghi, {
           ...i18nextOptions,
-          ns: 'ns',
-        });"
+          ns: "ns"
+        })"
       `)
     })
 
@@ -874,16 +870,16 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
         t($ => $.abc.def.ghi, {
           ...i18nextOptions,
-          defaultValue: 'some fallback value',
-        });"
+          defaultValue: "some fallback value"
+        })"
       `)
     })
 
@@ -903,15 +899,15 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
         t($ => $.abc.def.ghi, {
-          defaultValue: t($ => $.jkl.mno.pqr, i18nextOptions),
-        });"
+          defaultValue: t($ => $.jkl.mno.pqr, i18nextOptions)
+        })"
       `)
     })
 
@@ -931,18 +927,18 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
         t($ => $.abc.def.ghi, {
           defaultValue: t($ => $.jkl.mno.pqr, {
             ...i18nextOptions,
-            ns: 'ns',
-          }),
-        });"
+            ns: "ns"
+          })
+        })"
       `)
     })
 
@@ -962,19 +958,19 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        const i18nextOptions = {};
+        const i18nextOptions = {}
 
         t($ => $.abc.def.ghi, {
           defaultValue: t($ => $.jkl.mno.pqr, {
             ...i18nextOptions,
-            defaultValue: 'some default value',
-            ns: 'ns',
-          }),
-        });"
+            defaultValue: "some default value",
+            ns: "ns"
+          })
+        })"
       `)
     })
 
@@ -992,13 +988,40 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         })
       ).toMatchInlineSnapshot
         (`
-        "import { useTranslation } from 'react-i18next';
+        "import { useTranslation } from "react-i18next"
 
-        const { t } = useTranslation('ns');
+        const { t } = useTranslation("ns")
 
-        t($ => $.abc.def.ghi);"
+        t($ => $.abc.def.ghi)"
       `)
     })
+
+    vi.it('〖⛳️〗› ❲transform❳: it supports inline ternaries', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const condition = Math.random() > 0.5`,
+            ``,
+            `t(condition ? "abc.def.ghi" : "jkl.mno.pqr")`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from "react-i18next"
+
+        const { t } = useTranslation("ns")
+
+        const condition = Math.random() > 0.5
+
+        t($ => condition ? $.abc.def.ghi : $.jkl.mno.pqr)"
+      `)
+    })
+
   })
 
 })
