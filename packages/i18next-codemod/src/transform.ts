@@ -1,10 +1,13 @@
 import type * as j from 'jscodeshift'
 import type { ExpressionKind, IdentifierKind, TSTypeKind } from 'ast-types/lib/gen/kinds'
-import prettier from '@prettier/sync'
 
 import { has } from './has.js'
 
-type TFunctionArg = j.Identifier | j.MemberExpression | j.ArrowFunctionExpression | j.ObjectExpression
+type TFunctionArg =
+  | j.Identifier
+  | j.MemberExpression
+  | j.ArrowFunctionExpression
+  | j.ObjectExpression
 
 type SeparatedNamespace = {
   ns?: string
@@ -26,6 +29,10 @@ function isTemplateLiteralNode(x: unknown): x is j.TemplateLiteral {
 
 function isMemberExpressionNode(x: unknown): x is j.MemberExpression {
   return has('type', type => type === 'MemberExpression')(x)
+}
+
+function isConditionalExpressionNode(x: unknown): x is j.ConditionalExpression {
+  return has('type', type => type === 'ConditionalExpression')(x)
 }
 
 function isIdentifierNode(x: unknown): x is j.Identifier {
@@ -130,14 +137,10 @@ function is18nextTFunction(
 export function transform(file: j.FileInfo, api: j.API) {
   const j = api.jscodeshift
   const root = j(file.source)
-
   const i18nAliases = new Set<string | IdentifierKind>()
   const tAliases = new Set<string | IdentifierKind>()
   const useTranslationAliases = new Set<string | IdentifierKind>()
-  const context = {
-    i18nAliases,
-    tAliases,
-  }
+  const context = { i18nAliases, tAliases }
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
@@ -232,7 +235,7 @@ export function transform(file: j.FileInfo, api: j.API) {
       ) {
         const keys = arg0.elements.map(el => el?.value)
 
-        /** Gather default value + extra option props (if any) */
+        /** gather default value + extra option props (if any) */
         let positionalDefaultValue = null
         let optionsObject = null
         if (isStringLiteralNode(arg1)) positionalDefaultValue = arg1
@@ -263,7 +266,7 @@ export function transform(file: j.FileInfo, api: j.API) {
 
         const calleeClone = clone(node.callee)
 
-        /** Recursively build nested t() calls */
+        /** recursively build nested `t()` calls */
         const buildCall = (idx: number) => {
           const { ns, path } = separateNamespaceFromPath(keys[idx])
 
@@ -304,7 +307,7 @@ export function transform(file: j.FileInfo, api: j.API) {
           return j.callExpression(clone(calleeClone), args)
         }
 
-        /** Replace the entire original call */
+        /** replace the entire original call */
         j(p).replaceWith(buildCall(0))
         /** return so we don't fall through and start evaluating other branches */
         return
@@ -317,29 +320,28 @@ export function transform(file: j.FileInfo, api: j.API) {
           const { node } = p
           const [arg0, arg1, arg2] = p.node.arguments
 
-          /** case: dynamic-key */
           if (
-            isTemplateLiteralNode(arg0)
-            || isIdentifierNode(arg0)
-            || isMemberExpressionNode(arg0)
+            isConditionalExpressionNode(arg0) &&
+            isStringLiteralNode(arg0.consequent) &&
+            isStringLiteralNode(arg0.alternate) &&
+            typeof arg0.consequent.value === 'string' &&
+            typeof arg0.alternate.value === 'string'
           ) {
-            /* derive selector function */
-            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0) : [arg0]
             const selectorFn = j.arrowFunctionExpression(
               [j.identifier('$')],
-              tokensToSelector(tokens, j)
+              j.conditionalExpression(
+                arg0.test,
+                keyToSelector(arg0.consequent.value, j).body as ExpressionKind,
+                keyToSelector(arg0.alternate.value, j).body as ExpressionKind
+              )
             )
 
             const newArgs: TFunctionArg[] = [selectorFn]
             const opts: { [x: string]: unknown } = {}
 
-            /** positional defaultValue (string) */
-            if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
-
-            /** object‑style options (2nd or 3rd arg) */
-            const optObj = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
-            if (optObj) {
-              optObj.properties.forEach(prop => {
+            const userDefinedOptionsObject = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
+            if (userDefinedOptionsObject) {
+              userDefinedOptionsObject.properties.forEach(prop => {
                 if (has('key')(prop) && has('value')(prop)) {
                   const { key, value } = prop
                   if (has('name', (name) => typeof name === 'string')(key)) {
@@ -387,15 +389,78 @@ export function transform(file: j.FileInfo, api: j.API) {
               )
             }
 
-            // if (Object.keys(opts).length) {
-            //   newArgs.push(
-            //     j.objectExpression(
-            //       Object.entries(opts).map(
-            //         ([k, v]) => j.property('init', j.identifier(k), v as never)
-            //       )
-            //     )
-            //   )
-            // }
+            node.arguments = newArgs
+            /** return so we don't fall through and start evaluating other branches */
+            return
+          }
+
+          /** case: dynamic-key */
+          if (
+            isTemplateLiteralNode(arg0)
+            || isIdentifierNode(arg0)
+            || isMemberExpressionNode(arg0)
+          ) {
+            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0) : [arg0]
+            const selectorFn = j.arrowFunctionExpression(
+              [j.identifier('$')],
+              tokensToSelector(tokens, j)
+            )
+
+            const newArgs: TFunctionArg[] = [selectorFn]
+            const opts: { [x: string]: unknown } = {}
+
+            /** positional defaultValue (string) */
+            if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
+
+            const userDefinedOptionsObject = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
+            if (userDefinedOptionsObject) {
+              userDefinedOptionsObject.properties.forEach(prop => {
+                if (has('key')(prop) && has('value')(prop)) {
+                  const { key, value } = prop
+                  if (has('name', (name) => typeof name === 'string')(key)) {
+                    opts[key.name] = value
+                  } else if (has('value', (value) => typeof value === 'string')(key)) {
+                    opts[key.value] = value
+                  }
+                }
+              })
+            }
+
+            const hasOpts = Object.keys(opts).length > 0
+            const arg1IsPointer = isIdentifierNode(arg1) || isMemberExpressionNode(arg1)
+            const arg2IsPointer = isIdentifierNode(arg2) || isMemberExpressionNode(arg2)
+
+            if (arg1IsPointer) {
+              if (hasOpts) {
+                newArgs.push(
+                  j.objectExpression([
+                    j.spreadElement(arg1),
+                    ...Object.entries(opts).map(
+                      ([k, v]) => j.property('init', j.identifier(k), v as never)
+                    )
+                  ])
+                )
+              } else {
+                newArgs.push(arg1)
+              }
+            } else if (arg2IsPointer && hasOpts) {
+              newArgs.push(
+                j.objectExpression([
+                  j.spreadElement(arg2),
+                  ...Object.entries(opts).map(
+                    ([k, v]) => j.property('init', j.identifier(k), v as never)
+                  )
+                ])
+              )
+            } else if (hasOpts) {
+              newArgs.push(
+                j.objectExpression(
+                  Object.entries(opts).map(
+                    ([k, v]) => j.property('init', j.identifier(k), v as never)
+                  )
+                )
+              )
+            }
 
             node.arguments = newArgs
             /** return so we don't fall through and start evaluating other branches */
@@ -412,9 +477,9 @@ export function transform(file: j.FileInfo, api: j.API) {
 
       if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
 
-      const optObj = [arg1, arg2].find(isObjectExpressionNode)
-      if (optObj) {
-        optObj.properties.forEach(prop => {
+      const userDefinedOptionsObject = [arg1, arg2].find(isObjectExpressionNode)
+      if (userDefinedOptionsObject) {
+        userDefinedOptionsObject.properties.forEach(prop => {
           if (has('key')(prop) && has('value')(prop)) {
             const { key, value } = prop
             if (has('name', (name) => typeof name === 'string')(key)) {
@@ -464,23 +529,8 @@ export function transform(file: j.FileInfo, api: j.API) {
         )
       }
 
-      // if (Object.keys(opts).length) {
-      //   newArgs.push(
-      //     j.objectExpression(
-      //       Object.entries(opts).map(
-      //         ([k, v]) => j.property('init', j.identifier(k), v as never)
-      //       )
-      //     )
-      //   )
-      // }
-
       node.arguments = newArgs
     })
 
-  return prettier.format(
-    root.toSource(), {
-    parser: 'typescript',
-    arrowParens: 'avoid',
-    singleQuote: true,
-  })
-};
+  return root.toSource()
+}
