@@ -136,7 +136,7 @@ importers:
         specifier: ^11.0.0
         version: 11.0.3
 
-  packages/i18next-codemod:
+  packages/codemod:
     dependencies:
       jscodeshift:
         specifier: ^17.3.0
@@ -153,7 +153,7 @@ importers:
         version: 0.16.1
     publishDirectory: dist
 
-  packages/i18next-vite-plugin:
+  packages/vite-plugin:
     dependencies:
       '@prettier/sync':
         specifier: ^0.6.1

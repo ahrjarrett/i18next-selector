@@ -1,5 +1,4 @@
 packages:
-  - benchmarks/*/
   - bin
   - packages/*/
 catalog:

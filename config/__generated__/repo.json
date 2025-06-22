@@ -1,5 +1,5 @@
 {
-  "url": "https://github.com/ahrjarrett/i18next-codemod.git",
-  "name": "@i18next-codemod",
-  "scope": ""
+  "url": "https://github.com/ahrjarrett/i18next-selector.git",
+  "name": "i18next-selector",
+  "scope": "@i18next-selector"
 }

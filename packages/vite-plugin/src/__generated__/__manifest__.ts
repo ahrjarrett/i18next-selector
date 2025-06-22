@@ -1,11 +1,20 @@
 export default {
-  "name": "i18next-codemod",
+  "name": "@i18next-selector/vite-plugin",
   "type": "module",
   "version": "0.0.0",
   "private": false,
   "description": "",
   "license": "MIT",
-  "i18next-codemod": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahrjarrett/i18next-selector.git",
+    "directory": "packages/"
+  },
+  "bugs": {
+    "url": "https://github.com/ahrjarrett/i18next-selector/issues",
+    "email": "ahrjarrett@gmail.com"
+  },
+  "@i18next-selector": {
     "generateExports": {
       "include": ["**/*.ts"]
     },
@@ -30,12 +39,10 @@ export default {
     "clean:deps": "rm -rf node_modules",
     "test": "vitest"
   },
-  "devDependencies": {
-    "@prettier/sync": "^0.5.5",
-    "@types/jscodeshift": "^17.3.0",
-    "ast-types": "0.16.1"
-  },
   "dependencies": {
-    "jscodeshift": "^17.3.0"
+    "@prettier/sync": "^0.6.1",
+    "@traversable/json": "^0.0.25",
+    "@traversable/registry": "^0.0.24",
+    "vite": "catalog:"
   }
 } as const

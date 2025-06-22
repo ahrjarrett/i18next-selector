@@ -8,7 +8,7 @@ import type { TOptions } from 'i18next'
 import { transformToTypeScript } from './transform.js'
 
 function log(...args: any[]) {
-  console.debug('[i18next-vite-plugin]:', ...args)
+  console.debug('[@i18next-selector/vite-plugin]:', ...args)
 }
 
 /**

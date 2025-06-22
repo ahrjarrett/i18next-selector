@@ -1,22 +1,17 @@
 export default {
-  "name": "i18next-vite-plugin",
+  "name": "@i18next-selector/codemod",
   "type": "module",
   "version": "0.0.0",
   "private": false,
   "description": "",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/traversable/schema.git",
-    "directory": "packages/"
-  },
-  "bugs": {
-    "url": "https://github.com/traversable/schema/issues",
-    "email": "ahrjarrett@gmail.com"
-  },
-  "i18next-codemod": {
-    "generateExports": { "include": ["**/*.ts"] },
-    "generateIndex": { "include": ["**/*.ts"] }
+  "@i18next-selector": {
+    "generateExports": {
+      "include": ["**/*.ts"]
+    },
+    "generateIndex": {
+      "include": ["**/*.ts"]
+    }
   },
   "publishConfig": {
     "access": "public",
@@ -35,6 +30,12 @@ export default {
     "clean:deps": "rm -rf node_modules",
     "test": "vitest"
   },
-  "peerDependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@prettier/sync": "^0.5.5",
+    "@types/jscodeshift": "^17.3.0",
+    "ast-types": "0.16.1"
+  },
+  "dependencies": {
+    "jscodeshift": "^17.3.0"
+  }
 } as const

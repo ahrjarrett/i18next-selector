@@ -1,12 +1,12 @@
 import * as vi from 'vitest'
 import { applyTransform } from 'jscodeshift/src/testUtils.js'
 
-import { transform } from '@i18next-codemod'
+import { transform } from '@i18next-selector/codemod'
 
 const module = { default: transform, parser: 'ts' as const }
 const options = {}
 
-vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
+vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
 
   vi.describe('〖⛳️〗‹‹ ❲t❳', () => {
     vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is a named import', () => {
@@ -799,7 +799,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 2nd arg', () => {
+    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
@@ -825,7 +825,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer, is passed as the 2nd arg, and has computed properties', () => {
+    vi.it('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
@@ -854,7 +854,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 3rd arg', () => {
+    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
@@ -883,7 +883,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 2nd arg in a nested call', () => {
+    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg in a nested call', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
@@ -911,7 +911,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer, is passed as the 2nd arg, and has computed properties in a nested call', () => {
+    vi.it('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties in a nested call', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
@@ -942,7 +942,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and is passed as the 3rd arg in a nested call', () => {
+    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg in a nested call', () => {
       vi.expect(
         applyTransform(module, options, {
           path: '',
