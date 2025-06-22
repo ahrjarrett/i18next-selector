@@ -4,6 +4,13 @@ import prettier from '@prettier/sync'
 
 import { has } from './has.js'
 
+type TFunctionArg = j.Identifier | j.MemberExpression | j.ArrowFunctionExpression | j.ObjectExpression
+
+type SeparatedNamespace = {
+  ns?: string
+  path: string
+}
+
 const PATTERN = {
   identifier: /^[A-Za-z_$][A-Za-z0-9_$]*$/,
   digit: /^\d+$/,
@@ -43,7 +50,7 @@ function isObjectPatternNode(x: unknown): x is j.ObjectPattern {
 
 function keyToSelector(key: string, j: j.JSCodeshift) {
   const path = key.split('.')
-  const expr = path.reduce<j.Identifier | j.MemberExpression>(
+  const expr = path.reduce<TFunctionArg>(
     (acc, part) => {
       if (PATTERN.digit.test(part))
         return j.memberExpression(acc, j.literal(Number(part)), true)
@@ -55,11 +62,6 @@ function keyToSelector(key: string, j: j.JSCodeshift) {
     j.identifier('$')
   )
   return j.arrowFunctionExpression([j.identifier('$')], expr)
-}
-
-type SeparatedNamespace = {
-  ns?: string
-  path: string
 }
 
 function separateNamespaceFromPath(key: string): SeparatedNamespace {
@@ -328,7 +330,7 @@ export function transform(file: j.FileInfo, api: j.API) {
               tokensToSelector(tokens, j)
             )
 
-            const newArgs: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [selectorFn]
+            const newArgs: TFunctionArg[] = [selectorFn]
             const opts: { [x: string]: unknown } = {}
 
             /** positional defaultValue (string) */
@@ -349,7 +351,33 @@ export function transform(file: j.FileInfo, api: j.API) {
               })
             }
 
-            if (Object.keys(opts).length) {
+            const hasOpts = Object.keys(opts).length > 0
+            const arg1IsPointer = isIdentifierNode(arg1) || isMemberExpressionNode(arg1)
+            const arg2IsPointer = isIdentifierNode(arg2) || isMemberExpressionNode(arg2)
+
+            if (arg1IsPointer) {
+              if (hasOpts) {
+                newArgs.push(
+                  j.objectExpression([
+                    j.spreadElement(arg1),
+                    ...Object.entries(opts).map(
+                      ([k, v]) => j.property('init', j.identifier(k), v as never)
+                    )
+                  ])
+                )
+              } else {
+                newArgs.push(arg1)
+              }
+            } else if (arg2IsPointer && hasOpts) {
+              newArgs.push(
+                j.objectExpression([
+                  j.spreadElement(arg2),
+                  ...Object.entries(opts).map(
+                    ([k, v]) => j.property('init', j.identifier(k), v as never)
+                  )
+                ])
+              )
+            } else if (hasOpts) {
               newArgs.push(
                 j.objectExpression(
                   Object.entries(opts).map(
@@ -358,6 +386,16 @@ export function transform(file: j.FileInfo, api: j.API) {
                 )
               )
             }
+
+            // if (Object.keys(opts).length) {
+            //   newArgs.push(
+            //     j.objectExpression(
+            //       Object.entries(opts).map(
+            //         ([k, v]) => j.property('init', j.identifier(k), v as never)
+            //       )
+            //     )
+            //   )
+            // }
 
             node.arguments = newArgs
             /** return so we don't fall through and start evaluating other branches */
@@ -369,7 +407,7 @@ export function transform(file: j.FileInfo, api: j.API) {
 
       const { ns, path } = separateNamespaceFromPath(arg0.value)
       const selectorFn = keyToSelector(path, j)
-      const newArgs: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [selectorFn]
+      const newArgs: TFunctionArg[] = [selectorFn]
       const opts: { [x: string]: unknown } = {}
 
       if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
@@ -389,7 +427,34 @@ export function transform(file: j.FileInfo, api: j.API) {
       }
 
       if (ns && !('ns' in opts)) opts.ns = j.literal(ns)
-      if (Object.keys(opts).length) {
+
+      const hasOpts = Object.keys(opts).length > 0
+      const arg1IsPointer = isIdentifierNode(arg1) || isMemberExpressionNode(arg1)
+      const arg2IsPointer = isIdentifierNode(arg2) || isMemberExpressionNode(arg2)
+
+      if (arg1IsPointer) {
+        if (hasOpts) {
+          newArgs.push(
+            j.objectExpression([
+              j.spreadElement(arg1),
+              ...Object.entries(opts).map(
+                ([k, v]) => j.property('init', j.identifier(k), v as never)
+              )
+            ])
+          )
+        } else {
+          newArgs.push(arg1)
+        }
+      } else if (arg2IsPointer && hasOpts) {
+        newArgs.push(
+          j.objectExpression([
+            j.spreadElement(arg2),
+            ...Object.entries(opts).map(
+              ([k, v]) => j.property('init', j.identifier(k), v as never)
+            )
+          ])
+        )
+      } else if (hasOpts) {
         newArgs.push(
           j.objectExpression(
             Object.entries(opts).map(
@@ -398,6 +463,16 @@ export function transform(file: j.FileInfo, api: j.API) {
           )
         )
       }
+
+      // if (Object.keys(opts).length) {
+      //   newArgs.push(
+      //     j.objectExpression(
+      //       Object.entries(opts).map(
+      //         ([k, v]) => j.property('init', j.identifier(k), v as never)
+      //       )
+      //     )
+      //   )
+      // }
 
       node.arguments = newArgs
     })

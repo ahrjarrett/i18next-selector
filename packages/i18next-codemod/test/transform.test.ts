@@ -803,6 +803,181 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
       `)
     })
 
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 2nd arg', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("abc.def.ghi", i18nextOptions)`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, i18nextOptions);"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer, is passed as the 2nd arg, and has computed properties', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("ns:abc.def.ghi", i18nextOptions)`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, {
+          ...i18nextOptions,
+          ns: 'ns',
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 3rd arg', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("abc.def.ghi", "some fallback value", i18nextOptions)`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, {
+          ...i18nextOptions,
+          defaultValue: 'some fallback value',
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and passed as the 2nd arg in a nested call', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("abc.def.ghi", { defaultValue: t("jkl.mno.pqr", i18nextOptions) })`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: t($ => $.jkl.mno.pqr, i18nextOptions),
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer, is passed as the 2nd arg, and has computed properties in a nested call', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("abc.def.ghi", { defaultValue: t("ns:jkl.mno.pqr", i18nextOptions) })`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: t($ => $.jkl.mno.pqr, {
+            ...i18nextOptions,
+            ns: 'ns',
+          }),
+        });"
+      `)
+    })
+
+    vi.it('〖⛳️〗› ❲transform❳: it preserves options object is a pointer and is passed as the 3rd arg in a nested call', () => {
+      vi.expect(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { t } = useTranslation("ns")`,
+            ``,
+            `const i18nextOptions = {}`,
+            ``,
+            `t("abc.def.ghi", { defaultValue: t("ns:jkl.mno.pqr", "some default value", i18nextOptions) })`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from 'react-i18next';
+
+        const { t } = useTranslation('ns');
+
+        const i18nextOptions = {};
+
+        t($ => $.abc.def.ghi, {
+          defaultValue: t($ => $.jkl.mno.pqr, {
+            ...i18nextOptions,
+            defaultValue: 'some default value',
+            ns: 'ns',
+          }),
+        });"
+      `)
+    })
+
     vi.it('〖⛳️〗› ❲transform❳: it does not apply selector to the namespace passed to `useTranslation`', () => {
       vi.expect(
         applyTransform(module, options, {
@@ -824,7 +999,6 @@ vi.describe('〖⛳️〗‹‹‹ ❲i18next-codemod❳', () => {
         t($ => $.abc.def.ghi);"
       `)
     })
-
   })
 
 })
