@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "ahrjarrett/i18next-selector" }],
+  "access": "public",
+  "snapshot": {},
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["i18next-selector-bin"]
+}
