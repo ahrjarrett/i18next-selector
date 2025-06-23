@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.3
+
+### Patch Changes
+
+- [#11](https://github.com/ahrjarrett/i18next-selector/pull/11) [`26850f4`](https://github.com/ahrjarrett/i18next-selector/commit/26850f435b6ce32892d8d5b1edd406f37ec7326f) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - iteration on bin script
+
 ## 0.0.2
 
 ### Patch Changes
