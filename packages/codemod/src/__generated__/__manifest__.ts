@@ -6,7 +6,11 @@ export default {
   "description": "",
   "license": "MIT",
   "bin": {
+<<<<<<< Updated upstream
     "@i18next-selector/codemod": "./dist/cjs/bin.js"
+=======
+    "i18next-selector-codemod": "./dist/dist/cjs/bin.js"
+>>>>>>> Stashed changes
   },
   "@i18next-selector": {
     "generateExports": {
@@ -27,6 +31,7 @@ export default {
     "build:annotate": "babel build --plugins annotate-pure-calls --out-dir build --source-maps",
     "build:esm": "tsc -b tsconfig.build.json",
     "build:cjs": "babel build/esm --plugins @babel/transform-export-namespace-from --plugins @babel/transform-modules-commonjs --out-dir build/cjs --source-maps",
+    "build:dist": "chmod +x dist/dist/cjs/bin.js",
     "check": "tsc -b tsconfig.json",
     "clean": "pnpm run \"/^clean:.*/\"",
     "clean:build": "rm -rf .tsbuildinfo dist build",
