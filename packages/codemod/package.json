@@ -5,6 +5,7 @@
   "private": false,
   "description": "",
   "license": "MIT",
+  "bin": "dist/dist/cjs/bin.js",
   "@i18next-selector": {
     "generateExports": {
       "include": [

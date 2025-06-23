@@ -14,6 +14,75 @@ type SeparatedNamespace = {
   path: string
 }
 
+type Parser = 
+  | 'babel'
+  | 'babylon'
+  | 'flow'
+  | 'ts'
+  | 'tsx'
+
+declare const Options: {
+  /** 
+   * ## {@link Options.nsSeparator `Options.nsSeparator`}
+   * 
+   * Char to split namespace from key
+   * 
+   * See also:
+   * - The [`i18next` configuration options docs](https://www.i18next.com/overview/configuration-options#others)
+   * 
+   * @default ':'
+   */
+  nsSeparator?: string | false
+  /** 
+   * ## {@link Options.keySeparator `Options.keySeparator`}
+   * 
+   * Char to separate keys.
+   * 
+   * See also:
+   * - The [`i18next` configuration options docs](https://www.i18next.com/overview/configuration-options#others)
+   * 
+   * @default '.'
+   */
+  keySeparator?: string
+  /**
+   * ## {@link Options.dry `Options.dry`}
+   * 
+   * Dry run (no changes are made to files). Forwarded to `jscodeshift`.
+   * 
+   * See also:
+   * - The [jscodeshift CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
+   * 
+   * @default false
+   */
+  dry?: boolean
+  /**
+   * ## {@link Options.silent `Options.silent`}
+   * 
+   * Do not write to stdout or stderr. Forwarded to `jscodeshift`.
+   * 
+   * See also:
+   * - The [`jscodeshift` CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
+   * 
+   * @default false
+   */
+  silent?: boolean
+  /**
+   * ## {@link Options.silent `Options.silent`}
+   * 
+   * The parser to use for parsing the source files. Forwarded to `jscodeshift`.
+   * 
+   * One of: `'babel' | 'babylon' | 'flow' | 'ts' | 'tsx'`
+   * 
+   * See also:
+   * - The [`jscodeshift` CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
+   * 
+   * @default 'tsx'
+   */
+  parser?: Parser
+}
+
+export type Options = typeof Options
+
 const PATTERN = {
   identifier: /^[A-Za-z_$][A-Za-z0-9_$]*$/,
   digit: /^\d+$/,
