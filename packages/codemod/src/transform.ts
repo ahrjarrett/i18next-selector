@@ -14,7 +14,7 @@ type SeparatedNamespace = {
   path: string
 }
 
-type Parser = 
+type Parser =
   | 'babel'
   | 'babylon'
   | 'flow'
@@ -603,3 +603,5 @@ export function transform(file: j.FileInfo, api: j.API) {
 
   return root.toSource()
 }
+
+export default transform
