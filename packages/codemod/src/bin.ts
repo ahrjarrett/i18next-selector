@@ -1,7 +1,5 @@
-#!/usr/bin/env node
-// #!/usr/bin/env pnpm dlx tsx
+#!/usr/bin/env pnpm dlx tsx
 import * as path from 'node:path'
-import * as fs from 'node:fs'
 import yargs from 'yargs'
 import { execSync } from 'node:child_process'
 
@@ -17,6 +15,7 @@ interface Options {
 
 const [CMD_PATH, SCRIPT_PATH, ...args] = process.argv
 const DIR_NAME = path.dirname(SCRIPT_PATH)
+const TRANSFORM_PATH = path.resolve(DIR_NAME, 'transform.ts')
 
 const transformPath = path.resolve('transform.ts')
 
@@ -40,13 +39,14 @@ function main() {
     sourceDir: parsedOptions._?.[0] || defaults.sourceDir,
   } satisfies Required<Options>
 
-  const TRANSFORM_PATH = `${CMD_PATH}/node_modules/@i18next-selector/codemod/dist/cjs/transform.js`
+  // const TRANSFORM_PATH = `${CMD_PATH}/node_modules/@i18next-selector/codemod/dist/cjs/transform.js`
 
-  const CMD = `npx jscodeshift --parser=tsx --no-babel -t="${TRANSFORM_PATH}" --nsSeparator="${config.nsSeparator}" --keySeparator="${config.keySeparator}" ${config.sourceDir}`
+  const CMD = `npx jscodeshift --parser=tsx -t="${TRANSFORM_PATH}" --nsSeparator="${config.nsSeparator}" --keySeparator="${config.keySeparator}" ${config.sourceDir}`
 
+  console.log('DIR_PATH', path.resolve(DIR_NAME, 'transform.ts'))
   console.log('CMD', CMD)
 
-  execSync(CMD)
+  execSync(CMD, { stdio: 'inherit' })
 
   // console.log('sourceDir', config.sourceDir)
   // console.log('DIR_NAME', DIR_NAME)
