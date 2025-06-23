@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.7
+
+### Patch Changes
+
+- [#22](https://github.com/ahrjarrett/i18next-selector/pull/22) [`474521b`](https://github.com/ahrjarrett/i18next-selector/commit/474521b9e6aa52f07d5d9a7b3eaface2fab8022f) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - try(codemod): use the more verbose node_modules path to run the script for now :sigh:
+
 ## 0.0.6
 
 ### Patch Changes
