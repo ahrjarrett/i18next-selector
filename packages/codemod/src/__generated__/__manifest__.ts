@@ -1,12 +1,12 @@
 export default {
   "name": "@i18next-selector/codemod",
   "type": "module",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "description": "",
   "license": "MIT",
   "bin": {
-    "i18next-selector-codemod": "./dist/cjs/bin.js",
+    "i18next-selector-codemod": "./dist/src/bin.ts",
     "__i18next-selector-codemod__": "./src/bin.ts"
   },
   "@i18next-selector": {

@@ -1,5 +1,13 @@
 # @i18next-selector/codemod
 
+## 0.0.6
+
+### Patch Changes
+
+- [#20](https://github.com/ahrjarrett/i18next-selector/pull/20) [`75f0d88`](https://github.com/ahrjarrett/i18next-selector/commit/75f0d88c13ce8f594edc1ad0c06996f633e6ee40) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - try(codemod): use src instead of dist
+
+- [#20](https://github.com/ahrjarrett/i18next-selector/pull/20) [`5076eae`](https://github.com/ahrjarrett/i18next-selector/commit/5076eae169fe1f083f1b4780cf3406d00f86686b) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - try(codemod): use `src` instead of `dist` target
+
 ## 0.0.5
 
 ### Patch Changes
