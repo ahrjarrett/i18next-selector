@@ -1,9 +1,7 @@
-#!/usr/bin/env pnpm dlx tsx
+#!/usr/bin/env node
 
 import * as path from 'node:path'
 import { run } from 'jscodeshift/src/Runner.js'
-
-import type { Options } from './transform.js'
 
 const transformPath = path.resolve('transform.ts')
 
