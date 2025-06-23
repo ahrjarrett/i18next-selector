@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.4
+
+### Patch Changes
+
+- [#15](https://github.com/ahrjarrett/i18next-selector/pull/15) [`9423352`](https://github.com/ahrjarrett/i18next-selector/commit/9423352b531cbacc1fb4e4092557543d5186c625) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): permissions issue with bin script
+
 ## 0.0.3
 
 ### Patch Changes
