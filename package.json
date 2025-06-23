@@ -10,7 +10,7 @@
     "build:pkgs": "pnpm --filter \"@i18next-selector/*\" run \"/^build:.*/\"",
     "build:root": "tsc -b tsconfig.build.json && pnpm run build:docs",
     "build:post": "pnpm circular",
-    "build:dist": "pnpm dlx tsx ./bin/pack.ts",
+    "build:dist": "pnpm dlx tsx ./bin/pack.ts && pnpm --recursive --parallel run build:dist",
     "changes": "changeset add",
     "check": "pnpm run \"/^check:.*/\"",
     "check:pkgs": "pnpm -r --stream --parallel run check",
