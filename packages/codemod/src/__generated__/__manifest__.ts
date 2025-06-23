@@ -6,11 +6,7 @@ export default {
   "description": "",
   "license": "MIT",
   "bin": {
-<<<<<<< Updated upstream
     "@i18next-selector/codemod": "./dist/cjs/bin.js"
-=======
-    "i18next-selector-codemod": "./dist/dist/cjs/bin.js"
->>>>>>> Stashed changes
   },
   "@i18next-selector": {
     "generateExports": {
