@@ -7,13 +7,13 @@
 To install the codemod, copy/paste the appropriate install script for your package manager:
 
 ```base
-// if you use pnpm:
+# if you use pnpm:
 $ pnpm add -D @i18next-selector/codemod
 
-// if you use npm:
+# if you use npm:
 $ npm i -D @i18next-selector/codemod
 
-// if you use yarn:
+# if you use yarn:
 $ yarn add -D @i18next-selector/codemod
 ```
 
@@ -26,6 +26,7 @@ To apply the codemod, `cd` into the directory where your `node_modules` is insta
 If you know how to fix this, PRs are welcome! :)
 
 ```bash
+# passing ./src is optional if the path is the same as where you're calling the script
 $ ./node_modules/@i18next-selector/codemod/dist/cjs/bin.js ./src
 
 # if you've configured i18next to use a custom `nsSeparator` or `keySeparator`, pass them as flags:
