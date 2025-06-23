@@ -13,13 +13,9 @@ interface Options {
   sourceDir?: Default<'./'>
 }
 
-const [CMD_PATH, SCRIPT_PATH, ...args] = process.argv
+const [SCRIPT_PATH, ...args] = process.argv
 const DIR_NAME = path.dirname(SCRIPT_PATH)
 const TRANSFORM_PATH = path.resolve(DIR_NAME, 'transform.js')
-
-const transformPath = path.resolve('transform.ts')
-
-const defaultOptions = {}
 
 const parsedOptions = yargs(args)
   .scriptName('i18next-selector-codemod')
@@ -39,25 +35,11 @@ function main() {
     sourceDir: parsedOptions._?.[0] || defaults.sourceDir,
   } satisfies Required<Options>
 
-  // const TRANSFORM_PATH = `${CMD_PATH}/node_modules/@i18next-selector/codemod/dist/cjs/transform.js`
-
   const CMD = `npx jscodeshift --parser=tsx --no-babel -t="${TRANSFORM_PATH}" --nsSeparator="${config.nsSeparator}" --keySeparator="${config.keySeparator}" ${config.sourceDir}`
 
-  console.log('DIR_PATH', path.resolve(DIR_NAME, 'transform.ts'))
   console.log('CMD', CMD)
 
   execSync(CMD, { stdio: 'inherit' })
-
-  // console.log('sourceDir', config.sourceDir)
-  // console.log('DIR_NAME', DIR_NAME)
-
-  // pnpm dlx jscodeshift --parser=tsx --no-babel -t src/migrate-i18next.cjs src
-
-  // console.group('\n\n\rpackages/codemod/src/bin.ts', '\n\n\r')
-  // console.debug('\n\n\rpath.resolve()', path.resolve(), '\n\r')
-  // console.debug('\n\n\rpath.resolve("transform.ts")', path.resolve('transform.ts'), '\n\r')
-  // console.debug('\n\n\rprocess.argv', process.argv, '\n\r')
-  // console.groupEnd()
 }
 
 void main()
