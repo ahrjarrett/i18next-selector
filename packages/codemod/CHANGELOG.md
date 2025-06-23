@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.5
+
+### Patch Changes
+
+- [#17](https://github.com/ahrjarrett/i18next-selector/pull/17) [`fab0f40`](https://github.com/ahrjarrett/i18next-selector/commit/fab0f40f595492c5663eaccc1356904f269783a3) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): uses yargs to parse cmd line args
+
 ## 0.0.4
 
 ### Patch Changes
