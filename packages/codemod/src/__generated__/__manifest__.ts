@@ -1,12 +1,13 @@
 export default {
   "name": "@i18next-selector/codemod",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "description": "",
   "license": "MIT",
   "bin": {
-    "i18next-selector-codemod": "./dist/cjs/bin.js"
+    "i18next-selector-codemod": "./dist/cjs/bin.js",
+    "__i18next-selector-codemod__": "./src/bin.ts"
   },
   "@i18next-selector": {
     "generateExports": {
@@ -37,9 +38,11 @@ export default {
   "devDependencies": {
     "@prettier/sync": "^0.5.5",
     "@types/jscodeshift": "^17.3.0",
+    "@types/yargs": "^17.0.33",
     "ast-types": "0.16.1"
   },
   "dependencies": {
-    "jscodeshift": "^17.3.0"
+    "jscodeshift": "^17.3.0",
+    "yargs": "^18.0.0"
   }
 } as const
