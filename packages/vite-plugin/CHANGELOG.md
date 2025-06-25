@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.4
+
+### Patch Changes
+
+- [#28](https://github.com/ahrjarrett/i18next-selector/pull/28) [`6400f77`](https://github.com/ahrjarrett/i18next-selector/commit/6400f77219b81363c7b22d5f80138eebbed1f749) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): inverts control of formatting with `formatCmd` option
+
 ## 0.0.3
 
 ### Patch Changes
