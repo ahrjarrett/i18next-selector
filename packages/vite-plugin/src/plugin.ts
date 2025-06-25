@@ -159,25 +159,25 @@ export function transformTypeScriptAst(
   x: ts.Node,
   options: transform.Options
 ): unknown {
-  function go(x: ts.Node, offset: number = 0): any {
+  function go(x: ts.Node, offset: number): any {
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
       case ts.isArrayLiteralExpression(x): {
         const out = Array.of<ts.Node>()
         x.forEachChild((child) => out.push(child))
-        return out.map(go)
+        return out.map((_) => go(_, offset + 2))
       }
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
         const key = children.find(ts.isIdentifier)?.escapedText
         const valueIndex = children.findIndex(ts.isColonToken) + 1
-        const value = go(children[valueIndex])
+        const value = go(children[valueIndex], offset)
         return { jsdoc, key, value }
       }
       case ts.isObjectLiteralExpression(x):
         return groupTypeScriptPluralKeys(
-          x.properties.map(go, offset + 2),
+          x.properties.map((_) => go(_, offset + 2)),
           options
         )
       default: return x
