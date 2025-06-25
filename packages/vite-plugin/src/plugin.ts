@@ -2,8 +2,8 @@ import type { TOptions } from 'i18next'
 import type { Plugin } from 'vite'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { execSync } from 'node:child_process'
 import ts from 'typescript'
-import prettier from '@prettier/sync'
 import { Json } from '@traversable/json'
 
 import { defaultOptions, PLUGIN_HEADER } from './constants.js'
@@ -262,7 +262,7 @@ function getMappings(sourceDir: string): SourceToTargetMap[] {
 export declare namespace i18nextVitePlugin {
   type Options = {
     sourceDir: string
-    formatter?(source: string): string
+    formatCmd?: string
     i18nextConfig?: TOptions
     timeout?: number
     silent?: boolean
@@ -272,7 +272,7 @@ export declare namespace i18nextVitePlugin {
 export function i18nextVitePlugin({
   sourceDir,
   i18nextConfig,
-  formatter,
+  formatCmd,
   silent = false,
   timeout = 300,
 }: i18nextVitePlugin.Options): Plugin {
@@ -280,7 +280,6 @@ export function i18nextVitePlugin({
   const mappings = getMappings(sourceDir)
   const config = {
     ...i18nextConfig,
-    formatter: formatter || ((x) => prettier.format(x, { parser: 'typescript' })),
   } satisfies transform.Options
 
   return {
@@ -291,12 +290,11 @@ export function i18nextVitePlugin({
         if (!silent) log(`source file detected: ${m.sourceFile}`)
         fs.writeFileSync(
           m.targetFile,
-          config.formatter(
-            FILE_TYPE === 'JSON'
-              ? jsonFileToDeclarationFile(m, config)
-              : tsFileToDeclarationFile(m, config)
-          )
+          FILE_TYPE === 'JSON'
+            ? jsonFileToDeclarationFile(m, config)
+            : tsFileToDeclarationFile(m, config)
         )
+        if (formatCmd) execSync(formatCmd)
       })
     },
     configureServer({ watcher }) {
@@ -308,12 +306,11 @@ export function i18nextVitePlugin({
             if (!silent) log(`change detected: ${m.sourceFile}`)
             fs.writeFileSync(
               m.targetFile,
-              config.formatter(
-                FILE_TYPE === 'JSON'
-                  ? jsonFileToDeclarationFile(m, config)
-                  : tsFileToDeclarationFile(m, config)
-              )
+              FILE_TYPE === 'JSON'
+                ? jsonFileToDeclarationFile(m, config)
+                : tsFileToDeclarationFile(m, config)
             )
+            if (formatCmd) execSync(formatCmd)
           }
         })
       })
