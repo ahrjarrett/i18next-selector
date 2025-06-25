@@ -1,5 +1,13 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.6
+
+### Patch Changes
+
+- [#32](https://github.com/ahrjarrett/i18next-selector/pull/32) [`fbf12ef`](https://github.com/ahrjarrett/i18next-selector/commit/fbf12efc60367661b5dc90de0cdfeabf8a6e4c91) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(vite-plugin): support array literal expressions
+
+- [#34](https://github.com/ahrjarrett/i18next-selector/pull/34) [`848207b`](https://github.com/ahrjarrett/i18next-selector/commit/848207b5745115690dfcde9beec2069b9a2d6c20) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): pass offset to recursive calls in transformTypeScriptAst
+
 ## 0.0.5
 
 ### Patch Changes
