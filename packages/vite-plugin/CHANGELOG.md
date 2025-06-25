@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.7
+
+### Patch Changes
+
+- [#35](https://github.com/ahrjarrett/i18next-selector/pull/35) [`6306cc2`](https://github.com/ahrjarrett/i18next-selector/commit/6306cc2453712c1cc164b565ce288bdffd583951) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): fix array literal expressions
+
 ## 0.0.6
 
 ### Patch Changes
