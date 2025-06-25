@@ -155,6 +155,12 @@ export function transformJsonToJsonString(json: { [x: string]: Json } | readonly
   }
 }
 
+const isTransformableNode = (x: ts.Node) =>
+  ts.isStringLiteral(x)
+  || ts.isArrayLiteralExpression(x)
+  || ts.isPropertyAssignment(x)
+  || ts.isObjectLiteralExpression(x)
+
 export function transformTypeScriptAst(
   x: ts.Node,
   options: transform.Options
