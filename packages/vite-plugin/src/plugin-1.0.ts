@@ -1,6 +1,4 @@
-import * as ts from 'typescript'
 export type { Json } from '@traversable/json'
-import type { Json } from '@traversable/json'
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
@@ -9,8 +7,7 @@ import type { TOptions } from 'i18next'
 
 import { transformToTypeScript } from './transform.js'
 import { walk } from './walk.js'
-
-
+import type { transform } from './utils.js'
 
 function log(...args: any[]) {
   console.debug('[@i18next-selector/vite-plugin]:', ...args)
@@ -43,7 +40,7 @@ export function i18nextVitePlugin({
   const config = {
     ...i18nextConfig,
     ...formatter && { formatter }
-  } satisfies transformToTypeScript.Options
+  } satisfies transform.Options
 
   const maps = walk(sourceDir, { match: (path) => path.endsWith('.json') })
     .map((sourceFile) => {

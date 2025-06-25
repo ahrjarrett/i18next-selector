@@ -50,7 +50,7 @@ export type GroupedTypeScriptPluralKeys<T = unknown> = Record<
 export declare namespace transform {
   interface Options extends TOptions {
     pluralSeparator?: string
-    formatter?(x: string): string
+    formatCmd?: string
   }
 }
 
