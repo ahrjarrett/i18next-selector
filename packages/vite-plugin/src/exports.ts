@@ -1,5 +1,8 @@
 export { VERSION } from './version.js'
-export { i18nextVitePlugin } from './plugin.js'
+export {
+  i18nextVitePlugin,
+  tsFileToDeclarationFile,
+} from './plugin.js'
 export {
   groupPluralKeys,
   parse,
@@ -7,6 +10,7 @@ export {
   transformToJson,
   transformToTypeScript,
 } from './transform.js'
+export { transformTypeScriptAstToString } from './transform-ts.js'
 export {
   writeFromAsyncSource,
   writeFromFile,

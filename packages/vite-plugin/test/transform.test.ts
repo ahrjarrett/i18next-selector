@@ -15,7 +15,7 @@ const defaultOptions = { contextSeparator: '_', pluralSeparator: '_' }
 const DIR_PATH = path.join(path.resolve(), 'packages', 'vite-plugin', 'test', '__generated__')
 
 const PATH = {
-  targetFile: path.join(DIR_PATH, 'writeFromSource.get.ts')
+  targetFile: path.join(DIR_PATH, 'writeFromSource.generated.ts')
 }
 
 const input = {
