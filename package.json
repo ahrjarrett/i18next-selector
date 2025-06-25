@@ -46,7 +46,7 @@
     "i18next": "catalog:",
     "madge": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:",
+    "vite": "^6.3.5",
     "vitest": "catalog:"
   },
   "packageManager": "pnpm@10.2.1"

@@ -48,9 +48,6 @@ catalogs:
     typescript:
       specifier: 5.8.3
       version: 5.8.3
-    vite:
-      specifier: ^6.3.5
-      version: 6.3.5
     vitest:
       specifier: ^3.0.4
       version: 3.2.4
@@ -102,7 +99,7 @@ importers:
         specifier: 'catalog:'
         version: 5.8.3
       vite:
-        specifier: 'catalog:'
+        specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
       vitest:
         specifier: 'catalog:'
@@ -170,8 +167,9 @@ importers:
       '@traversable/registry':
         specifier: ^0.0.25
         version: 0.0.25
+    devDependencies:
       vite:
-        specifier: 'catalog:'
+        specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
     publishDirectory: dist
 
