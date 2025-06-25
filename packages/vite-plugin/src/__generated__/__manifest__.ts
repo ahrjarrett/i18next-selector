@@ -43,7 +43,6 @@ export default {
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@prettier/sync": "^0.6.1",
     "@traversable/json": "^0.0.26",
     "@traversable/registry": "^0.0.25"
   },
