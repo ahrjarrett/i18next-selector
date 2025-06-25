@@ -31,7 +31,7 @@ export function groupTypeScriptPluralKeys(
           if (isLeft(either)) {
             const prevJsdocs = either.left.jsdocs === null ? [] : either.left.jsdocs
             const jsdocs = [...prevJsdocs, jsdoc].filter((doc) => doc !== null)
-            acc[depluralized] = left({ key, jsdocs, value: [...either.left.value, String(value)] })
+            acc[depluralized] = left({ key: depluralized, jsdocs, value: [...either.left.value, String(value)] })
             return acc
           } else {
             const msg = '\n\r'
@@ -48,7 +48,7 @@ export function groupTypeScriptPluralKeys(
           }
         } else {
           const jsdocs = [jsdoc].filter((doc) => doc !== null)
-          acc[depluralized] = left({ key, jsdocs, value: [String(value)] })
+          acc[depluralized] = left({ key: depluralized, jsdocs, value: [String(value)] })
           return acc
         }
       }
