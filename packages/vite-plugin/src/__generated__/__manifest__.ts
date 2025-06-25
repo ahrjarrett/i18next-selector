@@ -41,8 +41,8 @@ export default {
   },
   "dependencies": {
     "@prettier/sync": "^0.6.1",
-    "@traversable/json": "^0.0.25",
-    "@traversable/registry": "^0.0.24",
+    "@traversable/json": "^0.0.26",
+    "@traversable/registry": "^0.0.25",
     "vite": "catalog:"
   }
 } as const
