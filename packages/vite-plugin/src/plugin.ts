@@ -155,13 +155,18 @@ export function transformJsonToJsonString(json: { [x: string]: Json } | readonly
   }
 }
 
-export function transformTypeScriptAstToString(
+export function transformTypeScriptAst(
   x: ts.Node,
   options: transform.Options
-) {
+): unknown {
   function go(x: ts.Node, offset: number = 0): any {
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
+      case ts.isArrayLiteralExpression(x): {
+        const out = Array.of<ts.Node>()
+        x.forEachChild((child) => out.push(child))
+        return out.map(go)
+      }
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
@@ -212,7 +217,7 @@ export function tsFileToDeclarationFile(
       console.log('\n\n\ndefaultExport is as const expression', defaultExport?.expression, '\n\n\n')
     } else if (ts.isObjectLiteralExpression(defaultExport.expression)) {
       const BODY = stringifyTypeScript(
-        transformTypeScriptAstToString(
+        transformTypeScriptAst(
           defaultExport.expression,
           options
         )
