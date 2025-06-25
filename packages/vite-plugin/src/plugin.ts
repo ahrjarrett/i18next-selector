@@ -168,11 +168,11 @@ export function transformTypeScriptAst(
   function go(x: ts.Node, offset: number): any {
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
-      case ts.isArrayLiteralExpression(x): {
-        const out = Array.of<ts.Node>()
-        x.forEachChild((child) => out.push(child))
-        return out.map((_) => go(_, offset + 2))
-      }
+      case ts.isArrayLiteralExpression(x): return x
+        .getChildren()[1]
+        .getChildren()
+        .filter(isTransformableNode)
+        .map((_) => go(_, offset + 2))
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
