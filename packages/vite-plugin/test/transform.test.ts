@@ -22,7 +22,9 @@ const input = {
   beverage: 'beverage',
   'beverage|beer': 'beer',
   tea_one: 'a cuppa tea and a lie down',
+  tea_two: 'two cups of tea',
   tea_other: '{{count}} cups of tea and a big sleep',
+  tea_many: 'many cups of tea',
   'dessert|cake': 'a nice cake',
   'dessert|muffin_one': 'a nice muffin',
   'dessert|muffin_other': '{{count}} nice muffins',
@@ -36,7 +38,9 @@ const input = {
       'espresso|latte_one': 'a foamy latte',
       'espresso|latte_other': '{{count}} foamy lattes',
       'espresso|cappuccino_one': 'a dry cappuccino',
+      'espresso|cappuccino_two': 'two dry cappuccinos',
       'espresso|cappuccino_other': '{{count}} dry cappuccinos',
+      'espresso|cappuccino_many': 'many dry cappuccinos',
     },
   },
   sodas: {
@@ -229,7 +233,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
     vi.expect(
       transformToJson(input, defaultOptions)
     ).toMatchInlineSnapshot
-      (`"{ "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "{{count}} cups of tea and a big sleep","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "{{count}} dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
+      (`"{ "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "two cups of tea" | "{{count}} cups of tea and a big sleep" | "many cups of tea","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "two dry cappuccinos" | "{{count}} dry cappuccinos" | "many dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
 
   })
 
@@ -255,7 +259,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
         "coffee": {
           "bar": {
             "espresso|americano": ""a hot americano"",
-            "espresso|cappuccino": ""a dry cappuccino" | "{{count}} dry cappuccinos"",
+            "espresso|cappuccino": ""a dry cappuccino" | "two dry cappuccinos" | "{{count}} dry cappuccinos" | "many dry cappuccinos"",
             "espresso|latte": ""a foamy latte" | "{{count}} foamy lattes"",
             "shot": ""a shot of espresso"",
           },
@@ -278,14 +282,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
             "purple": ""purple faygo"",
           },
         },
-        "tea": ""a cuppa tea and a lie down" | "{{count}} cups of tea and a big sleep"",
+        "tea": ""a cuppa tea and a lie down" | "two cups of tea" | "{{count}} cups of tea and a big sleep" | "many cups of tea"",
       }
     `)
   })
 
   vi.it('〖⛳️〗› ❲transformToTypeScript❳', () => {
     vi.expect(transformToTypeScript(input, defaultOptions)).toMatchInlineSnapshot
-      (`"export declare const resources: { "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "{{count}} cups of tea and a big sleep","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "{{count}} dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
+      (`"export declare const resources: { "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "two cups of tea" | "{{count}} cups of tea and a big sleep" | "many cups of tea","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "two dry cappuccinos" | "{{count}} dry cappuccinos" | "many dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
   })
 
   vi.it('〖⛳️〗› ❲writeFromSource❳', () => {
