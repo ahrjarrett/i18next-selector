@@ -1,3 +1,5 @@
+import type { TOptions } from 'i18next'
+
 export type JustURI = typeof JustURI
 export const JustURI = Symbol.for('@i18next-selector/vite-plugin/Just')
 
