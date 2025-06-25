@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.5
+
+### Patch Changes
+
+- [#30](https://github.com/ahrjarrett/i18next-selector/pull/30) [`2aa8cd5`](https://github.com/ahrjarrett/i18next-selector/commit/2aa8cd5139caf2d4831ba8200007d9d92c2904e9) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): fixes pluralization handling for typescript
+
 ## 0.0.4
 
 ### Patch Changes
