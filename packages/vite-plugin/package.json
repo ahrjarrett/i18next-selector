@@ -46,7 +46,12 @@
   "dependencies": {
     "@prettier/sync": "^0.6.1",
     "@traversable/json": "^0.0.26",
-    "@traversable/registry": "^0.0.25",
-    "vite": "catalog:"
+    "@traversable/registry": "^0.0.25"
+  },
+  "peerDependencies": {
+    "vite": "6 - 7"
+  },
+  "peerDependenciesMeta": {
+    "vite": { "optional": false }
   }
 }
