@@ -1,11 +1,11 @@
 import { Json } from '@traversable/json'
 import type { TOptions } from 'i18next'
 
-import * as T from './options.js'
+import * as T from './utils.js'
 import type {
   transform,
 } from './utils.js'
-import {  } from './utils.js'
+import {} from './utils.js'
 import { defaultOptions } from './constants.js'
 
 export const pluralSuffixes = [

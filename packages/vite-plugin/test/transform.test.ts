@@ -285,41 +285,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
 
   vi.it('〖⛳️〗› ❲transformToTypeScript❳', () => {
     vi.expect(transformToTypeScript(input, defaultOptions)).toMatchInlineSnapshot
-      (`
-      "export declare const resources: {
-        beverage: "beverage";
-        "beverage|beer": "beer";
-        tea: "a cuppa tea and a lie down" | "{{count}} cups of tea and a big sleep";
-        "dessert|cake": "a nice cake";
-        "dessert|muffin": "a nice muffin" | "{{count}} nice muffins";
-        coffee: {
-          drip: { black: "a strong cup of black coffee" };
-          bar: {
-            shot: "a shot of espresso";
-            "espresso|americano": "a hot americano";
-            "espresso|latte": "a foamy latte" | "{{count}} foamy lattes";
-            "espresso|cappuccino": "a dry cappuccino" | "{{count}} dry cappuccinos";
-          };
-        };
-        sodas: {
-          coca_cola: {
-            coke: "a can of coke";
-            "coke|diet": "a can of diet coke" | "{{count}} cans of diet coke";
-          };
-          faygo: {
-            purple: "purple faygo";
-            orange: "one orange faygo" | "{{count}} orange faygo";
-          };
-        };
-        interpolation: { val: "Interpolated {{val}}" };
-        array: [
-          "element one",
-          { elementTwo: "element two" },
-          { elementThree: [{ nestedElementThree: "element three" }] },
-        ];
-      };
-      "
-    `)
+      (`"export declare const resources: { "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "{{count}} cups of tea and a big sleep","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "{{count}} dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
   })
 
   vi.it('〖⛳️〗› ❲writeFromSource❳', () => {
