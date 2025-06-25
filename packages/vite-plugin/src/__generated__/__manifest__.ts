@@ -1,7 +1,7 @@
 export default {
   "name": "@i18next-selector/vite-plugin",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "description": "",
   "license": "MIT",
@@ -51,6 +51,8 @@ export default {
     "vite": "6 - 7"
   },
   "peerDependenciesMeta": {
-    "vite": { "optional": false }
+    "vite": {
+      "optional": false
+    }
   }
 } as const
