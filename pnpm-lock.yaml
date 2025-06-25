@@ -48,9 +48,6 @@ catalogs:
     typescript:
       specifier: 5.8.3
       version: 5.8.3
-    vite:
-      specifier: ^6.3.5
-      version: 6.3.5
     vitest:
       specifier: ^3.0.4
       version: 3.2.4
@@ -102,7 +99,7 @@ importers:
         specifier: 'catalog:'
         version: 5.8.3
       vite:
-        specifier: 'catalog:'
+        specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
       vitest:
         specifier: 'catalog:'
@@ -165,13 +162,14 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(prettier@3.5.3)
       '@traversable/json':
-        specifier: ^0.0.25
-        version: 0.0.25(@traversable/registry@0.0.24)(fast-check@3.23.2)
+        specifier: ^0.0.26
+        version: 0.0.26(@traversable/registry@0.0.25)(fast-check@3.23.2)
       '@traversable/registry':
-        specifier: ^0.0.24
-        version: 0.0.24
+        specifier: ^0.0.25
+        version: 0.0.25
+    devDependencies:
       vite:
-        specifier: 'catalog:'
+        specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.32)(yaml@2.8.0)
     publishDirectory: dist
 
@@ -916,17 +914,17 @@ packages:
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
-  '@traversable/json@0.0.25':
-    resolution: {integrity: sha512-fvIFkPJKNMnU3oj/Lz++45An8/MZNmAvoNF0u3mQ24nR2ms9lIjhpkcH80eO6XAcQ71uDvmdBwhOLQYFUop88A==}
+  '@traversable/json@0.0.26':
+    resolution: {integrity: sha512-oXKX0eNxbbHGLjLV27nTuV0uyR6uSoWi0BF+FYJu4jXRcSsWqCHOqNjIb2x/0usKd70rnKLGyHxurlTBTpQVOw==}
     peerDependencies:
-      '@traversable/registry': ^0.0.24
+      '@traversable/registry': ^0.0.25
       fast-check: ^3
     peerDependenciesMeta:
       fast-check:
         optional: true
 
-  '@traversable/registry@0.0.24':
-    resolution: {integrity: sha512-7z/Dx/yNbfh+9QjiPHppvGa1u71H4bv4nQiVN99a7xw5OaLFM8ds2do9C4Rg1SntcOCo5jroXJh9ixEjUUllEw==}
+  '@traversable/registry@0.0.25':
+    resolution: {integrity: sha512-idu2DhzoHOeqO+FZSpnDTgrFQWZL+poyxO9KozHeW7KdVqecrtYwR10vCVB/dItVdMBVZbavbNWO6PgUYN1KLg==}
 
   '@ts-graphviz/adapter@2.0.6':
     resolution: {integrity: sha512-kJ10lIMSWMJkLkkCG5gt927SnGZcBuG0s0HHswGzcHTgvtUe7yk5/3zTEr0bafzsodsOq5Gi6FhQeV775nC35Q==}
@@ -3318,13 +3316,13 @@ snapshots:
 
   '@standard-schema/spec@1.0.0': {}
 
-  '@traversable/json@0.0.25(@traversable/registry@0.0.24)(fast-check@3.23.2)':
+  '@traversable/json@0.0.26(@traversable/registry@0.0.25)(fast-check@3.23.2)':
     dependencies:
-      '@traversable/registry': 0.0.24
+      '@traversable/registry': 0.0.25
     optionalDependencies:
       fast-check: 3.23.2
 
-  '@traversable/registry@0.0.24': {}
+  '@traversable/registry@0.0.25': {}
 
   '@ts-graphviz/adapter@2.0.6':
     dependencies:
