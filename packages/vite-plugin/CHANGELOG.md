@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.9
+
+### Patch Changes
+
+- [#40](https://github.com/ahrjarrett/i18next-selector/pull/40) [`62d00ad`](https://github.com/ahrjarrett/i18next-selector/commit/62d00ad9c2b38cde2d7614dc22a598851fc30e17) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(vite-plugin): runs `formatCmd` on HMR update too
+
 ## 0.0.8
 
 ### Patch Changes
