@@ -36,7 +36,7 @@ export default defineConfig({
     // include: ['test/**/*.test.ts'],
     printConsoleTrace: true,
     sequence: { concurrent: true },
-    workspace: [
+    projects: [
       'benchmarks/*',
       'packages/*',
       'bin',
