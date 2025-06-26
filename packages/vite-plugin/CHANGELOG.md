@@ -1,5 +1,13 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.8
+
+### Patch Changes
+
+- [#39](https://github.com/ahrjarrett/i18next-selector/pull/39) [`e25fa06`](https://github.com/ahrjarrett/i18next-selector/commit/e25fa064734763d4304397e7cde8e4b5db25d427) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(vite-plugin): adds support for 'as const' expressions
+
+- [#37](https://github.com/ahrjarrett/i18next-selector/pull/37) [`d8af245`](https://github.com/ahrjarrett/i18next-selector/commit/d8af245e1bf84025afcc6d9920c8bd4700f8640f) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(vite-plugin): adds support for named exports
+
 ## 0.0.7
 
 ### Patch Changes
