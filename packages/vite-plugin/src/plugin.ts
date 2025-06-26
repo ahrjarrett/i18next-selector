@@ -19,6 +19,10 @@ interface SourceToTargetMap {
   targetFile: string
 }
 
+function log(...args: any[]) {
+  console.debug(`${PLUGIN_HEADER}\n\r`, ...args, '\n\r')
+}
+
 export function parseJson(
   x: Json,
   $: transform.Options
@@ -100,9 +104,14 @@ export function stringifyTypeScript(xs: unknown) {
     switch (true) {
       default: return xs satisfies never
       case Json.isScalar(xs): return String(xs)
-      case Json.isArray(xs): {
-        return `[${xs.join(',')}]`
-      }
+      case Json.isArray(xs): return ''
+        + '['
+        + '\n'
+        + OFFSET
+        + xs.join(JOIN)
+        + '\n'
+        + OFFSET
+        + ']'
       case Json.isObject(xs): {
         const entries = Object.entries(xs)
         return entries.length === 0 ? `{}` : ''
@@ -132,14 +141,17 @@ export function stringifyTypeScript(xs: unknown) {
   })(xs as never, { depth: 0 })
 }
 
-export function transformJsonToJsonString(json: { [x: string]: Json } | readonly Json[] | string, options?: transform.Options): string {
+export function transformJson(
+  json: { [x: string]: Json } | readonly Json[] | string,
+  options?: transform.Options
+): string {
   const config = {
     pluralSeparator: options?.pluralSeparator || defaultOptions.pluralSeparator,
   } satisfies TOptions
 
   if (typeof json !== 'string') return stringifyJson(parseJson(json, config))
   else {
-    try { return transformJsonToJsonString(JSON.parse(json)) }
+    try { return transformJson(JSON.parse(json)) }
     catch (e) {
       const msg = '\n\r'
         + PLUGIN_HEADER
@@ -160,19 +172,25 @@ const isTransformableNode = (x: ts.Node) =>
   || ts.isArrayLiteralExpression(x)
   || ts.isPropertyAssignment(x)
   || ts.isObjectLiteralExpression(x)
+  || ts.isAsExpression(x)
 
-export function transformTypeScriptAst(
+export function transformTypeScript(
   x: ts.Node,
   options: transform.Options
 ): unknown {
   function go(x: ts.Node, offset: number): any {
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
+      case ts.isAsExpression(x): return go(x.getChildren()[1], offset)
       case ts.isArrayLiteralExpression(x): return x
         .getChildren()[1]
         .getChildren()
         .filter(isTransformableNode)
         .map((_) => go(_, offset + 2))
+      case ts.isObjectLiteralExpression(x): return groupTypeScriptPluralKeys(
+        x.properties.map((_) => go(_, offset + 2)),
+        options
+      )
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
@@ -181,16 +199,11 @@ export function transformTypeScriptAst(
         const value = go(children[valueIndex], offset)
         return { jsdoc, key, value }
       }
-      case ts.isObjectLiteralExpression(x):
-        return groupTypeScriptPluralKeys(
-          x.properties.map((_) => go(_, offset + 2)),
-          options
-        )
       default: return x
     }
   }
 
-  return go(x, 0)
+  return stringifyTypeScript(go(x, 0))
 }
 
 export function jsonFileToDeclarationFile(
@@ -198,7 +211,7 @@ export function jsonFileToDeclarationFile(
   options?: transform.Options
 ) {
   const sourceFile = fs.readFileSync(mapping.sourceFile).toString('utf8')
-  return `export declare const resources: ${transformJsonToJsonString(sourceFile, options)}`
+  return `export declare const resources: ${transformJson(sourceFile, options)}`
 }
 
 export function tsFileToDeclarationFile(
@@ -210,43 +223,34 @@ export function tsFileToDeclarationFile(
 
   const sourceFile = program.getSourceFile(mapping.sourceFile)
   if (!sourceFile) return ''
-  const variableStatements = sourceFile.statements.filter(ts.isVariableStatement)
   const defaultExport = sourceFile.statements.find(ts.isExportAssignment)
-
-  // if (sourceFile && ts.isAsExpression(sourceFile)) {
-  //   console.log('\n\n\nsourceFile', sourceFile, '\n\n\n')
-  // }
-
+  const variableStatements = sourceFile.statements.filter(ts.isVariableStatement)
+  let out = Array.of<string>()
   if (defaultExport) {
-    console.log('here')
-    if (ts.isAsExpression(defaultExport.expression)) {
-      console.log('\n\n\ndefaultExport is as const expression', defaultExport?.expression, '\n\n\n')
-    } else if (ts.isObjectLiteralExpression(defaultExport.expression)) {
-      const BODY = stringifyTypeScript(
-        transformTypeScriptAst(
-          defaultExport.expression,
-          options
+    out.push(
+      'declare const defaultExport: '
+      + transformTypeScript(defaultExport.expression, options)
+      + '\nexport default defaultExport'
+    )
+  }
+  if (variableStatements.length > 0) {
+    variableStatements
+      .map(({ declarationList }) => ({
+        name: declarationList.declarations[0].name.getText(),
+        expr: declarationList.declarations[0].initializer,
+      }))
+      .filter((x): x is { name: string, expr: ts.Expression } => x.expr !== undefined)
+      .forEach(
+        (x) => out.push(
+          '\n'
+          + 'export declare const '
+          + x.name
+          + ': '
+          + transformTypeScript(x.expr, options)
         )
       )
-      return ''
-        + 'declare const defaultExport: '
-        + BODY
-        + '\n\rexport default defaultExport'
-    }
-  } else if (variableStatements.length > 0) {
-    console.log('\n\n\nvariableStatements', variableStatements, '\n\n\n')
   }
-
-  // if (sourceFile && ts.isSourceFile(sourceFile)) {
-  //   // console.log('\n\n\nsourceFile', sourceFile, '\n\n\n')
-  //   console.log('\n\n\ndefaultExport.expression is ObjectLiteralExpression', ts.isObjectLiteralExpression(defaultExport?.expression), '\n\n\n')
-  // }
-
-  return ''
-}
-
-function log(...args: any[]) {
-  console.debug(`${PLUGIN_HEADER}\n\r`, ...args, '\n\r')
+  return out.join('\n')
 }
 
 function getMappings(sourceDir: string): SourceToTargetMap[] {
@@ -305,8 +309,11 @@ export function i18nextVitePlugin({
             ? jsonFileToDeclarationFile(m, config)
             : tsFileToDeclarationFile(m, config)
         )
-        if (formatCmd) execSync(formatCmd)
       })
+      if (formatCmd) {
+        if (!silent) log('executing command:', formatCmd)
+        execSync(formatCmd)
+      }
     },
     configureServer({ watcher }) {
       mappings.forEach((m) => {
@@ -321,10 +328,13 @@ export function i18nextVitePlugin({
                 ? jsonFileToDeclarationFile(m, config)
                 : tsFileToDeclarationFile(m, config)
             )
-            if (formatCmd) execSync(formatCmd)
           }
         })
       })
+      if (formatCmd) {
+        if (!silent) log('executing command:', formatCmd)
+        execSync(formatCmd)
+      }
     },
     handleHotUpdate({ file, server }) {
       if (throttled) return
