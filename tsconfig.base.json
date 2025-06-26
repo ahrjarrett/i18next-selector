@@ -28,10 +28,14 @@
     "noErrorTruncation": true,
     "skipLibCheck": true,
     "paths": {
-      "@i18next-selector/vite-plugin": ["packages/vite-plugin/src/index.js"],
-      "@i18next-selector/vite-plugin/*": ["packages/vite-plugin/*.js"],
       "@i18next-selector/codemod": ["packages/codemod/src/index.js"],
-      "@i18next-selector/codemod/*": ["packages/codemod/src/*.js"]
+      "@i18next-selector/codemod/*": ["packages/codemod/src/*.js"],
+      "@i18next-selector/shadow-i18next": [
+        "packages/shadow-i18next/src/index.js"
+      ],
+      "@i18next-selector/shadow-i18next/*": ["packages/shadow-i18next/*.js"],
+      "@i18next-selector/vite-plugin": ["packages/vite-plugin/src/index.js"],
+      "@i18next-selector/vite-plugin/*": ["packages/vite-plugin/*.js"]
     }
   }
 }

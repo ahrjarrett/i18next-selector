@@ -3,6 +3,7 @@
   "include": [],
   "references": [
     { "path": "packages/codemod" },
+    { "path": "packages/shadow-i18next" },
     { "path": "packages/vite-plugin" }
   ]
 }

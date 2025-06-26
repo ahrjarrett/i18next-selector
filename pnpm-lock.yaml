@@ -156,6 +156,8 @@ importers:
         version: 0.16.1
     publishDirectory: dist
 
+  packages/shadow-i18next: {}
+
   packages/vite-plugin:
     dependencies:
       '@traversable/json':

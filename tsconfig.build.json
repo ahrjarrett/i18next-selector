@@ -3,6 +3,7 @@
   "include": [],
   "references": [
     { "path": "packages/codemod/tsconfig.build.json" },
+    { "path": "packages/shadow-i18next/tsconfig.build.json" },
     { "path": "packages/vite-plugin/tsconfig.build.json" }
   ]
 }
