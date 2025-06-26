@@ -180,7 +180,7 @@ export function transformTypeScript(
   function go(x: ts.Node, offset: number): any {
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
-      case ts.isAsExpression(x): return go(x.getChildren()[1], offset)
+      case ts.isAsExpression(x): return go(x.expression, offset)
       case ts.isArrayLiteralExpression(x):
         return x
           .getChildren()[1]
