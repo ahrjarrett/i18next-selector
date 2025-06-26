@@ -124,7 +124,6 @@ export function stringifyTypeScript(xs: unknown) {
                 + mergeJsdocs(jsdocs, LOCAL_OFFSET)
                 + OFFSET
                 + `${key}: ${value}`
-              // + `${i === 0 ? '  ' : ''}${key}: ${value}`
             } else {
               const { jsdocs, key, value } = x.left
               return ''
@@ -182,15 +181,17 @@ export function transformTypeScript(
     switch (true) {
       case ts.isStringLiteral(x): return x.getText()
       case ts.isAsExpression(x): return go(x.getChildren()[1], offset)
-      case ts.isArrayLiteralExpression(x): return x
-        .getChildren()[1]
-        .getChildren()
-        .filter(isTransformableNode)
-        .map((_) => go(_, offset + 2))
-      case ts.isObjectLiteralExpression(x): return groupTypeScriptPluralKeys(
-        x.properties.map((_) => go(_, offset + 2)),
-        options
-      )
+      case ts.isArrayLiteralExpression(x):
+        return x
+          .getChildren()[1]
+          .getChildren()
+          .filter(isTransformableNode)
+          .map((_) => go(_, offset + 2))
+      case ts.isObjectLiteralExpression(x):
+        return groupTypeScriptPluralKeys(
+          x.properties.map((_) => go(_, offset + 2)),
+          options
+        )
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
