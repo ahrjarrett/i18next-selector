@@ -20,7 +20,7 @@ interface SourceToTargetMap {
 }
 
 function log(...args: any[]) {
-  console.debug(`${PLUGIN_HEADER}\n\r`, ...args, '\n\r')
+  console.debug(`\n\r${PLUGIN_HEADER}\n\r`, ...args, '\n\r')
 }
 
 export function parseJson(
@@ -311,7 +311,7 @@ export function i18nextVitePlugin({
             : tsFileToDeclarationFile(m, config)
         )
       })
-      if (formatCmd) {
+      if (formatCmd && mappings.length > 0) {
         if (!silent) log('executing command:', formatCmd)
         execSync(formatCmd)
       }
@@ -332,7 +332,7 @@ export function i18nextVitePlugin({
           }
         })
       })
-      if (formatCmd) {
+      if (formatCmd && mappings.length > 0) {
         if (!silent) log('executing command:', formatCmd)
         execSync(formatCmd)
       }
@@ -343,8 +343,12 @@ export function i18nextVitePlugin({
       setTimeout(() => throttled = false, timeout)
       const m = mappings.find(({ sourceFile }) => file === sourceFile)
       if (m) {
-        if (!silent) log(`change detected: ${m.sourceFile}`)
+        if (!silent) log(`HMR change detected: ${m.sourceFile}`)
         server.hot.send({ type: 'full-reload' })
+      }
+      if (m && formatCmd) {
+        if (!silent) log('executing command:', formatCmd)
+        execSync(formatCmd)
       }
     }
   }
