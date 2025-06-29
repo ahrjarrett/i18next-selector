@@ -1,45 +1,87 @@
 #!/usr/bin/env pnpm dlx tsx
 import * as path from 'node:path'
-import yargs from 'yargs'
 import { execSync } from 'node:child_process'
+import { Command, Prompt } from "@effect/cli"
+import { NodeContext, NodeRuntime } from "@effect/platform-node"
+import { Effect } from "effect"
+import { PKG_NAME, PKG_VERSION } from './version.js'
 
-import { run } from 'jscodeshift/src/Runner.js'
-
-type Default<T> = T | (string & {})
-
-interface Options {
-  nsSeparator?: Default<':'>
-  keySeparator?: Default<'.'>
-  sourceDir?: Default<'./'>
+type Options = {
+  paths: string[]
+  parser: 'tsx' | 'ts'
+  keySeparator: string
+  nsSeparator: string
 }
 
-const [, SCRIPT_PATH, ...args] = process.argv
-const DIR_NAME = path.join(path.dirname(SCRIPT_PATH), '..', '@i18next-selector', 'codemod', 'dist', 'esm')
-const TRANSFORM_PATH = path.resolve(DIR_NAME, 'transform.js')
-
-const parsedOptions = yargs(args)
-  .scriptName('i18next-selector-codemod')
-  .parse() as Record<string, string | undefined>
+const parserChoices = [
+  { title: 'tsx', value: 'tsx' },
+  { title: 'ts', value: 'ts' },
+] as const
 
 const defaults = {
-  nsSeparator: ':',
+  paths: ['./src'],
+  parser: parserChoices[0].value,
   keySeparator: '.',
-  sourceDir: './',
-} as const satisfies Required<Options>
+  nsSeparator: ':',
+} as const
 
+const [, SCRIPT_PATH] = process.argv
 
-function main() {
-  const config = {
-    keySeparator: parsedOptions.keySeparator || defaults.nsSeparator,
-    nsSeparator: parsedOptions.nsSeparator || defaults.nsSeparator,
-    sourceDir: parsedOptions._?.[0] || defaults.sourceDir,
-  } satisfies Required<Options>
+const DIST_PATH = path.join(
+  path.dirname(SCRIPT_PATH),
+  '..',
+  PKG_NAME,
+  'dist',
+)
 
-  const CMD = `npx jscodeshift --parser=tsx --no-babel -t="${TRANSFORM_PATH}" --nsSeparator="${config.nsSeparator}" --keySeparator="${config.keySeparator}" ${config.sourceDir}`
+const TRANSFORM_PATH = path.resolve(DIST_PATH, 'esm', 'transform.js')
+
+const paths = Prompt.list({
+  message: `Which directories would you like to apply the codemod to (separated by commas)?`,
+  default: defaults.paths.join(','),
+})
+
+const parser = Prompt.select({
+  message: 'Which parser do you want to use?',
+  choices: parserChoices,
+})
+
+const keySeparator = Prompt.text({
+  message: 'i18next key separator?',
+  default: defaults.keySeparator,
+})
+
+const nsSeparator = Prompt.text({
+  message: 'Namespace separator?',
+  default: defaults.nsSeparator,
+})
+
+const command = Command.prompt(
+  'Configure i18next-selector codemod',
+  Prompt.all([paths, parser, keySeparator, nsSeparator]),
+  ([paths, parser, keySeparator, nsSeparator]) => 
+    run({ paths, parser, keySeparator, nsSeparator })
+)
+
+function run({ paths, parser, nsSeparator, keySeparator }: Options) {
+  const CMD = [
+    'npx jscodeshift',
+    `-t="${TRANSFORM_PATH}"`,
+    '--no-babel',
+    `--parser=${parser}`,
+    `--nsSeparator="${nsSeparator}"`,
+    `--keySeparator="${keySeparator}"`,
+    `${paths.join(', ')}`
+  ].join(' ')
 
   console.log('CMD', CMD)
 
-  execSync(CMD, { stdio: 'inherit' })
+  return Effect.sync(() => execSync(CMD, { stdio: 'inherit' }))
 }
 
-void main()
+const main = Command.run(command, {
+  name: PKG_NAME,
+  version: `v${PKG_VERSION}` as const,
+})
+
+void main(process.argv).pipe(Effect.provide(NodeContext.layer), NodeRuntime.runMain)
