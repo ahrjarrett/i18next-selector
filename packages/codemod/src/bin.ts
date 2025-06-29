@@ -59,78 +59,29 @@ const nsSeparator = Prompt.text({
 const command = Command.prompt(
   'Configure i18next-selector codemod',
   Prompt.all([paths, parser, keySeparator, nsSeparator]),
-  ([paths, parser, keySeparator, nsSeparator]) =>
-    Effect.sync(main({ paths, parser, keySeparator, nsSeparator }))
+  ([paths, parser, keySeparator, nsSeparator]) => 
+    run({ paths, parser, keySeparator, nsSeparator })
 )
 
-const cli = Command.run(command, {
+function run({ paths, parser, nsSeparator, keySeparator }: Options) {
+  const CMD = [
+    'npx jscodeshift',
+    `-t="${TRANSFORM_PATH}"`,
+    '--no-babel',
+    `--parser=${parser}`,
+    `--nsSeparator="${nsSeparator}"`,
+    `--keySeparator="${keySeparator}"`,
+    `${paths.join(', ')}`
+  ].join(' ')
+
+  console.log('CMD', CMD)
+
+  return Effect.sync(() => execSync(CMD, { stdio: 'inherit' }))
+}
+
+const main = Command.run(command, {
   name: PKG_NAME,
   version: `v${PKG_VERSION}` as const,
 })
 
-cli(process.argv).pipe(Effect.provide(NodeContext.layer), NodeRuntime.runMain)
-
-function main({ paths, parser, nsSeparator, keySeparator }: Options) {
-  return () => {
-    const CMD = [
-      'npx jscodeshift',
-      `-t="${TRANSFORM_PATH}"`,
-      '--no-babel',
-      `--parser=${parser}`,
-      `--nsSeparator="${nsSeparator}"`,
-      `--keySeparator="${keySeparator}"`,
-      `${paths.join(', ')}`
-    ].join(' ')
-
-    console.log('CMD', CMD)
-
-    execSync(CMD, { stdio: 'inherit' })
-  }
-}
-
-// Prepare and run the CLI application
-// cli(process.argv).pipe(Effect.provide(NodeContext.layer), NodeRuntime.runMain)
-
-// Command.prompt(
-//   "New workspace",
-//   Prompt.all([pkgName, env, localDeps, visibility]),
-//   ([pkgName, env, localDeps, private_]) =>
-//     Effect.sync(() => main({ pkgName, env, localDeps, private: private_, dryRun: false })
-//     ))
-
-// import { run } from 'jscodeshift/src/Runner.js'
-
-// type Default<T> = T | (string & {})
-
-// interface Options {
-//   nsSeparator?: Default<':'>
-//   keySeparator?: Default<'.'>
-//   sourceDir?: Default<'./'>
-// }
-
-
-// const parsedOptions = yargs(args)
-//   .scriptName('i18next-selector-codemod')
-//   .parse() as Record<string, string | undefined>
-
-// const defaults = {
-//   nsSeparator: ':',
-//   keySeparator: '.',
-//   sourceDir: './',
-// } as const satisfies Required<Options>
-
-// function main() {
-//   const config = {
-//     keySeparator: parsedOptions.keySeparator || defaults.nsSeparator,
-//     nsSeparator: parsedOptions.nsSeparator || defaults.nsSeparator,
-//     sourceDir: parsedOptions._?.[0] || defaults.sourceDir,
-//   } satisfies Required<Options>
-
-//   const CMD = `npx jscodeshift --parser=tsx --no-babel -t="${TRANSFORM_PATH}" --nsSeparator="${config.nsSeparator}" --keySeparator="${config.keySeparator}" ${config.sourceDir}`
-
-//   console.log('CMD', CMD)
-
-//   execSync(CMD, { stdio: 'inherit' })
-// }
-
-// void main()
+void main(process.argv).pipe(Effect.provide(NodeContext.layer), NodeRuntime.runMain)
