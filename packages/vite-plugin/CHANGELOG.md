@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.10
+
+### Patch Changes
+
+- [#42](https://github.com/ahrjarrett/i18next-selector/pull/42) [`f54f094`](https://github.com/ahrjarrett/i18next-selector/commit/f54f09474425ee7558aedf98d5a918ea46d85a0b) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - refactor(vite-plugin): removes formatting for json parsing
+
 ## 0.0.9
 
 ### Patch Changes

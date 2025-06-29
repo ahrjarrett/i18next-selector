@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.8
+
+### Patch Changes
+
+- [#42](https://github.com/ahrjarrett/i18next-selector/pull/42) [`7fc7be4`](https://github.com/ahrjarrett/i18next-selector/commit/7fc7be49cb42ebad8b3325c6aa0056732f1fc68a) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): uses `process.argv[1]` instead of `process.argv[0]`
+
 ## 0.0.7
 
 ### Patch Changes
