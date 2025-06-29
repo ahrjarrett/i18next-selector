@@ -7,8 +7,8 @@ const module = { default: transform, parser: 'ts' as const }
 const options = {}
 
 vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
-
   vi.describe('〖⛳️〗‹‹ ❲t❳', () => {
+
     vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is a named import', () => {
       vi.expect(
         applyTransform(module, options, {
@@ -1021,7 +1021,6 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         t($ => condition ? $.abc.def.ghi : $.jkl.mno.pqr)"
       `)
     })
-
   })
 
 })
