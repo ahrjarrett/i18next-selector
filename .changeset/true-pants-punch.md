@@ -2,4 +2,4 @@
 "@i18next-selector/codemod": patch
 ---
 
-refactor(codemod): use `@effect/cli`
+feat(codemod): use `@effect/cli` to gather codemod args via prompt
