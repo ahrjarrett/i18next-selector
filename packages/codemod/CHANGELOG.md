@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.9
+
+### Patch Changes
+
+- [#44](https://github.com/ahrjarrett/i18next-selector/pull/44) [`4152090`](https://github.com/ahrjarrett/i18next-selector/commit/41520901344a58c28aa1c8cd5e45686db5bfcc37) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): use `@effect/cli` to gather codemod args via prompt
+
 ## 0.0.8
 
 ### Patch Changes
