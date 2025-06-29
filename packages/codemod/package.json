@@ -45,6 +45,9 @@
     "ast-types": "0.16.1"
   },
   "dependencies": {
+    "@effect/cli": "^0.38.2",
+    "@effect/platform-node": "^0.54.3",
+    "effect": "^3.10.14",
     "jscodeshift": "^17.3.0",
     "yargs": "^18.0.0"
   }
