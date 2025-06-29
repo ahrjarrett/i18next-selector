@@ -70,7 +70,6 @@ function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
   const CMD = [
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
-    '--no-babel',
     `--parser=${parserMap[`${parser || defaults.parser}`]}`,
     ...(dryrun ? [`--dry=true`] : []),
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
