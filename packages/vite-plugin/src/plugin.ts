@@ -65,37 +65,17 @@ export function unparseJson(xs: unknown) {
   })(xs as never)
 }
 
-export function stringifyJson(xs: unknown): string {
-  return Json.foldWithIndex<string>((xs, { depth }) => {
-    const OFFSET = '  '.repeat(depth)
-    const JOIN = `,\n  ${OFFSET}`
-    switch (true) {
-      default: return xs satisfies never
-      case Json.isScalar(xs): return String(xs)
-      case Json.isArray(xs): {
-        return xs.length === 0 ? `[]` : ''
-          + '['
-          + '\n'
-          + OFFSET
-          + xs.map((x, i) => `${i === 0 ? '  ' : ''}${x}`).join(JOIN)
-          + '\n'
-          + OFFSET
-          + ']'
-      }
-      case Json.isObject(xs): {
-        const entries = Object.entries(xs)
-        return entries.length === 0 ? `{}` : ''
-          + '{'
-          + '\n'
-          + OFFSET
-          + Object.entries(xs).map(([k, v], i) => `${i === 0 ? '  ' : ''}"${k}": ${v}`).join(JOIN)
-          + '\n'
-          + OFFSET
-          + '}'
-      }
-    }
-  })(xs as never, { depth: 0, path: [] })
-}
+export const stringifyJson = Json.fold<string>((xs) => {
+  switch (true) {
+    default: return xs satisfies never
+    case Json.isScalar(xs):
+      return String(xs)
+    case Json.isArray(xs):
+      return `[${xs.map((x, i) => `${i === 0 ? '  ' : ''}${x}`).join(',')}]`
+    case Json.isObject(xs):
+      return `{${Object.entries(xs).map(([k, v], i) => `${i === 0 ? '  ' : ''}"${k}": ${v}`).join(',')}}`
+  }
+})
 
 export function stringifyTypeScript(xs: unknown) {
   return foldWithIndex((xs, { depth }) => {
@@ -148,7 +128,7 @@ export function transformJson(
     pluralSeparator: options?.pluralSeparator || defaultOptions.pluralSeparator,
   } satisfies TOptions
 
-  if (typeof json !== 'string') return stringifyJson(parseJson(json, config))
+  if (typeof json !== 'string') return stringifyJson(parseJson(json, config) as Json)
   else {
     try { return transformJson(JSON.parse(json)) }
     catch (e) {

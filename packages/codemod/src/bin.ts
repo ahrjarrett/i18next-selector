@@ -13,8 +13,8 @@ interface Options {
   sourceDir?: Default<'./'>
 }
 
-const [SCRIPT_PATH, ...args] = process.argv
-const DIR_NAME = path.dirname(SCRIPT_PATH)
+const [, SCRIPT_PATH, ...args] = process.argv
+const DIR_NAME = path.join(path.dirname(SCRIPT_PATH), '..', '@i18next-selector', 'codemod', 'dist', 'esm')
 const TRANSFORM_PATH = path.resolve(DIR_NAME, 'transform.js')
 
 const parsedOptions = yargs(args)
