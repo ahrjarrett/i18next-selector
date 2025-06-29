@@ -13,7 +13,7 @@ interface Options {
   sourceDir?: Default<'./'>
 }
 
-const [SCRIPT_PATH, ...args] = process.argv
+const [, SCRIPT_PATH, ...args] = process.argv
 const DIR_NAME = path.dirname(SCRIPT_PATH)
 const TRANSFORM_PATH = path.resolve(DIR_NAME, 'transform.js')
 
