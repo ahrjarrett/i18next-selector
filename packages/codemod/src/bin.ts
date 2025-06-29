@@ -26,15 +26,8 @@ const defaults = {
 } as const
 
 const [, SCRIPT_PATH] = process.argv
-
-const DIST_PATH = path.join(
-  path.dirname(SCRIPT_PATH),
-  '..',
-  PKG_NAME,
-  'dist',
-)
-
-const TRANSFORM_PATH = path.resolve(DIST_PATH, 'esm', 'transform.js')
+const DIST_PATH = path.join(path.dirname(SCRIPT_PATH), '..', PKG_NAME, 'dist')
+const TRANSFORM_PATH = path.resolve(DIST_PATH, 'cjs', 'transform.js')
 
 const paths = Prompt.list({
   message: `Which directories would you like to apply the codemod to (separated by commas)?`,
@@ -59,7 +52,7 @@ const nsSeparator = Prompt.text({
 const command = Command.prompt(
   'Configure i18next-selector codemod',
   Prompt.all([paths, parser, keySeparator, nsSeparator]),
-  ([paths, parser, keySeparator, nsSeparator]) => 
+  ([paths, parser, keySeparator, nsSeparator]) =>
     run({ paths, parser, keySeparator, nsSeparator })
 )
 
