@@ -8,22 +8,28 @@ import { PKG_NAME, PKG_VERSION } from './version.js'
 
 type Options = {
   paths: string[]
-  parser: typeof parserChoices[number]['value']
+  parser: boolean
+  dryrun: boolean
   keySeparator: string
   nsSeparator: string
 }
 
-const parserChoices = [
-  { title: 'both', value: 'both' },
-  { title: 'tsx', value: 'tsx' },
-  { title: 'ts', value: 'ts' },
+const parserMap = {
+  true: 'tsx',
+  false: 'ts',
+} as const
+
+const booleanChoices = [
+  { title: 'true', value: true },
+  { title: 'false', value: false },
 ] as const
 
 const defaults = {
   paths: ['./src'],
-  parser: parserChoices[0].value,
+  parser: true,
   keySeparator: '.',
   nsSeparator: ':',
+  dryrun: false,
 } as const
 
 const [, SCRIPT_PATH] = process.argv
@@ -31,41 +37,45 @@ const DIST_PATH = path.join(path.dirname(SCRIPT_PATH), '..', PKG_NAME, 'dist')
 const TRANSFORM_PATH = path.join(path.resolve(DIST_PATH), 'cjs', 'transform.js')
 
 const paths = Prompt.list({
-  message: `Directories to modify (default: './src')`,
-  default: defaults.paths.join(','),
+  message: `Directories to modify (default: '${defaults.paths.join(' ')}')`,
+  delimiter: ' ',
 })
 
 const parser = Prompt.select({
-  message: `File types to modify? (default: 'both')`,
-  choices: parserChoices,
+  message: `Include tsx files? (default: ${defaults.parser})`,
+  choices: booleanChoices,
 })
 
 const keySeparator = Prompt.text({
-  message: `i18next key separator? (default: '.'`,
-  default: defaults.keySeparator,
+  message: `i18next key separator? (default: '${defaults.keySeparator}')`,
 })
 
 const nsSeparator = Prompt.text({
-  message: `Namespace separator? (default: ':')`,
-  default: defaults.nsSeparator,
+  message: `Namespace separator? (default: '${defaults.nsSeparator}')`,
+})
+
+const dryrun = Prompt.select({
+  message: `Dry run? (default: ${defaults.dryrun})`,
+  choices: booleanChoices,
 })
 
 const command = Command.prompt(
   'Configure i18next-selector codemod',
-  Prompt.all([paths, parser, keySeparator, nsSeparator]),
-  ([paths, parser, keySeparator, nsSeparator]) =>
-    run({ paths, parser, keySeparator, nsSeparator })
+  Prompt.all([paths, parser, keySeparator, nsSeparator, dryrun]),
+  ([paths, parser, keySeparator, nsSeparator, dryrun]) =>
+    run({ paths, parser, keySeparator, nsSeparator, dryrun })
 )
 
-function run({ paths, parser, nsSeparator, keySeparator }: Options) {
+function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
   const CMD = [
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
     '--no-babel',
-    `--parser=${parser || defaults.parser}`,
-    `--nsSeparator="${nsSeparator || defaults.nsSeparator}"`,
-    `--keySeparator="${keySeparator || defaults.keySeparator}"`,
-    `${paths.length === 0 ? defaults.paths : paths.join(', ')}`
+    `--parser=${parserMap[`${parser || defaults.parser}`]}`,
+    ...(dryrun ? [`--dry`] : []),
+    `--keySeparator=${keySeparator || defaults.keySeparator}`,
+    `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
+    `${(paths.length === 0 ? defaults.paths : paths).join(' ')}`
   ].join(' ')
 
   console.log('Executing:\n\r', CMD)
