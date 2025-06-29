@@ -1,7 +1,7 @@
 export default {
   "name": "@i18next-selector/codemod",
   "type": "module",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": false,
   "description": "",
   "license": "MIT",
@@ -37,11 +37,12 @@ export default {
   "devDependencies": {
     "@prettier/sync": "^0.5.5",
     "@types/jscodeshift": "^17.3.0",
-    "@types/yargs": "^17.0.33",
     "ast-types": "0.16.1"
   },
   "dependencies": {
-    "jscodeshift": "^17.3.0",
-    "yargs": "^18.0.0"
+    "@effect/cli": "^0.38.2",
+    "@effect/platform-node": "^0.54.3",
+    "effect": "^3.10.14",
+    "jscodeshift": "^17.3.0"
   }
 } as const
