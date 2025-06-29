@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.10
+
+### Patch Changes
+
+- [#46](https://github.com/ahrjarrett/i18next-selector/pull/46) [`fed95e7`](https://github.com/ahrjarrett/i18next-selector/commit/fed95e71ccec46945cbe90e28b768e72296c3dbd) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): use dist/cjs when running jscodeshift
+
 ## 0.0.9
 
 ### Patch Changes
