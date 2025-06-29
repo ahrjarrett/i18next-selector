@@ -8,12 +8,13 @@ import { PKG_NAME, PKG_VERSION } from './version.js'
 
 type Options = {
   paths: string[]
-  parser: 'tsx' | 'ts'
+  parser: typeof parserChoices[number]['value']
   keySeparator: string
   nsSeparator: string
 }
 
 const parserChoices = [
+  { title: 'both', value: 'both' },
   { title: 'tsx', value: 'tsx' },
   { title: 'ts', value: 'ts' },
 ] as const
@@ -27,25 +28,25 @@ const defaults = {
 
 const [, SCRIPT_PATH] = process.argv
 const DIST_PATH = path.join(path.dirname(SCRIPT_PATH), '..', PKG_NAME, 'dist')
-const TRANSFORM_PATH = path.resolve(DIST_PATH, 'cjs', 'transform.js')
+const TRANSFORM_PATH = path.join(path.resolve(DIST_PATH), 'cjs', 'transform.js')
 
 const paths = Prompt.list({
-  message: `Which directories would you like to apply the codemod to (separated by commas)?`,
+  message: `Directories to modify (default: './src')`,
   default: defaults.paths.join(','),
 })
 
 const parser = Prompt.select({
-  message: 'Which parser do you want to use?',
+  message: `File types to modify? (default: 'both')`,
   choices: parserChoices,
 })
 
 const keySeparator = Prompt.text({
-  message: 'i18next key separator?',
+  message: `i18next key separator? (default: '.'`,
   default: defaults.keySeparator,
 })
 
 const nsSeparator = Prompt.text({
-  message: 'Namespace separator?',
+  message: `Namespace separator? (default: ':')`,
   default: defaults.nsSeparator,
 })
 
@@ -61,13 +62,13 @@ function run({ paths, parser, nsSeparator, keySeparator }: Options) {
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
     '--no-babel',
-    `--parser=${parser}`,
-    `--nsSeparator="${nsSeparator}"`,
-    `--keySeparator="${keySeparator}"`,
-    `${paths.join(', ')}`
+    `--parser=${parser || defaults.parser}`,
+    `--nsSeparator="${nsSeparator || defaults.nsSeparator}"`,
+    `--keySeparator="${keySeparator || defaults.keySeparator}"`,
+    `${paths.length === 0 ? defaults.paths : paths.join(', ')}`
   ].join(' ')
 
-  console.log('CMD', CMD)
+  console.log('Executing:\n\r', CMD)
 
   return Effect.sync(() => execSync(CMD, { stdio: 'inherit' }))
 }
@@ -77,4 +78,7 @@ const main = Command.run(command, {
   version: `v${PKG_VERSION}` as const,
 })
 
-void main(process.argv).pipe(Effect.provide(NodeContext.layer), NodeRuntime.runMain)
+void main(process.argv).pipe(
+  Effect.provide(NodeContext.layer),
+  NodeRuntime.runMain
+)
