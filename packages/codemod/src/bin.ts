@@ -27,10 +27,10 @@ const booleanChoices = [
 const defaults = {
   paths: ['./src'],
   parser: true,
+  dryrun: false,
   keySeparator: '.',
   nsSeparator: ':',
-  dryrun: false,
-} as const
+} as const satisfies Options
 
 const [, SCRIPT_PATH] = process.argv
 const DIST_PATH = path.join(path.dirname(SCRIPT_PATH), '..', PKG_NAME, 'dist')
@@ -72,7 +72,7 @@ function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
     `-t="${TRANSFORM_PATH}"`,
     '--no-babel',
     `--parser=${parserMap[`${parser || defaults.parser}`]}`,
-    ...(dryrun ? [`--dry`] : []),
+    ...(dryrun ? [`--dry=true`] : []),
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
     `${(paths.length === 0 ? defaults.paths : paths).join(' ')}`

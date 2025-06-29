@@ -16,7 +16,7 @@ function hasOwn(u: unknown, key: keyof any): u is { [x: string]: unknown } {
       : Object_hasOwnProperty.call(u, key)
 }
 
-export function get(x: unknown, ks: (keyof any)[]) {
+function get(x: unknown, ks: (keyof any)[]) {
   let out = x
   let k: keyof any | undefined
   while ((k = ks.shift()) !== undefined) {
@@ -37,19 +37,19 @@ function parsePath(xs: readonly (keyof any)[] | readonly [...(keyof any)[], (u: 
     : [xs.slice(0, -1), xs[xs.length - 1]]
 }
 
-export type has<KS extends readonly (keyof any)[], T = {}> = has.loop<KS, T>
+type has<KS extends readonly (keyof any)[], T = {}> = has.loop<KS, T>
 
-export declare namespace has {
+declare namespace has {
   export type loop<KS extends readonly unknown[], T>
     = KS extends readonly [...infer Todo, infer K extends keyof any]
     ? has.loop<Todo, { [P in K]: T }>
     : T extends infer U extends {} ? U : never
 }
 
-export function has<KS extends readonly (keyof any)[]>(...params: [...KS]): (u: unknown) => u is has<KS>
-export function has<const KS extends readonly (keyof any)[], T>(...params: [...KS, (u: unknown) => u is T]): (u: unknown) => u is has<KS, T>
+function has<KS extends readonly (keyof any)[]>(...params: [...KS]): (u: unknown) => u is has<KS>
+function has<const KS extends readonly (keyof any)[], T>(...params: [...KS, (u: unknown) => u is T]): (u: unknown) => u is has<KS, T>
 // impl.
-export function has(
+function has(
   ...args:
     | [...path: (keyof any)[]]
     | [...path: (keyof any)[], check: (u: any) => u is any]
@@ -72,71 +72,9 @@ type SeparatedNamespace = {
   path: string
 }
 
-type Parser =
-  | 'babel'
-  | 'babylon'
-  | 'flow'
-  | 'ts'
-  | 'tsx'
-
 declare const Options: {
-  /** 
-   * ## {@link Options.nsSeparator `Options.nsSeparator`}
-   * 
-   * Char to split namespace from key
-   * 
-   * See also:
-   * - The [`i18next` configuration options docs](https://www.i18next.com/overview/configuration-options#others)
-   * 
-   * @default ':'
-   */
-  nsSeparator?: string | false
-  /** 
-   * ## {@link Options.keySeparator `Options.keySeparator`}
-   * 
-   * Char to separate keys.
-   * 
-   * See also:
-   * - The [`i18next` configuration options docs](https://www.i18next.com/overview/configuration-options#others)
-   * 
-   * @default '.'
-   */
-  keySeparator?: string
-  /**
-   * ## {@link Options.dry `Options.dry`}
-   * 
-   * Dry run (no changes are made to files). Forwarded to `jscodeshift`.
-   * 
-   * See also:
-   * - The [jscodeshift CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
-   * 
-   * @default false
-   */
-  dry?: boolean
-  /**
-   * ## {@link Options.silent `Options.silent`}
-   * 
-   * Do not write to stdout or stderr. Forwarded to `jscodeshift`.
-   * 
-   * See also:
-   * - The [`jscodeshift` CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
-   * 
-   * @default false
-   */
-  silent?: boolean
-  /**
-   * ## {@link Options.silent `Options.silent`}
-   * 
-   * The parser to use for parsing the source files. Forwarded to `jscodeshift`.
-   * 
-   * One of: `'babel' | 'babylon' | 'flow' | 'ts' | 'tsx'`
-   * 
-   * See also:
-   * - The [`jscodeshift` CLI docs](https://github.com/facebook/jscodeshift/?tab=readme-ov-file#usage-cli)
-   * 
-   * @default 'tsx'
-   */
-  parser?: Parser
+  nsSeparator: string
+  keySeparator: string
 }
 
 export type Options = typeof Options
@@ -182,8 +120,8 @@ function isObjectPatternNode(x: unknown): x is j.ObjectPattern {
   return has('type', type => type === 'ObjectPattern')(x)
 }
 
-function keyToSelector(key: string, j: j.JSCodeshift) {
-  const path = key.split('.')
+function keyToSelector(key: string, j: j.JSCodeshift, options: Options) {
+  const path = key.split(options.keySeparator)
   const expr = path.reduce<TFunctionArg>(
     (acc, part) => {
       if (PATTERN.digit.test(part))
@@ -198,18 +136,18 @@ function keyToSelector(key: string, j: j.JSCodeshift) {
   return j.arrowFunctionExpression([j.identifier('$')], expr)
 }
 
-function separateNamespaceFromPath(key: string): SeparatedNamespace {
-  const [head, ...tail] = key.split(':')
+function separateNamespaceFromPath(key: string, options: Options): SeparatedNamespace {
+  const [head, ...tail] = key.split(options.nsSeparator)
   return tail.length
-    ? { ns: head, path: tail.join(':') }
+    ? { ns: head, path: tail.join(options.nsSeparator) }
     : { path: head }
 }
 
-function templateLiteralToTokens(template: j.TemplateLiteral) {
+function templateLiteralToTokens(template: j.TemplateLiteral, options: Options) {
   let tokens: (ExpressionKind | TSTypeKind | string)[] = []
   template.quasis.forEach((quasi, i) => {
     if (quasi.value.cooked) {
-      quasi.value.cooked.split('.').forEach(s => {
+      quasi.value.cooked.split(options.keySeparator).forEach(s => {
         if (s) tokens.push(s)
       })
     }
@@ -261,7 +199,11 @@ function is18nextTFunction(
   )
 }
 
-export function transform(file: j.FileInfo, api: j.API) {
+export function transform(
+  file: j.FileInfo, 
+  api: j.API, 
+  options: Options
+) {
   const j = api.jscodeshift
   const root = j(file.source)
   const i18nAliases = new Set<string | IdentifierKind>()
@@ -395,7 +337,7 @@ export function transform(file: j.FileInfo, api: j.API) {
 
         /** recursively build nested `t()` calls */
         const buildCall = (idx: number) => {
-          const { ns, path } = separateNamespaceFromPath(keys[idx])
+          const { ns, path } = separateNamespaceFromPath(keys[idx], options)
 
           const props = []
 
@@ -428,7 +370,7 @@ export function transform(file: j.FileInfo, api: j.API) {
             props.push(...toplevelOptionProperties)
           }
 
-          const args: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [keyToSelector(path, j)]
+          const args: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [keyToSelector(path, j, options)]
           if (props.length) args.push(j.objectExpression(props))
 
           return j.callExpression(clone(calleeClone), args)
@@ -458,8 +400,8 @@ export function transform(file: j.FileInfo, api: j.API) {
               [j.identifier('$')],
               j.conditionalExpression(
                 arg0.test,
-                keyToSelector(arg0.consequent.value, j).body as ExpressionKind,
-                keyToSelector(arg0.alternate.value, j).body as ExpressionKind
+                keyToSelector(arg0.consequent.value, j, options).body as ExpressionKind,
+                keyToSelector(arg0.alternate.value, j, options).body as ExpressionKind
               )
             )
 
@@ -527,7 +469,7 @@ export function transform(file: j.FileInfo, api: j.API) {
             || isIdentifierNode(arg0)
             || isMemberExpressionNode(arg0)
           ) {
-            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0) : [arg0]
+            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, options) : [arg0]
             const selectorFn = j.arrowFunctionExpression(
               [j.identifier('$')],
               tokensToSelector(tokens, j)
@@ -597,8 +539,8 @@ export function transform(file: j.FileInfo, api: j.API) {
 
       if (!isStringLiteralNode(arg0) || typeof arg0.value !== 'string') return
 
-      const { ns, path } = separateNamespaceFromPath(arg0.value)
-      const selectorFn = keyToSelector(path, j)
+      const { ns, path } = separateNamespaceFromPath(arg0.value, options)
+      const selectorFn = keyToSelector(path, j, options)
       const newArgs: TFunctionArg[] = [selectorFn]
       const opts: { [x: string]: unknown } = {}
 
