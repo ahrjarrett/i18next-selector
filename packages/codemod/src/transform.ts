@@ -75,6 +75,7 @@ type SeparatedNamespace = {
 declare const Options: {
   nsSeparator: string
   keySeparator: string
+  parser: 'tsx' | 'ts'
 }
 
 export type Options = typeof Options
@@ -199,10 +200,16 @@ function is18nextTFunction(
   )
 }
 
+const defaults = {
+  keySeparator: '.',
+  nsSeparator: ':',
+  parser: 'tsx',
+} satisfies Options
+
 export function transform(
-  file: j.FileInfo, 
-  api: j.API, 
-  options: Options
+  file: j.FileInfo,
+  api: j.API,
+  options?: { [x: string]: unknown } // Options
 ) {
   const j = api.jscodeshift
   const root = j(file.source)
@@ -210,6 +217,7 @@ export function transform(
   const tAliases = new Set<string | IdentifierKind>()
   const useTranslationAliases = new Set<string | IdentifierKind>()
   const context = { i18nAliases, tAliases }
+  const config = { ...defaults, ...options } satisfies Options
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
@@ -337,7 +345,7 @@ export function transform(
 
         /** recursively build nested `t()` calls */
         const buildCall = (idx: number) => {
-          const { ns, path } = separateNamespaceFromPath(keys[idx], options)
+          const { ns, path } = separateNamespaceFromPath(keys[idx], config)
 
           const props = []
 
@@ -370,7 +378,7 @@ export function transform(
             props.push(...toplevelOptionProperties)
           }
 
-          const args: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [keyToSelector(path, j, options)]
+          const args: (j.ArrowFunctionExpression | j.ObjectExpression)[] = [keyToSelector(path, j, config)]
           if (props.length) args.push(j.objectExpression(props))
 
           return j.callExpression(clone(calleeClone), args)
@@ -400,8 +408,8 @@ export function transform(
               [j.identifier('$')],
               j.conditionalExpression(
                 arg0.test,
-                keyToSelector(arg0.consequent.value, j, options).body as ExpressionKind,
-                keyToSelector(arg0.alternate.value, j, options).body as ExpressionKind
+                keyToSelector(arg0.consequent.value, j, config).body as ExpressionKind,
+                keyToSelector(arg0.alternate.value, j, config).body as ExpressionKind
               )
             )
 
@@ -469,7 +477,7 @@ export function transform(
             || isIdentifierNode(arg0)
             || isMemberExpressionNode(arg0)
           ) {
-            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, options) : [arg0]
+            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, config) : [arg0]
             const selectorFn = j.arrowFunctionExpression(
               [j.identifier('$')],
               tokensToSelector(tokens, j)
@@ -539,8 +547,8 @@ export function transform(
 
       if (!isStringLiteralNode(arg0) || typeof arg0.value !== 'string') return
 
-      const { ns, path } = separateNamespaceFromPath(arg0.value, options)
-      const selectorFn = keyToSelector(path, j, options)
+      const { ns, path } = separateNamespaceFromPath(arg0.value, config)
+      const selectorFn = keyToSelector(path, j, config)
       const newArgs: TFunctionArg[] = [selectorFn]
       const opts: { [x: string]: unknown } = {}
 

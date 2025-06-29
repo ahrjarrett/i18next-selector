@@ -3,9 +3,9 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@effect/cli": "^0.38.2",
-    "@effect/platform-node": "^0.54.3",
-    "effect": "^3.10.14"
+    "@effect/cli": "^0.66.1",
+    "@effect/platform-node": "^0.88.3",
+    "effect": "^3.16.10"
   },
   "devDependencies": {
     "@pnpm/deps.graph-sequencer": "^1.0.0",

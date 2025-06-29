@@ -40,9 +40,14 @@ export default {
     "ast-types": "0.16.1"
   },
   "dependencies": {
-    "@effect/cli": "^0.38.2",
-    "@effect/platform-node": "^0.54.3",
-    "effect": "^3.10.14",
+    "@effect/cli": "^0.66.1",
+    "@effect/platform": "^0.87.1",
+    "@effect/platform-node": "^0.88.3",
+    "@effect/printer": "^0.44.10",
+    "@effect/printer-ansi": "^0.44.10",
+    "@effect/schema": "^0.75.5",
+    "@effect/typeclass": "^0.35.10",
+    "effect": "^3.16.10",
     "jscodeshift": "^17.3.0"
   }
 } as const
