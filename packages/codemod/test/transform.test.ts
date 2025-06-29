@@ -4,7 +4,7 @@ import { applyTransform } from 'jscodeshift/src/testUtils.js'
 import { transform } from '@i18next-selector/codemod'
 
 const module = { default: transform, parser: 'ts' as const }
-const options = {}
+const options = { keySeparator: '.', nsSeparator: ':' }
 
 vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
   vi.describe('〖⛳️〗‹‹ ❲t❳', () => {
