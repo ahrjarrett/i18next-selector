@@ -1,6 +1,8 @@
-# `i18next-selector-codemod`
+# i18next-selector-codemod
 
 `i18next-selector-codemod` exists to make the migration to using the i18next [selector API](https://github.com/i18next/i18next/pull/2322) smooth and relatively painless for TypeScript users.
+
+![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-codemod.gif)
 
 ## Usage
 
@@ -11,10 +13,6 @@ $ npx i18next-selector-codemod
 ```
 
 The CLI will guide you through a series of prompts, and then will either show you the set of changes that would be made (if `dryrun` is selected), or will apply the changes across the directories you specified.
-
-## Demo
-
-TODO: add a gif demonstrating the usage
 
 ## What it will change
 
