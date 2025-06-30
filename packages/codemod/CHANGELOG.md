@@ -1,5 +1,13 @@
 # @i18next-selector/codemod
 
+## 0.0.2
+
+### Patch Changes
+
+- [#55](https://github.com/ahrjarrett/i18next-selector/pull/55) [`4fe1559`](https://github.com/ahrjarrett/i18next-selector/commit/4fe15590ac3ee6d6fdf6f32727d140129794d625) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): fixes directory default, removes `@effect/schema`
+
+- [#55](https://github.com/ahrjarrett/i18next-selector/pull/55) [`8bf03d2`](https://github.com/ahrjarrett/i18next-selector/commit/8bf03d260313edaf8966bb9c5cd6beb26ac76072) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - docs(codemod): adds docs
+
 ## 0.0.1
 
 ### Patch Changes
