@@ -8,16 +8,10 @@ import { PKG_NAME, PKG_VERSION } from './version.js'
 
 type Options = {
   paths: string[]
-  parser: boolean
   dryrun: boolean
   keySeparator: string
   nsSeparator: string
 }
-
-const parserMap = {
-  true: 'tsx',
-  false: 'ts',
-} as const
 
 const booleanChoices = [
   { title: 'true', value: true },
@@ -26,7 +20,6 @@ const booleanChoices = [
 
 const defaults = {
   paths: ['./src'],
-  parser: true,
   dryrun: false,
   keySeparator: '.',
   nsSeparator: ':',
@@ -39,11 +32,6 @@ const TRANSFORM_PATH = path.join(path.resolve(DIST_PATH), 'cjs', 'transform.js')
 const paths = Prompt.list({
   message: `Directories to modify (default: '${defaults.paths.join(' ')}')`,
   delimiter: ' ',
-})
-
-const parser = Prompt.select({
-  message: `Include tsx files? (default: ${defaults.parser})`,
-  choices: booleanChoices,
 })
 
 const keySeparator = Prompt.text({
@@ -61,20 +49,20 @@ const dryrun = Prompt.select({
 
 const command = Command.prompt(
   'Configure i18next-selector codemod',
-  Prompt.all([paths, parser, keySeparator, nsSeparator, dryrun]),
-  ([paths, parser, keySeparator, nsSeparator, dryrun]) =>
-    run({ paths, parser, keySeparator, nsSeparator, dryrun })
+  Prompt.all([paths, keySeparator, nsSeparator, dryrun]),
+  ([paths, keySeparator, nsSeparator, dryrun]) =>
+    run({ paths, keySeparator, nsSeparator, dryrun })
 )
 
-function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
+function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
   const PATHS = paths.length === 1 && paths[0].trim() === '' ? defaults.paths : paths
   const CMD = [
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
-    `--parser=${parserMap[`${parser || defaults.parser}`]}`,
     ...(dryrun ? [`--dry=true`] : []),
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
+    `--parser=tsx`,
     `${PATHS.join(' ')}`
   ].join(' ')
 
