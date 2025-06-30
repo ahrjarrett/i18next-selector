@@ -16,6 +16,8 @@ Here's a quick demo:
 
 ![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-codemod.gif)
 
+Here's [the diff](https://github.com/electricitymaps/electricitymaps-contrib/pull/8239) it created when applied to the `electricitymaps-contrib` codebase.
+
 ## What it will change
 
 The following is a partial list of the transformations that `i18next-selector-codemod` is capable of applying on your behalf:
