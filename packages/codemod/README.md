@@ -98,16 +98,15 @@ Below is a partial list of transformations that, for one reason or another, `i18
 function doStuff(key: string) {
   return t('abc.' + key + '.ghi') 
   //       ^^^^^^^^^^^^^^^^^^^^^
-  // the AST for this syntax is quite
-  // complicated to handle reliably, so this 
-  // code will not be transformed
+  // the AST for this syntax is quite complicated to
+  // handle reliably, so this code will not be transformed
 }
 
 function doAbstractStuff(t: TFunction) {
   //                     ^^^^^^^^^^^^
-  // passing around a reference to `t` makes it hard
-  // for the codemod to be sure where `t` came from,
-  // so this code will not be transfomed
+  // passing around a reference to `t` makes it hard for 
+  // the codemod to be sure where `t` came from, so this
+  // code will not be transfomed
   return t('key')
 }
 ```
