@@ -1,5 +1,15 @@
 # @i18next-selector/codemod
 
+## 0.0.11
+
+### Patch Changes
+
+- [#51](https://github.com/ahrjarrett/i18next-selector/pull/51) [`2650c5b`](https://github.com/ahrjarrett/i18next-selector/commit/2650c5b8a8efb58b1f99fd51f582ab28595f9d91) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): supports custom `keySeparator` and `nsSeparator`
+
+- [#49](https://github.com/ahrjarrett/i18next-selector/pull/49) [`f63f160`](https://github.com/ahrjarrett/i18next-selector/commit/f63f160928d9186afde86753718c2549cba41bcf) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - polish(codemod): polishes the CLI interface
+
+- [#48](https://github.com/ahrjarrett/i18next-selector/pull/48) [`e50c113`](https://github.com/ahrjarrett/i18next-selector/commit/e50c113772240c10ddb0f06bb46ac23d9b018b7d) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): adds `@effect` peer dependencies
+
 ## 0.0.10
 
 ### Patch Changes
