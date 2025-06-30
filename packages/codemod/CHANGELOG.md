@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.1
+
+### Patch Changes
+
+- [#52](https://github.com/ahrjarrett/i18next-selector/pull/52) [`af0b11e`](https://github.com/ahrjarrett/i18next-selector/commit/af0b11ea309dff98b1fd38da48f08a5cc6cf45be) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - renames `@i18next-selector/codemod` package to `i18next-selector-codemod` to support usage with `npx`
+
 ## 0.0.11
 
 ### Patch Changes
