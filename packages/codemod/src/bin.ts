@@ -8,16 +8,10 @@ import { PKG_NAME, PKG_VERSION } from './version.js'
 
 type Options = {
   paths: string[]
-  parser: boolean
   dryrun: boolean
   keySeparator: string
   nsSeparator: string
 }
-
-const parserMap = {
-  true: 'tsx',
-  false: 'ts',
-} as const
 
 const booleanChoices = [
   { title: 'true', value: true },
@@ -26,7 +20,6 @@ const booleanChoices = [
 
 const defaults = {
   paths: ['./src'],
-  parser: true,
   dryrun: false,
   keySeparator: '.',
   nsSeparator: ':',
@@ -41,11 +34,6 @@ const paths = Prompt.list({
   delimiter: ' ',
 })
 
-const parser = Prompt.select({
-  message: `Include tsx files? (default: ${defaults.parser})`,
-  choices: booleanChoices,
-})
-
 const keySeparator = Prompt.text({
   message: `i18next key separator? (default: '${defaults.keySeparator}')`,
 })
@@ -56,25 +44,26 @@ const nsSeparator = Prompt.text({
 
 const dryrun = Prompt.select({
   message: `Dry run? (default: ${defaults.dryrun})`,
-  choices: booleanChoices,
+  choices: [...booleanChoices].reverse(),
 })
 
 const command = Command.prompt(
   'Configure i18next-selector codemod',
-  Prompt.all([paths, parser, keySeparator, nsSeparator, dryrun]),
-  ([paths, parser, keySeparator, nsSeparator, dryrun]) =>
-    run({ paths, parser, keySeparator, nsSeparator, dryrun })
+  Prompt.all([paths, keySeparator, nsSeparator, dryrun]),
+  ([paths, keySeparator, nsSeparator, dryrun]) =>
+    run({ paths, keySeparator, nsSeparator, dryrun })
 )
 
-function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
+function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
+  const PATHS = paths.length === 1 && paths[0].trim() === '' ? defaults.paths : paths
   const CMD = [
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
-    `--parser=${parserMap[`${parser || defaults.parser}`]}`,
     ...(dryrun ? [`--dry=true`] : []),
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
-    `${(paths.length === 0 ? defaults.paths : paths).join(' ')}`
+    `--parser=tsx`,
+    `${PATHS.join(' ')}`
   ].join(' ')
 
   console.log('Executing:\n\r', CMD)
