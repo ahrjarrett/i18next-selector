@@ -150,9 +150,6 @@ importers:
       '@effect/printer-ansi':
         specifier: ^0.44.10
         version: 0.44.10(@effect/typeclass@0.35.10(effect@3.16.10))(effect@3.16.10)
-      '@effect/schema':
-        specifier: ^0.75.5
-        version: 0.75.5(effect@3.16.10)
       '@effect/typeclass':
         specifier: ^0.35.10
         version: 0.35.10(effect@3.16.10)
@@ -538,12 +535,6 @@ packages:
     peerDependencies:
       '@effect/platform': ^0.87.1
       effect: ^3.16.10
-
-  '@effect/schema@0.75.5':
-    resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
-    deprecated: this package has been merged into the main effect package
-    peerDependencies:
-      effect: ^3.9.2
 
   '@effect/sql@0.40.1':
     resolution: {integrity: sha512-yvAgaPotWz72h5WOh2sqckUk1rCNmcaWQJR9MW5v+KPMUryK5+BR2hnhPO5Lz+TKAOIcdBoQOwsdLCw/Y0zg3A==}
@@ -3125,11 +3116,6 @@ snapshots:
     dependencies:
       '@effect/platform': 0.87.1(effect@3.16.10)
       effect: 3.16.10
-
-  '@effect/schema@0.75.5(effect@3.16.10)':
-    dependencies:
-      effect: 3.16.10
-      fast-check: 3.23.2
 
   '@effect/sql@0.40.1(@effect/experimental@0.51.1(@effect/platform@0.87.1(effect@3.16.10))(effect@3.16.10))(@effect/platform@0.87.1(effect@3.16.10))(effect@3.16.10)':
     dependencies:

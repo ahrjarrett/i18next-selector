@@ -45,7 +45,6 @@ export default {
     "@effect/platform-node": "^0.88.3",
     "@effect/printer": "^0.44.10",
     "@effect/printer-ansi": "^0.44.10",
-    "@effect/schema": "^0.75.5",
     "@effect/typeclass": "^0.35.10",
     "effect": "^3.16.10",
     "jscodeshift": "^17.3.0"

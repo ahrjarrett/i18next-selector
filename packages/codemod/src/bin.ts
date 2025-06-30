@@ -56,7 +56,7 @@ const nsSeparator = Prompt.text({
 
 const dryrun = Prompt.select({
   message: `Dry run? (default: ${defaults.dryrun})`,
-  choices: booleanChoices,
+  choices: [...booleanChoices].reverse(),
 })
 
 const command = Command.prompt(
@@ -67,6 +67,7 @@ const command = Command.prompt(
 )
 
 function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
+  const PATHS = paths.length === 1 && paths[0].trim() === '' ? defaults.paths : paths
   const CMD = [
     'npx jscodeshift',
     `-t="${TRANSFORM_PATH}"`,
@@ -74,7 +75,7 @@ function run({ paths, parser, keySeparator, nsSeparator, dryrun }: Options) {
     ...(dryrun ? [`--dry=true`] : []),
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
-    `${(paths.length === 0 ? defaults.paths : paths).join(' ')}`
+    `${PATHS.join(' ')}`
   ].join(' ')
 
   console.log('Executing:\n\r', CMD)
