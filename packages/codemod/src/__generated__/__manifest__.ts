@@ -1,7 +1,7 @@
 export default {
-  "name": "@i18next-selector/codemod",
+  "name": "i18next-selector-codemod",
   "type": "module",
-  "version": "0.0.11",
+  "version": "0.0.0",
   "private": false,
   "description": "",
   "license": "MIT",
