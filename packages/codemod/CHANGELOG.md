@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.3
+
+### Patch Changes
+
+- [#57](https://github.com/ahrjarrett/i18next-selector/pull/57) [`a42a0ab`](https://github.com/ahrjarrett/i18next-selector/commit/a42a0abb16ce886893539711ac9ad460f62a3dba) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - docs(codemod): adds gif
+
 ## 0.0.2
 
 ### Patch Changes
