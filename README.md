@@ -20,6 +20,15 @@ To accomplish this, we identified the following tasks:
 
 ### i18next-selector-codemod
 
+<div>
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/i18next-selector-codemod?style=flat-square&logo=npm&label=npm&color=blue">
+  &nbsp;
+  <img alt="Static Badge" src="https://img.shields.io/badge/license-MIT-a094a2?style=flat-square">
+  &nbsp;
+  <img alt="npm" src="https://img.shields.io/npm/dt/i18next-selector-codemod?style=flat-square">
+  &nbsp;
+</div>
+
 - [i18next-selector-codemod](https://github.com/ahrjarrett/i18next-selector/tree/main/packages/codemod)
 
 The `i18next-selector-codemod` makes migrating to the selector API easy.
@@ -29,7 +38,7 @@ To see the full set of transformations it will make on your behalf, check out th
 #### Usage
 
 ```bash
-npx i18next-selector-codemod
+$ npx i18next-selector-codemod
 ```
 
 For more detailed usage instructions, refer to the [package README](https://github.com/ahrjarrett/i18next-selector/blob/main/packages/codemod/README.md).
@@ -39,6 +48,15 @@ For more detailed usage instructions, refer to the [package README](https://gith
 ![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-codemod.gif)
 
 ### @i18next-selector/vite-plugin
+
+<div>
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40i18next-selector%2Fvite-plugin?style=flat-square&logo=npm&label=npm&color=blue">
+  &nbsp;
+  <img alt="Static Badge" src="https://img.shields.io/badge/license-MIT-a094a2?style=flat-square">
+  &nbsp;
+  <img alt="npm" src="https://img.shields.io/npm/dt/@i18next-selector/vite-plugin?style=flat-square">
+  &nbsp;
+</div>
 
 To get the most out of the selector API, we recommend users use the `enableSelector: "optimize"` setting.
 
