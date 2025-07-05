@@ -1,6 +1,10 @@
-# i18next-selector
+<br>
+<h1 align="center">@i18next-selector</h1>
+<br>
 
-This repo contains packages that support [this PR](https://github.com/i18next/i18next/pull/2322), which adds a _selector API_ to i18next.
+<p align="center">This repo contains packages that support <a href="https://github.com/i18next/i18next/pull/2322" target="_blank">this PR</a>, which adds a <em>selector API</em> to i18next.</p>
+
+<br>
 
 ## Goals
 
