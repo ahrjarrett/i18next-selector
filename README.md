@@ -1,36 +1,65 @@
 # i18next-selector
 
-This repo contains packages that support [this PR](https://github.com/i18next/i18next/pull/2322), which adds a "selector" API to i18next
+This repo contains packages that support [this PR](https://github.com/i18next/i18next/pull/2322), which adds a _selector API_ to i18next.
 
 ## Goals
 
-The goals of the PR are to:
+This project provides tools to support users that are going to, or have already, transitioned to `i18next`'s selector API.
 
-1. increase IDE performance for TypeScript users with large translation sets
-2. decrease the occurence of OOM (out-of-memory) errors when using i18next with tools such as `@typescript-eslint`
-3. improve DX by supporting "go-to definition", allowing users to quickly find, navigate, and troubleshoot their translations
-4. preserve JSDoc annotations at the call-site, making translations easier to understand and share
+- allow `i18next` to support TypeScript users with arbitrarily large translation dictionaries
+- make `i18next` more memory-efficient for all TypeScript users, regardless of the size of their translation dictionaries
 
-To see how the codemod behaves, check out the [tests](https://github.com/ahrjarrett/@i18next-selector/blob/main/packages/codemod/test/transform.test.ts).
+To accomplish this, we identified the following tasks:
 
-## Todos
+- [x] fix TypeScript performance by "doing less": instead, _use the platform_ and leverage built-in IDE support for auto-completion
+- [x] fix OOM (out-of-memory) errors by fixing the number of TS compiler allocations
+- [x] improve DX by supporting "go-to definition", allowing users to quickly find, navigate, and troubleshoot their translations
+- [x] preserve JSDoc annotations at the call-site, making translations easier to understand and share
 
-1. [ ] Finish review process for [this PR](https://github.com/i18next/i18next/pull/2322)
-2. [x] DONE Add support for transforming an array of keys to nested `t` calls with default values
-3. [x] DONE Add support for `react-i18next`
-4. [ ] Add parameter for users to provide a path to their `i18next` config file
-   - This would allow the codemod to adapt to options such as `nsSeparator` and `keySeparator`
-5. [ ] Use [`fast-check`](https://github.com/dubzzz/fast-check) to make the test suite more robust
-   - That way we get all the bugs out of the way _before_ publishing, rather than having to fix bugs for users over time
-6. [ ] Add GitHub Actions to CI/CD pipeline to handle:
-   1. package publishing 
-   2. build artifacts for ESM/CJS
-8. [ ] Add support for making translations "zero-cost"
-   - Propose adding a configuration option that opts out of _all_ type-level transformations when using the selector API
-   - Publish a [Vite plugin](https://vite.dev/guide/api-plugin) that creates a copy of user translations on build, which
-    would users to pre-compile translations into the format TypeScript expects
-   - Doing this would allow `i18next` to support translations for TypeScript users at any scale, and would bring allocations
-    down to almost zero
+## Packages
 
-8. [x] WONT-DO Allow user to provide custom prettier options (forward them along)
-9. [x] WONT-DO Fix weird formatting bug when nesting `t` calls
+### i18next-selector-codemod
+
+- [i18next-selector-codemod](https://github.com/ahrjarrett/i18next-selector/tree/main/packages/codemod)
+
+The `i18next-selector-codemod` makes migrating to the selector API easy.
+
+To see the full set of transformations it will make on your behalf, check out the [tests](https://github.com/ahrjarrett/@i18next-selector/blob/main/packages/codemod/test/transform.test.ts).
+
+#### Usage
+
+```bash
+npx i18next-selector-codemod
+```
+
+For more detailed usage instructions, refer to the [package README](https://github.com/ahrjarrett/i18next-selector/blob/main/packages/codemod/README.md).
+
+#### Demo
+
+![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-codemod.gif)
+
+### @i18next-selector/vite-plugin
+
+To get the most out of the selector API, we recommend users use the `enableSelector: "optimize"` setting.
+
+`enableSelector: "optimize"` tells `i18next` not to perform any of the fancy key-transformations that make using the library computationally expensive.
+
+However, turning off those transformations makes `i18next` less ergonomic for users that rely heavily on features like [pluralization](https://www.i18next.com/translation-function/plurals).
+
+To fix this, you can use the `@i18next-selector/vite-plugin`, which hooks into Vite's [hot module replacement](https://vite.dev/guide/api-hmr) API to apply the key transformations automatically when translation dictionaries are edited.
+
+#### Usage
+
+To use the plugin, simply configure the plugin to point to the directory where your local translations live.
+
+The plugin will transform any `.json` or `.ts` files into `.d.ts` files, and works with arbitrarily nested dictionaries, and arbitrarily nested directory structure.
+
+#### Demo
+
+- `.ts` files
+
+![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+
+- `.json` files
+
+![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
