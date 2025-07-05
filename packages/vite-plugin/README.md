@@ -16,7 +16,13 @@ This is annoying and error prone, so `@i18next-selector/vite-plugin` takes care 
 
 ## Demo
 
-![i18next-selector-vite-plugin demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin.gif)
+- `.ts` files
+
+![i18next-selector-vite-plugin TS demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+
+- `.json` files
+
+![i18next-selector-vite-plugin JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
 
 ## Installation
 
