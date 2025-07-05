@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.12
+
+### Patch Changes
+
+- [#62](https://github.com/ahrjarrett/i18next-selector/pull/62) [`e2888ca`](https://github.com/ahrjarrett/i18next-selector/commit/e2888ca2ea6ed0c03f96666b3f995efc49ecae33) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - docs: adds demos to documentation
+
 ## 0.0.11
 
 ### Patch Changes
