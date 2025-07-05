@@ -1,4 +1,18 @@
-# @i18next-selector/vite-plugin
+<br>
+<h1 align="center">@i18next-selector/vite-plugin</h1>
+<br>
+
+<div align="center">
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40i18next-selector%2Fvite-plugin?style=flat-square&logo=npm&label=npm&color=blue">
+  &nbsp;
+  <img alt="Static Badge" src="https://img.shields.io/badge/license-MIT-a094a2?style=flat-square">
+  &nbsp;
+  <img alt="npm" src="https://img.shields.io/npm/dt/@i18next-selector/vite-plugin?style=flat-square">
+  &nbsp;
+</div>
+
+<br>
+<br>
 
 This plugin exists to help simplify the migration to using the i18next [selector API](https://github.com/i18next/i18next/pull/2322) for TypeScript users.
 
@@ -16,7 +30,13 @@ This is annoying and error prone, so `@i18next-selector/vite-plugin` takes care 
 
 ## Demo
 
-![i18next-selector-vite-plugin demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin.gif)
+- `.ts` files
+
+![i18next-selector-vite-plugin TS demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+
+- `.json` files
+
+![i18next-selector-vite-plugin JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
 
 ## Installation
 
