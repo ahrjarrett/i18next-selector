@@ -4,7 +4,9 @@ import { execSync } from 'node:child_process'
 import { Command, Prompt } from "@effect/cli"
 import { NodeContext, NodeRuntime } from "@effect/platform-node"
 import { Effect } from "effect"
-import { PKG_NAME, PKG_VERSION } from './version.js'
+
+const PKG_NAME = 'i18next-selector-codemod'
+const PKG_VERSION = '0.0.3'
 
 type Options = {
   paths: string[]
