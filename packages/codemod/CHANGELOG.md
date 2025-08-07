@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.4
+
+### Patch Changes
+
+- [#69](https://github.com/ahrjarrett/i18next-selector/pull/69) [`0a0582f`](https://github.com/ahrjarrett/i18next-selector/commit/0a0582fe4e9a58875fa727e478c0f90e7a5bc6c0) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix: adds support for environments that don't have pnpm installed (#65)
+
 ## 0.0.3
 
 ### Patch Changes
