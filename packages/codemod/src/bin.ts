@@ -1,4 +1,4 @@
-#!/usr/bin/env pnpm dlx tsx
+#!/usr/bin/env npx tsx
 import * as path from 'node:path'
 import { execSync } from 'node:child_process'
 import { Command, Prompt } from "@effect/cli"

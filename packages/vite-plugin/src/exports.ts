@@ -1,4 +1,3 @@
-export { VERSION } from './version.js'
 export {
   i18nextVitePlugin,
   tsFileToDeclarationFile,
