@@ -1,5 +1,6 @@
 import type * as j from 'jscodeshift'
 import type { ExpressionKind, IdentifierKind, TSTypeKind } from 'ast-types/lib/gen/kinds'
+import type { namedTypes } from 'ast-types'
 
 const Object_hasOwnProperty = globalThis.Object.prototype.hasOwnProperty
 
@@ -193,6 +194,7 @@ function clone(node: unknown) {
 interface Context {
   tAliases: Set<string | IdentifierKind>
   i18nAliases: Set<string | IdentifierKind>
+  TransAliases: Set<string | IdentifierKind>
 }
 
 function is18nextTFunction(
@@ -207,6 +209,14 @@ function is18nextTFunction(
     isIdentifierNode(callee.object) &&
     i18nAliases.has(callee.object.name)
   )
+}
+
+function isTransComponent(
+  callee: ExpressionKind,
+  { TransAliases }: Context
+): boolean {
+  return isIdentifierNode(callee)
+    && TransAliases.has(callee.name)
 }
 
 const defaults = {
@@ -225,7 +235,8 @@ export function transform(
   const i18nAliases = new Set<string | IdentifierKind>()
   const tAliases = new Set<string | IdentifierKind>()
   const useTranslationAliases = new Set<string | IdentifierKind>()
-  const context = { i18nAliases, tAliases }
+  const TransAliases = new Set<string | IdentifierKind>()
+  const context = { i18nAliases, tAliases, TransAliases } satisfies Context
   const config = { ...defaults, ...options } satisfies Options
 
   root
@@ -257,17 +268,98 @@ export function transform(
         ) {
           useTranslationAliases.add(s.local ? s.local.name : 'useTranslation')
         }
+        if (
+          s.type === 'ImportSpecifier' &&
+          s.imported.name === 'Trans'
+        ) {
+          TransAliases.add(s.local ? s.local.name : 'Trans')
+        }
       })
     })
 
-  if (i18nAliases.size === 0 && tAliases.size === 0 && useTranslationAliases.size === 0) return file.source
+  if (
+    i18nAliases.size === 0
+    && tAliases.size === 0
+    && useTranslationAliases.size === 0
+    && TransAliases.size === 0
+  ) return file.source
+
+  function buildSelector(pathString: string) {
+    const segments = pathString.split(".")
+    let expr: namedTypes.Identifier | namedTypes.MemberExpression = j.identifier("$")
+
+    for (const seg of segments) {
+      if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(seg)) {
+        expr = j.memberExpression(expr, j.identifier(seg))
+      } else {
+        expr = j.memberExpression(expr, j.literal(seg), true)
+      }
+    }
+    return expr
+  }
+
+  function parseKey(key: string) {
+    const colonIndex = key.indexOf(config.nsSeparator)
+    if (colonIndex === -1) {
+      return { ns: null, path: key }
+    }
+    return {
+      ns: key.slice(0, colonIndex),
+      path: key.slice(colonIndex + 1),
+    }
+  }
+
+  root
+    .find(j.JSXElement, {
+      openingElement: {
+        name: { type: "JSXIdentifier", name: "Trans" },
+      },
+    })
+    .forEach(path => {
+      const attrs = path.node.openingElement.attributes || []
+
+      const i18nAttr = attrs.find(
+        attr => attr.type === "JSXAttribute" && attr.name.name === "i18nKey"
+      )
+      if (!i18nAttr) return
+
+      let keyString
+      if (
+        has('value', 'type')(i18nAttr)
+        && i18nAttr.value?.type === "StringLiteral"
+        && has('value', 'value')(i18nAttr)
+      ) {
+        keyString = i18nAttr.value.value
+      } else if (
+        has('value', 'type')(i18nAttr)
+        && i18nAttr.value?.type === "JSXExpressionContainer"
+        && has('value', 'expression', 'type')(i18nAttr)
+        && i18nAttr.value.expression.type === "StringLiteral"
+        && has('value', 'expression', 'value')(i18nAttr)
+      ) {
+        keyString = i18nAttr.value.expression.value
+      }
+
+      if (typeof keyString !== "string") return
+
+      const { ns, path: pathString } = parseKey(keyString)
+      const arrowFn = j.arrowFunctionExpression(
+        [j.identifier("$")],
+        buildSelector(pathString)
+      )
+
+        ; (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(arrowFn)
+
+      if (ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
+        attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(ns)))
+      }
+    })
 
   root
     .find(j.VariableDeclarator)
     .forEach(p => {
       const init = p.node.init
       const id = p.node.id
-
 
       /**
        * @example
