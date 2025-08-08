@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.7
+
+### Patch Changes
+
+- [#77](https://github.com/ahrjarrett/i18next-selector/pull/77) [`5d4aa13`](https://github.com/ahrjarrett/i18next-selector/commit/5d4aa13196399d8fb42bb1eb13bb51fff09707e8) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat: makes `ns` the first property added to the options object (#67)
+
 ## 0.0.6
 
 ### Patch Changes
