@@ -1089,14 +1089,30 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
           source: [
             `import { Trans } from "react-i18next"`,
             ``,
-            `const a = <Trans i18nKey="my.key" />`,
+            `<Trans i18nKey="my.key" />`,
           ].join('\r')
         })
       ).toMatchInlineSnapshot
         (`
         "import { Trans } from "react-i18next"
 
-        const a = <Trans i18nKey={$ => $.my.key} />"
+        <Trans i18nKey={$ => $.my.key} />"
+      `)
+
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="my.key">example inner text</Trans>`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key}>example inner text</Trans>"
       `)
     })
 
@@ -1110,14 +1126,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         source: [
           `import { Trans } from "react-i18next"`,
           ``,
-          `const a = <Trans i18nKey="my.key" ns="ns1" />`,
+          `<Trans i18nKey="my.key" ns="ns1" />`,
         ].join('\r')
       })
     ).toMatchInlineSnapshot
       (`
       "import { Trans } from "react-i18next"
 
-      const a = <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      <Trans i18nKey={$ => $.my.key} ns="ns1" />"
     `)
 
     vi.expect.soft(
@@ -1126,14 +1142,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         source: [
           `import { Trans } from "react-i18next"`,
           ``,
-          `const a = <Trans i18nKey="ns1:my.key" />`,
+          `<Trans i18nKey="ns1:my.key" />`,
         ].join('\r')
       })
     ).toMatchInlineSnapshot
       (`
       "import { Trans } from "react-i18next"
 
-      const a = <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      <Trans i18nKey={$ => $.my.key} ns="ns1" />"
     `)
   })
 
