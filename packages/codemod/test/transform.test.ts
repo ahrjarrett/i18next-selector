@@ -3,7 +3,7 @@ import { applyTransform } from 'jscodeshift/src/testUtils.js'
 
 import { transform } from '@i18next-selector/codemod'
 
-const module = { default: transform, parser: 'ts' as const }
+const module = { default: transform, parser: 'tsx' as const }
 const options = { keySeparator: '.', nsSeparator: ':' }
 
 vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
@@ -1080,4 +1080,116 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
     })
   })
 
+  vi.describe('〖⛳️〗‹‹‹ ❲Trans❳', () => {
+
+    vi.test('〖⛳️〗› ❲transform❳: it transforms i18nextKey to selector', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="my.key" />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key} />"
+      `)
+
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey={"my.key"} />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key} />"
+      `)
+
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="my.key">example inner text</Trans>`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key}>example inner text</Trans>"
+      `)
+    })
+
+    vi.test('〖⛳️〗› ❲transform❳: it handles namespaces in the `Trans` component', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="my.key" ns="ns1" />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      `)
+
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="ns1:my.key" />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      `)
+
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<>`,
+            `  <Trans i18nKey="ns1:my.key" />`,
+            `  <Trans i18nKey="ns2:my.key" />`,
+            `</>`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <>
+          <Trans i18nKey={$ => $.my.key} ns="ns1" />
+          <Trans i18nKey={$ => $.my.key} ns="ns2" />
+        </>"
+      `)
+
+    })
+
+  })
+
 })
+
