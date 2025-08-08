@@ -118,14 +118,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })
 
         function createTranslation1(key: string) { return t($ => $.abc[key].ghi); }
@@ -178,14 +178,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -234,14 +234,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         i18next.t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -605,14 +605,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -664,14 +664,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -723,14 +723,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -785,14 +785,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         T($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -844,14 +844,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
-          ns: "ns1"
+          ns: "ns1",
+          defaultValue: "default value"
         })
 
         t($ => $.abc.def.ghi, {
-          defaultValue: "default value",
+          ns: "ns1",
           val: "some val",
-          ns: "ns1"
+          defaultValue: "default value"
         })"
       `)
     })
@@ -1024,8 +1024,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         t($ => $.abc.def.ghi, {
           defaultValue: t($ => $.jkl.mno.pqr, {
             ...i18nextOptions,
-            defaultValue: "some default value",
-            ns: "ns"
+            ns: "ns",
+            defaultValue: "some default value"
           })
         })"
       `)

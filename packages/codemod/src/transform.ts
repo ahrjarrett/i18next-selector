@@ -430,7 +430,7 @@ export function transform(
             if (has('key')(prop) && has('value')(prop)) {
               const { key, value } = prop
               if (has('name', (name) => typeof name === 'string')(key)) {
-                const k = key.name || value
+                const k = key.name ?? value
                 if (k === 'defaultValue') {
                   defaultValueFromOptions = prop.value
                 } else {
@@ -661,7 +661,7 @@ export function transform(
       const newArgs: TFunctionArg[] = [selectorFn]
       const opts: { [x: string]: unknown } = {}
 
-      if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
+      if (ns && !('ns' in opts)) opts.ns = j.literal(ns)
 
       const userDefinedOptionsObject = [arg1, arg2].find(isObjectExpressionNode)
       if (userDefinedOptionsObject) {
@@ -677,7 +677,7 @@ export function transform(
         })
       }
 
-      if (ns && !('ns' in opts)) opts.ns = j.literal(ns)
+      if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
 
       const hasOpts = Object.keys(opts).length > 0
       const arg1IsPointer = isIdentifierNode(arg1) || isMemberExpressionNode(arg1)
