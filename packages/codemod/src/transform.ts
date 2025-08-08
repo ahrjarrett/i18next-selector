@@ -67,9 +67,9 @@ type TFunctionArg =
   | j.ArrowFunctionExpression
   | j.ObjectExpression
 
-type SeparatedNamespace = {
+type SeparatedNamespace<T = string> = {
   ns?: string
-  path: string
+  path: T
 }
 
 declare const Options: {
@@ -144,19 +144,28 @@ function separateNamespaceFromPath(key: string, options: Options): SeparatedName
     : { path: head }
 }
 
-function templateLiteralToTokens(template: j.TemplateLiteral, options: Options) {
+function templateLiteralToTokens(template: j.TemplateLiteral, options: Options): SeparatedNamespace<(ExpressionKind | TSTypeKind | string)[]> {
   let tokens: (ExpressionKind | TSTypeKind | string)[] = []
+  let ns: string | null = null
   template.quasis.forEach((quasi, i) => {
     if (quasi.value.cooked) {
-      quasi.value.cooked.split(options.keySeparator).forEach(s => {
-        if (s) tokens.push(s)
-      })
+      const tmp = quasi.value.cooked.split(options.nsSeparator)
+      if (tmp.length > 1) {
+        ns = tmp[0]
+        tmp.slice(1).join('').split(options.keySeparator).forEach(s => {
+          if (s) tokens.push(s)
+        })
+      } else {
+        quasi.value.cooked.split(options.keySeparator).forEach(s => {
+          if (s) tokens.push(s)
+        })
+      }
     }
     if (i < template.expressions.length) {
       tokens.push(template.expressions[i])
     }
   })
-  return tokens
+  return { path: tokens, ...typeof ns === 'string' ? { ns } : {} }
 }
 
 function tokensToSelector(tokens: (string | ExpressionKind | TSTypeKind)[], j: j.JSCodeshift) {
@@ -223,6 +232,7 @@ export function transform(
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
     .forEach(p => {
       (p.node.specifiers || []).forEach(s => {
+
         switch (s.type) {
           case 'ImportDefaultSpecifier':
           case 'ImportNamespaceSpecifier': {
@@ -477,14 +487,20 @@ export function transform(
             || isIdentifierNode(arg0)
             || isMemberExpressionNode(arg0)
           ) {
-            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, config) : [arg0]
+            const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, config) : { path: [arg0] }
+
             const selectorFn = j.arrowFunctionExpression(
               [j.identifier('$')],
-              tokensToSelector(tokens, j)
+              tokensToSelector(tokens.path, j)
             )
 
             const newArgs: TFunctionArg[] = [selectorFn]
             const opts: { [x: string]: unknown } = {}
+
+            if (typeof tokens.ns === 'string') {
+              // #66 https://github.com/ahrjarrett/i18next-selector/issues/66
+              opts.ns = j.literal(tokens.ns)
+            }
 
             /** positional defaultValue (string) */
             if (isStringLiteralNode(arg1)) opts.defaultValue = arg1
@@ -514,13 +530,14 @@ export function transform(
                     j.spreadElement(arg1),
                     ...Object.entries(opts).map(
                       ([k, v]) => j.property('init', j.identifier(k), v as never)
-                    )
+                    ),
                   ])
                 )
               } else {
                 newArgs.push(arg1)
               }
             } else if (arg2IsPointer && hasOpts) {
+
               newArgs.push(
                 j.objectExpression([
                   j.spreadElement(arg2),

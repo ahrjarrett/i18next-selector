@@ -9,8 +9,65 @@ const options = { keySeparator: '.', nsSeparator: ':' }
 vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
   vi.describe('〖⛳️〗‹‹ ❲t❳', () => {
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is a named import', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it works when `t` is given a template literal', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { t } from "i18next"`,
+            ``,
+            `t(\`abc.def.ghi\`)`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { t } from "i18next"
+
+        t($ => $.abc.def.ghi)"
+      `)
+    })
+
+    vi.test('〖⛳️〗› ❲transform❳: it works when `t` is given a template literal that contains a namespace', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { t } from "i18next"`,
+            ``,
+            `t(\`ns1:def.ghi\`)`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { t } from "i18next"
+
+        t($ => $.def.ghi, {
+          ns: "ns1"
+        })"
+      `)
+
+      // #66: https://github.com/ahrjarrett/i18next-selector/issues/66
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { t } from "i18next"`,
+            ``,
+            `t(\`account:password_reset.request.\${status}.title\`);`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { t } from "i18next"
+
+        t($ => $.password_reset.request[status].title, {
+          ns: "account"
+        });"
+      `)
+    })
+
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `t` is a named import', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -77,8 +134,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is used as a default import', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is used as a default import', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -133,8 +190,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is a namespace import', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `i18next` is a namespace import', () => {
+      vi.expect.soft(
         applyTransform(
           module, options, {
           path: '',
@@ -189,7 +246,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: handles `defaultValue` permutations', () => {
+    vi.test('〖⛳️〗› ❲transform❳: handles `defaultValue` permutations', () => {
 
       /**
        * TODO
@@ -202,7 +259,7 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
        * Issue: https://github.com/benjamn/recast/pull/353
        */
 
-      vi.expect(
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -330,8 +387,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a local function', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a local function', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -372,8 +429,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a named import from somewhere besides `i18next`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it does not apply transformation when `t` is a named import from somewhere besides `i18next`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -413,8 +470,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a default import from somewhere besides `i18next`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a default import from somewhere besides `i18next`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -455,8 +512,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a namespace import from somewhere besides `i18next`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it does not apply transformation when `i18next` is a namespace import from somewhere besides `i18next`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -496,12 +553,13 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         i18next.t("ns1:abc.def.ghi", "default value", { val: "some val" })"
       `)
     })
+
   })
 
   vi.describe('〖⛳️〗‹‹‹ ❲useTranslation❳', () => {
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` and `t` are destructured', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` and `t` are destructured', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -559,8 +617,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is renamed when pulled off of `useTranslation`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `t` is renamed when pulled off of `useTranslation`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -618,8 +676,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -676,13 +734,12 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })"
       `)
     })
-
   })
 
   vi.describe('〖⛳️〗‹‹‹ ❲useTranslation❳', () => {
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `t` is renamed when pulled off of `useTranslation`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `t` is renamed when pulled off of `useTranslation`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -740,8 +797,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` is aliased', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -799,8 +856,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -825,8 +882,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -854,8 +911,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -883,8 +940,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg in a nested call', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 2nd arg in a nested call', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -911,8 +968,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties in a nested call', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: merges options object pointer when passed as the 2nd arg with computed properties in a nested call', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -942,8 +999,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg in a nested call', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: preserves options object pointer when passed as the 3rd arg in a nested call', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -974,8 +1031,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it does not apply selector to the namespace passed to `useTranslation`', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it does not apply selector to the namespace passed to `useTranslation`', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
@@ -996,8 +1053,8 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.it('〖⛳️〗› ❲transform❳: it supports inline ternaries', () => {
-      vi.expect(
+    vi.test('〖⛳️〗› ❲transform❳: it supports inline ternaries', () => {
+      vi.expect.soft(
         applyTransform(module, options, {
           path: '',
           source: [
