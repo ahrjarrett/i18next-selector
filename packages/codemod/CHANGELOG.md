@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.5
+
+### Patch Changes
+
+- [#72](https://github.com/ahrjarrett/i18next-selector/pull/72) [`13828b0`](https://github.com/ahrjarrett/i18next-selector/commit/13828b0b7ca51d83dbcee4ecf627fea671c7e961) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix: adds support for namespace extraction inside string interpolation (#66)
+
 ## 0.0.4
 
 ### Patch Changes
