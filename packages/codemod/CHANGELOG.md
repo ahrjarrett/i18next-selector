@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.6
+
+### Patch Changes
+
+- [#75](https://github.com/ahrjarrett/i18next-selector/pull/75) [`09e33b1`](https://github.com/ahrjarrett/i18next-selector/commit/09e33b1546163a8160788de25d5707e394dd43ed) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat: adds support for the `Trans` component (#74, closes #71)
+
 ## 0.0.5
 
 ### Patch Changes
