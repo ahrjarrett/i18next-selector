@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.8
+
+### Patch Changes
+
+- [#82](https://github.com/ahrjarrett/i18next-selector/pull/82) [`4ef29ea`](https://github.com/ahrjarrett/i18next-selector/commit/4ef29ea09151f4a9723442608c129bc8b2910dfc) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat: support accessing `t` function from `i18n` object returned by `useTranslation`
+
 ## 0.0.7
 
 ### Patch Changes
