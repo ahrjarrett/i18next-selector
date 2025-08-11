@@ -114,6 +114,10 @@ function isObjectExpressionNode(x: unknown): x is j.ObjectExpression {
   return has('type', type => type === 'ObjectExpression')(x)
 }
 
+function isSpreadElement(x: unknown): x is j.SpreadElement {
+  return has('type', type => type === 'SpreadElement')(x)
+}
+
 function isCallExpressionNode(x: unknown): x is j.CallExpression {
   return has('type', type => type === 'CallExpression')(x)
 }
@@ -441,7 +445,7 @@ export function transform(
     .filter(p => is18nextTFunction(p.node.callee, context))
     .forEach(p => {
       const { node } = p
-      const [arg0, arg1, arg2] = node.arguments
+      let [arg0, arg1, arg2] = node.arguments
 
       if (
         isArrayExpressionNode(arg0) &&
@@ -487,11 +491,13 @@ export function transform(
 
           const props = []
 
-          if (ns) props.push(j.property(
-            'init',
-            j.identifier('ns'),
-            j.literal(ns)
-          ))
+          if (ns) {
+            props.push(j.property(
+              'init',
+              j.identifier('ns'),
+              j.literal(ns)
+            ))
+          }
 
           if (idx < keys.length - 1) {
             props.push(
@@ -576,6 +582,7 @@ export function transform(
               if (hasOpts) {
                 newArgs.push(
                   j.objectExpression([
+                    ...spreads,
                     j.spreadElement(arg1),
                     ...Object.entries(opts).map(
                       ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -588,6 +595,7 @@ export function transform(
             } else if (arg2IsPointer && hasOpts) {
               newArgs.push(
                 j.objectExpression([
+                  ...spreads,
                   j.spreadElement(arg2),
                   ...Object.entries(opts).map(
                     ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -596,12 +604,14 @@ export function transform(
               )
             } else if (hasOpts) {
               newArgs.push(
-                j.objectExpression(
-                  Object.entries(opts).map(
+                j.objectExpression([
+                  ...spreads,
+                  ...Object.entries(opts).map(
                     ([k, v]) => j.property('init', j.identifier(k), v as never)
                   )
-                )
+                ])
               )
+            } else {
             }
 
             node.arguments = newArgs
@@ -624,6 +634,7 @@ export function transform(
 
             const newArgs: TFunctionArg[] = [selectorFn]
             const opts: { [x: string]: unknown } = {}
+            let spreads: any[] = []
 
             if (typeof tokens.ns === 'string') {
               // #66 https://github.com/ahrjarrett/i18next-selector/issues/66
@@ -636,7 +647,10 @@ export function transform(
             const userDefinedOptionsObject = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
             if (userDefinedOptionsObject) {
               userDefinedOptionsObject.properties.forEach(prop => {
-                if (has('key')(prop) && has('value')(prop)) {
+                if (isSpreadElement(prop)) {
+                  spreads.push(prop)
+                }
+                else if (has('key')(prop) && has('value')(prop)) {
                   const { key, value } = prop
                   if (has('name', (name) => typeof name === 'string')(key)) {
                     opts[key.name] = value
@@ -655,6 +669,7 @@ export function transform(
               if (hasOpts) {
                 newArgs.push(
                   j.objectExpression([
+                    ...spreads,
                     j.spreadElement(arg1),
                     ...Object.entries(opts).map(
                       ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -665,9 +680,9 @@ export function transform(
                 newArgs.push(arg1)
               }
             } else if (arg2IsPointer && hasOpts) {
-
               newArgs.push(
                 j.objectExpression([
+                  ...spreads,
                   j.spreadElement(arg2),
                   ...Object.entries(opts).map(
                     ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -676,11 +691,18 @@ export function transform(
               )
             } else if (hasOpts) {
               newArgs.push(
-                j.objectExpression(
-                  Object.entries(opts).map(
+                j.objectExpression([
+                  ...spreads,
+                  ...Object.entries(opts).map(
                     ([k, v]) => j.property('init', j.identifier(k), v as never)
                   )
-                )
+                ])
+              )
+            } else if (spreads.length > 0) {
+              newArgs.push(
+                j.objectExpression([
+                  ...spreads,
+                ])
               )
             }
 
@@ -696,13 +718,17 @@ export function transform(
       const selectorFn = keyToSelector(path, j, config)
       const newArgs: TFunctionArg[] = [selectorFn]
       const opts: { [x: string]: unknown } = {}
+      let spreads: any[] = []
 
       if (ns && !('ns' in opts)) opts.ns = j.literal(ns)
 
       const userDefinedOptionsObject = [arg1, arg2].find(isObjectExpressionNode)
       if (userDefinedOptionsObject) {
         userDefinedOptionsObject.properties.forEach(prop => {
-          if (has('key')(prop) && has('value')(prop)) {
+          if (isSpreadElement(prop)) {
+            spreads.push(prop)
+          }
+          else if (has('key')(prop) && has('value')(prop)) {
             const { key, value } = prop
             if (has('name', (name) => typeof name === 'string')(key)) {
               opts[key.name] = value
@@ -723,6 +749,7 @@ export function transform(
         if (hasOpts) {
           newArgs.push(
             j.objectExpression([
+              ...spreads,
               j.spreadElement(arg1),
               ...Object.entries(opts).map(
                 ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -735,6 +762,7 @@ export function transform(
       } else if (arg2IsPointer && hasOpts) {
         newArgs.push(
           j.objectExpression([
+            ...spreads,
             j.spreadElement(arg2),
             ...Object.entries(opts).map(
               ([k, v]) => j.property('init', j.identifier(k), v as never)
@@ -743,11 +771,12 @@ export function transform(
         )
       } else if (hasOpts) {
         newArgs.push(
-          j.objectExpression(
-            Object.entries(opts).map(
+          j.objectExpression([
+            ...spreads,
+            ...Object.entries(opts).map(
               ([k, v]) => j.property('init', j.identifier(k), v as never)
             )
-          )
+          ])
         )
       }
 

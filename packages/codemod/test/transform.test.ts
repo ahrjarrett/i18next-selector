@@ -9,6 +9,38 @@ const options = { keySeparator: '.', nsSeparator: ':' }
 vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
   vi.describe('〖⛳️〗‹‹ ❲t❳', () => {
 
+    vi.test('〖⛳️〗› ❲transform❳: `t` preserves spread options', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { t } from "i18next"`,
+            ``,
+            `const values = {}`,
+            ``,
+            `t(\`abc.def.ghi\`, { ...values })`,
+            ``,
+            `t(\`ns:abc.def.ghi\`, { ...values })`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { t } from "i18next"
+
+        const values = {}
+
+        t($ => $.abc.def.ghi, {
+          ...values
+        })
+
+        t($ => $.abc.def.ghi, {
+          ...values,
+          ns: "ns"
+        })"
+      `)
+
+    })
+
     vi.test('〖⛳️〗› ❲transform❳: it works when `t` is given a template literal', () => {
       vi.expect.soft(
         applyTransform(module, options, {
