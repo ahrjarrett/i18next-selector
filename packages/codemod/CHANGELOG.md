@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.9
+
+### Patch Changes
+
+- [#84](https://github.com/ahrjarrett/i18next-selector/pull/84) [`83815ed`](https://github.com/ahrjarrett/i18next-selector/commit/83815edc0627b409383c2355601056a36245fb9e) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat: preserve object spreads in options object (#80)
+
 ## 0.0.8
 
 ### Patch Changes
