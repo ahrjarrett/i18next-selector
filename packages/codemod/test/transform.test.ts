@@ -734,6 +734,67 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         })"
       `)
     })
+
+    vi.test('〖⛳️〗› ❲transform❳: it applies transformation when `useTranslation` and `t` are destructured', () => {
+      // #79: https://github.com/ahrjarrett/i18next-selector/issues/79
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { useTranslation } from "react-i18next"`,
+            ``,
+            `const { i18n } = useTranslation()`,
+            ``,
+            `i18n.t("abc.def.ghi")`,
+            ``,
+            `i18n.t("ns1:abc.def.ghi")`,
+            ``,
+            `i18n.t("bob:abc.def.ghi")`,
+            ``,
+            `i18n.t("abc.^~ !.ghi")`,
+            ``,
+            `i18n.t("abc.def.ghi", "default value")`,
+            ``,
+            `i18n.t("abc.def.ghi", "default value", { ns: "ns1" })`,
+            ``,
+            `i18n.t("ns1:abc.def.ghi", "default value", { val: "some val" })`
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { useTranslation } from "react-i18next"
+
+        const { i18n } = useTranslation()
+
+        i18n.t($ => $.abc.def.ghi)
+
+        i18n.t($ => $.abc.def.ghi, {
+          ns: "ns1"
+        })
+
+        i18n.t($ => $.abc.def.ghi, {
+          ns: "bob"
+        })
+
+        i18n.t($ => $.abc["^~ !"].ghi)
+
+        i18n.t($ => $.abc.def.ghi, {
+          defaultValue: "default value"
+        })
+
+        i18n.t($ => $.abc.def.ghi, {
+          ns: "ns1",
+          defaultValue: "default value"
+        })
+
+        i18n.t($ => $.abc.def.ghi, {
+          ns: "ns1",
+          val: "some val",
+          defaultValue: "default value"
+        })"
+      `)
+
+    })
   })
 
   vi.describe('〖⛳️〗‹‹‹ ❲useTranslation❳', () => {

@@ -192,8 +192,8 @@ function clone(node: unknown) {
 }
 
 interface Context {
-  tAliases: Set<string | IdentifierKind>
   i18nAliases: Set<string | IdentifierKind>
+  tAliases: Set<string | IdentifierKind>
   TransAliases: Set<string | IdentifierKind>
 }
 
@@ -236,7 +236,11 @@ export function transform(
   const tAliases = new Set<string | IdentifierKind>()
   const useTranslationAliases = new Set<string | IdentifierKind>()
   const TransAliases = new Set<string | IdentifierKind>()
-  const context = { i18nAliases, tAliases, TransAliases } satisfies Context
+  const context = {
+    i18nAliases,
+    tAliases,
+    TransAliases,
+  } satisfies Context
   const config = { ...defaults, ...options } satisfies Options
 
   root
@@ -398,6 +402,38 @@ export function transform(
       ) {
         tAliases.add(id.name)
       }
+
+      /**
+       * @example
+       * const { i18n } = useTranslation()
+       * i18n.t(...)
+       */
+      if (
+        isIdentifierNode(id) &&
+        isMemberExpressionNode(init) &&
+        isCallExpressionNode(init.object) &&
+        isIdentifierNode(init.object.callee) &&
+        useTranslationAliases.has(init.object.callee.name) &&
+        isIdentifierNode(init.property) &&
+        init.property.name === 't'
+      ) {
+        tAliases.add(id.name)
+      }
+
+      root.find(j.VariableDeclarator, {
+        id: { type: "ObjectPattern" },
+        init: { type: "CallExpression", callee: { name: "useTranslation" } }
+      }).forEach(path => {
+        if (has('properties', Array.isArray)(path.node.id)) {
+          path.node.id.properties.forEach(prop => {
+            if (has('key', 'name')(prop) && has('value', 'name', (_) => typeof _ === 'string')(prop)) {
+              if (prop.key?.name === "i18n") {
+                i18nAliases.add(prop.value?.name || prop.key.name)
+              }
+            }
+          })
+        }
+      })
     })
 
   root
