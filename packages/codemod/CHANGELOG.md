@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.11
+
+### Patch Changes
+
+- [#91](https://github.com/ahrjarrett/i18next-selector/pull/91) [`8a2ab32`](https://github.com/ahrjarrett/i18next-selector/commit/8a2ab32673817df6aa61e9e941cb4e97d0dc94ed) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): adds support for custom ignore patterns
+
 ## 0.0.10
 
 ### Patch Changes
