@@ -62,6 +62,7 @@ function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
     'npx jscodeshift',
     `--transform="${TRANSFORM_PATH}"`,
     ...(dryrun ? [`--dry=true`] : []),
+    `--ignore-pattern="**/node_modules/**"`,
     `--ignore-pattern="*.d.ts"`,
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
