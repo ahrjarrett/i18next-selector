@@ -13,6 +13,7 @@ type Options = {
   dryrun: boolean
   keySeparator: string
   nsSeparator: string
+  ignorePattern?: string
 }
 
 const booleanChoices = [
@@ -44,6 +45,10 @@ const nsSeparator = Prompt.text({
   message: `Namespace separator? (default: '${defaults.nsSeparator}')`,
 })
 
+const ignorePattern = Prompt.text({
+  message: `Ignore pattern (.gitignore style)?`,
+})
+
 const dryrun = Prompt.select({
   message: `Dry run? (default: ${defaults.dryrun})`,
   choices: [...booleanChoices].reverse(),
@@ -51,12 +56,12 @@ const dryrun = Prompt.select({
 
 const command = Command.prompt(
   'Configure i18next-selector codemod',
-  Prompt.all([paths, keySeparator, nsSeparator, dryrun]),
-  ([paths, keySeparator, nsSeparator, dryrun]) =>
-    run({ paths, keySeparator, nsSeparator, dryrun })
+  Prompt.all([paths, keySeparator, nsSeparator, dryrun, ignorePattern]),
+  ([paths, keySeparator, nsSeparator, dryrun, ignorePattern]) =>
+    run({ paths, keySeparator, nsSeparator, dryrun, ignorePattern })
 )
 
-function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
+function run({ paths, keySeparator, nsSeparator, dryrun, ignorePattern }: Options) {
   const PATHS = paths.length === 1 && paths[0].trim() === '' ? defaults.paths : paths
   const CMD = [
     'npx jscodeshift',
@@ -64,6 +69,7 @@ function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
     ...(dryrun ? [`--dry=true`] : []),
     `--ignore-pattern="**/node_modules/**"`,
     `--ignore-pattern="*.d.ts"`,
+    ...ignorePattern === undefined ? [] : [`--ignore-pattern="${ignorePattern}"`],
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
     `--parser=tsx`,
