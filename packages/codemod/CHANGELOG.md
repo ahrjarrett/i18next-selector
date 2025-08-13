@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.13
+
+### Patch Changes
+
+- [#98](https://github.com/ahrjarrett/i18next-selector/pull/98) [`9da47e3`](https://github.com/ahrjarrett/i18next-selector/commit/9da47e3a96aa46d1b8310ec43115d24c56e91e65) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix: don't check user's version of node
+
 ## 0.0.12
 
 ### Patch Changes
