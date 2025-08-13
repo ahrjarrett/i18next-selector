@@ -1,5 +1,13 @@
 # @i18next-selector/codemod
 
+## 0.0.10
+
+### Patch Changes
+
+- [#87](https://github.com/ahrjarrett/i18next-selector/pull/87) [`d36b22c`](https://github.com/ahrjarrett/i18next-selector/commit/d36b22ce0c58bb8ea09607c0cc255bb07a114922) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): ignores TypeScript declaration files
+
+- [#89](https://github.com/ahrjarrett/i18next-selector/pull/89) [`0529277`](https://github.com/ahrjarrett/i18next-selector/commit/0529277336d0ab6c6dc085d9ec44dbf0d843567b) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): also ignore node_modules
+
 ## 0.0.9
 
 ### Patch Changes
