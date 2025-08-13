@@ -246,7 +246,6 @@ export function transform(
     TransAliases,
   } satisfies Context
   const config = { ...defaults, ...options } satisfies Options
-  let spreads: any[] = []
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
@@ -560,6 +559,7 @@ export function transform(
 
             const newArgs: TFunctionArg[] = [selectorFn]
             const opts: { [x: string]: unknown } = {}
+            let spreads: any[] = []
 
             const userDefinedOptionsObject = [arg1, arg2].find(a => a && a.type === 'ObjectExpression')
             if (userDefinedOptionsObject) {
