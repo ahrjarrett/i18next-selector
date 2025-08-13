@@ -246,6 +246,7 @@ export function transform(
     TransAliases,
   } satisfies Context
   const config = { ...defaults, ...options } satisfies Options
+  let spreads: any[] = []
 
   root
     .find(j.ImportDeclaration, { source: { value: 'i18next' } })
