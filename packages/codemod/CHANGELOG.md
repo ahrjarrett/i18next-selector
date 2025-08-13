@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.12
+
+### Patch Changes
+
+- [#95](https://github.com/ahrjarrett/i18next-selector/pull/95) [`0e57ed5`](https://github.com/ahrjarrett/i18next-selector/commit/0e57ed50a4d49c940dae7c6a31e597d7a692fdcf) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): fixes bug where `spreads` was sometimes not initialized (#94)
+
 ## 0.0.11
 
 ### Patch Changes
