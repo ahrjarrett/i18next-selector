@@ -69,7 +69,7 @@ function run({ paths, keySeparator, nsSeparator, dryrun, ignorePattern }: Option
     ...(dryrun ? [`--dry=true`] : []),
     `--ignore-pattern="**/node_modules/**"`,
     `--ignore-pattern="*.d.ts"`,
-    ...ignorePattern === undefined ? [] : [`--ignore-pattern="${ignorePattern}"`],
+    ...!ignorePattern ? [] : [`--ignore-pattern="${ignorePattern}"`],
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
     `--parser=tsx`,
