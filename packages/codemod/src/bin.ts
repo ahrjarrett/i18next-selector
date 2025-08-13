@@ -60,8 +60,9 @@ function run({ paths, keySeparator, nsSeparator, dryrun }: Options) {
   const PATHS = paths.length === 1 && paths[0].trim() === '' ? defaults.paths : paths
   const CMD = [
     'npx jscodeshift',
-    `-t="${TRANSFORM_PATH}"`,
+    `--transform="${TRANSFORM_PATH}"`,
     ...(dryrun ? [`--dry=true`] : []),
+    `--ignore-pattern="*.d.ts"`,
     `--keySeparator=${keySeparator || defaults.keySeparator}`,
     `--nsSeparator=${nsSeparator || defaults.nsSeparator}`,
     `--parser=tsx`,
