@@ -1225,60 +1225,60 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
       `)
     })
 
-    vi.test.only('〖⛳️〗› ❲transform❳: it handles namespaces in the `Trans` component', () => {
-      // vi.expect.soft(
-      //   applyTransform(module, options, {
-      //     path: '',
-      //     source: [
-      //       `import { Trans } from "react-i18next"`,
-      //       ``,
-      //       `<Trans i18nKey="my.key" ns="ns1" />`,
-      //     ].join('\r')
-      //   })
-      // ).toMatchInlineSnapshot
-      //   (`
-      //   "import { Trans } from "react-i18next"
+    vi.test('〖⛳️〗› ❲transform❳: it handles namespaces in the `Trans` component', () => {
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="my.key" ns="ns1" />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
 
-      //   <Trans i18nKey={$ => $.my.key} ns="ns1" />"
-      // `)
+        <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      `)
 
-      // vi.expect.soft(
-      //   applyTransform(module, options, {
-      //     path: '',
-      //     source: [
-      //       `import { Trans } from "react-i18next"`,
-      //       ``,
-      //       `<Trans i18nKey="ns1:my.key" />`,
-      //     ].join('\r')
-      //   })
-      // ).toMatchInlineSnapshot
-      //   (`
-      //   "import { Trans } from "react-i18next"
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<Trans i18nKey="ns1:my.key" />`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
 
-      //   <Trans i18nKey={$ => $.my.key} ns="ns1" />"
-      // `)
+        <Trans i18nKey={$ => $.my.key} ns="ns1" />"
+      `)
 
-      // vi.expect.soft(
-      //   applyTransform(module, options, {
-      //     path: '',
-      //     source: [
-      //       `import { Trans } from "react-i18next"`,
-      //       ``,
-      //       `<>`,
-      //       `  <Trans i18nKey="ns1:my.key" />`,
-      //       `  <Trans i18nKey="ns2:my.key" />`,
-      //       `</>`,
-      //     ].join('\r')
-      //   })
-      // ).toMatchInlineSnapshot
-      //   (`
-      //   "import { Trans } from "react-i18next"
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<>`,
+            `  <Trans i18nKey="ns1:my.key" />`,
+            `  <Trans i18nKey="ns2:my.key" />`,
+            `</>`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
 
-      //   <>
-      //     <Trans i18nKey={$ => $.my.key} ns="ns1" />
-      //     <Trans i18nKey={$ => $.my.key} ns="ns2" />
-      //   </>"
-      // `)
+        <>
+          <Trans i18nKey={$ => $.my.key} ns="ns1" />
+          <Trans i18nKey={$ => $.my.key} ns="ns2" />
+        </>"
+      `)
 
       vi.expect.soft(
         applyTransform(module, options, {
