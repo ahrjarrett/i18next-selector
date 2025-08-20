@@ -332,6 +332,7 @@ export function transform(
       if (!i18nAttr) return
 
       let keyString
+
       if (
         has('value', 'type')(i18nAttr)
         && i18nAttr.value?.type === "StringLiteral"
@@ -340,23 +341,42 @@ export function transform(
         keyString = i18nAttr.value.value
       } else if (
         has('value', 'type')(i18nAttr)
-        && i18nAttr.value?.type === "JSXExpressionContainer"
+        && i18nAttr.value.type === "JSXExpressionContainer"
         && has('value', 'expression', 'type')(i18nAttr)
         && i18nAttr.value.expression.type === "StringLiteral"
         && has('value', 'expression', 'value')(i18nAttr)
       ) {
         keyString = i18nAttr.value.expression.value
+      } else if (
+        has('value', 'type')(i18nAttr)
+        && i18nAttr.value.type === "JSXExpressionContainer"
+        && has('value', 'expression', 'type')(i18nAttr)
+        && i18nAttr.value.expression.type === "TemplateLiteral"
+        && has('value', 'expression', 'expressions', Array.isArray)(i18nAttr)
+        && i18nAttr.value.expression.expressions.length === 0
+        && has('value', 'expression', 'quasis', Array.isArray)(i18nAttr)
+      ) {
+        keyString = i18nAttr.value.expression.quasis[0].value.cooked
       }
 
       if (typeof keyString !== "string") return
 
+      /**
+       * @example
+       * const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, config) : { path: [arg0] }
+       * const selectorFn = j.arrowFunctionExpression(
+       *   [j.identifier('$')],
+       *   tokensToSelector(tokens.path, j)
+       * )
+       */
+
       const { ns, path: pathString } = parseKey(keyString)
-      const arrowFn = j.arrowFunctionExpression(
+      const selectorFn = j.arrowFunctionExpression(
         [j.identifier("$")],
         buildSelector(pathString)
       )
 
-        ; (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(arrowFn)
+        ; (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(selectorFn)
 
       if (ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
         attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(ns)))

@@ -1280,6 +1280,26 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
         </>"
       `)
 
+      vi.expect.soft(
+        applyTransform(module, options, {
+          path: '',
+          source: [
+            `import { Trans } from "react-i18next"`,
+            ``,
+            `<>`,
+            `  <Trans i18nKey={\`my.key\`} />`,
+            // `  <Trans i18nKey={\`my\${key}\`} />`,
+            `</>`,
+          ].join('\r')
+        })
+      ).toMatchInlineSnapshot
+        (`
+        "import { Trans } from "react-i18next"
+
+        <>
+          <Trans i18nKey={$ => $.my.key} />
+        </>"
+      `)
     })
 
   })
