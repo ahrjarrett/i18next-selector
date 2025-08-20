@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.14
+
+### Patch Changes
+
+- [#103](https://github.com/ahrjarrett/i18next-selector/pull/103) [`bba78e4`](https://github.com/ahrjarrett/i18next-selector/commit/bba78e49e0ba682470dc12c7d4346ba22f50831f) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): adds support for template literals in `Trans` component's `i18nKey` prop
+
 ## 0.0.13
 
 ### Patch Changes
