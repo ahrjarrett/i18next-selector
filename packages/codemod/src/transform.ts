@@ -361,15 +361,6 @@ export function transform(
 
       if (typeof keyString !== "string") return
 
-      /**
-       * @example
-       * const tokens = isTemplateLiteralNode(arg0) ? templateLiteralToTokens(arg0, config) : { path: [arg0] }
-       * const selectorFn = j.arrowFunctionExpression(
-       *   [j.identifier('$')],
-       *   tokensToSelector(tokens.path, j)
-       * )
-       */
-
       const { ns, path: pathString } = parseKey(keyString)
       const selectorFn = j.arrowFunctionExpression(
         [j.identifier("$")],
