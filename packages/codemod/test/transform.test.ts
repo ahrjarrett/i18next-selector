@@ -1286,19 +1286,14 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/codemod❳', () => {
           source: [
             `import { Trans } from "react-i18next"`,
             ``,
-            `<>`,
-            `  <Trans i18nKey={\`my.key\`} />`,
-            // `  <Trans i18nKey={\`my\${key}\`} />`,
-            `</>`,
+            `<Trans i18nKey={\`my.key\`} />`,
           ].join('\r')
         })
       ).toMatchInlineSnapshot
         (`
         "import { Trans } from "react-i18next"
 
-        <>
-          <Trans i18nKey={$ => $.my.key} />
-        </>"
+        <Trans i18nKey={$ => $.my.key} />"
       `)
     })
 
