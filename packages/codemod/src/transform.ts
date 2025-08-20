@@ -332,6 +332,9 @@ export function transform(
       if (!i18nAttr) return
 
       let keyString
+      let selectorFn
+      let tokens
+
       if (
         has('value', 'type')(i18nAttr)
         && i18nAttr.value?.type === "StringLiteral"
@@ -340,27 +343,60 @@ export function transform(
         keyString = i18nAttr.value.value
       } else if (
         has('value', 'type')(i18nAttr)
-        && i18nAttr.value?.type === "JSXExpressionContainer"
+        && i18nAttr.value.type === "JSXExpressionContainer"
         && has('value', 'expression', 'type')(i18nAttr)
         && i18nAttr.value.expression.type === "StringLiteral"
         && has('value', 'expression', 'value')(i18nAttr)
       ) {
         keyString = i18nAttr.value.expression.value
+      } else if (
+        has('value', 'type')(i18nAttr)
+        && i18nAttr.value.type === "JSXExpressionContainer"
+        && has('value', 'expression', 'type')(i18nAttr)
+        && isTemplateLiteralNode(i18nAttr.value.expression)
+        && has('value', 'expression', 'expressions', Array.isArray)(i18nAttr)
+      ) {
+        if (
+          i18nAttr.value.expression.expressions.length === 0
+          && has('value', 'expression', 'quasis', Array.isArray)(i18nAttr)
+        ) {
+          keyString = i18nAttr.value.expression.quasis[0].value.cooked
+        }
+        else {
+          tokens = templateLiteralToTokens(i18nAttr.value.expression, config)
+        }
       }
 
-      if (typeof keyString !== "string") return
+      if (typeof keyString !== "string") {
+        if (tokens !== undefined) {
+          selectorFn = j.arrowFunctionExpression(
+            [j.identifier("$")],
+            tokensToSelector(tokens.path, j)
+          )
+          console.log('HERE', tokens);
 
-      const { ns, path: pathString } = parseKey(keyString)
-      const arrowFn = j.arrowFunctionExpression(
-        [j.identifier("$")],
-        buildSelector(pathString)
-      )
+          (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(selectorFn)
+          // const ns = 
 
-        ; (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(arrowFn)
+          if (tokens.ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
+            attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(tokens.ns)))
+          }
+        }
+        else return
+      } else {
+        const { ns, path: pathString } = parseKey(keyString)
+        selectorFn = j.arrowFunctionExpression(
+          [j.identifier("$")],
+          buildSelector(pathString)
+        )
 
-      if (ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
-        attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(ns)))
+          ; (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(selectorFn)
+
+        if (ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
+          attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(ns)))
+        }
       }
+
     })
 
   root
