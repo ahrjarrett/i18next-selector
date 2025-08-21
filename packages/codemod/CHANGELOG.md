@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.15
+
+### Patch Changes
+
+- [#107](https://github.com/ahrjarrett/i18next-selector/pull/107) [`6066db1`](https://github.com/ahrjarrett/i18next-selector/commit/6066db1c03653660e6477ba9216cb73a39d31673) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod): adds support for openSUSE
+
 ## 0.0.14
 
 ### Patch Changes
