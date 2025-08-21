@@ -82,7 +82,7 @@ export default {
       // required:
       sourceDir: Locales.sourceDir,
       // optional:
-      formatCmd: "yarn format:write" 
+      formatCmd: "yarn format:write",
       silent: true, // default: false
     })
   ]
