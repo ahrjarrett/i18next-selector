@@ -29,7 +29,7 @@ jobs:
       - name: Pack
         run: production=true pnpm build:dist
       - name: Preview
-        run: pnpm dlx pkg-pr-new publish --compact './packages/*'
+        run: npx pkg-pr-new publish --compact './packages/*'
   release:
     name: Release Packages
     runs-on: ubuntu-latest
