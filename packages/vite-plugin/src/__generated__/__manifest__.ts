@@ -1,7 +1,7 @@
 export default {
   "name": "@i18next-selector/vite-plugin",
   "type": "module",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "private": false,
   "description": "",
   "license": "MIT",
@@ -40,6 +40,7 @@ export default {
     "test": "vitest"
   },
   "devDependencies": {
+    "@prettier/sync": "^0.6.1",
     "vite": "^6.3.5"
   },
   "dependencies": {
