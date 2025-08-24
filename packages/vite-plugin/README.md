@@ -28,6 +28,28 @@ But if you're using `i18next` to handle pluralization for you, with `"optimize"`
 
 This is annoying and error prone, so `@i18next-selector/vite-plugin` takes care of generating the appropriate pluralization keys for you.
 
+## Caveats
+
+Note that currently the plugin does not support "spread syntax". 
+
+See [this issue](https://github.com/ahrjarrett/i18next-selector/issues/114) to track progress on this feature.
+
+### Example
+
+```typescript
+const ns1 = {/* translations */} as const
+const ns2 = {/* translations */} as const
+
+const translation = {
+  // ↓↓ these nodes are not currently handled:
+  ...ns1,
+  ...ns2
+  // ↑↑ these nodes are not currently handled:
+}
+
+export default translation
+```
+
 ## Demo
 
 - `.ts` files
