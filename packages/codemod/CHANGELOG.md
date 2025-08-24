@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.17
+
+### Patch Changes
+
+- [#118](https://github.com/ahrjarrett/i18next-selector/pull/118) [`1afeda3`](https://github.com/ahrjarrett/i18next-selector/commit/1afeda3da54ab968d8bd70b0fd50f2509307b8cd) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod,vite-plugin): adds `repository` field to manifest files
+
 ## 0.0.16
 
 ### Patch Changes

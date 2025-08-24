@@ -1,5 +1,13 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.15
+
+### Patch Changes
+
+- [#118](https://github.com/ahrjarrett/i18next-selector/pull/118) [`1afeda3`](https://github.com/ahrjarrett/i18next-selector/commit/1afeda3da54ab968d8bd70b0fd50f2509307b8cd) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(codemod,vite-plugin): adds `repository` field to manifest files
+
+- [#118](https://github.com/ahrjarrett/i18next-selector/pull/118) [`f15a17d`](https://github.com/ahrjarrett/i18next-selector/commit/f15a17d164b62d5309d41ad9ab306ed46f4bb6e8) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): fixes case where `pluralSeparator` causes keys to be non-identifiers
+
 ## 0.0.14
 
 ### Patch Changes
