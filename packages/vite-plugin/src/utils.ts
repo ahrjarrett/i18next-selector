@@ -67,7 +67,14 @@ export function rmPluralization(entry: [string, unknown], options: transform.Opt
   else {
     const [key] = entry
     const index = key.lastIndexOf(options.pluralSeparator ?? defaultOptions.pluralSeparator)
-    return just(key.slice(0, index))
+    let sliced = key.slice(0, index)
+    if (
+      sliced.startsWith('"') && !sliced.endsWith('"')
+      || sliced.startsWith("'") && !sliced.endsWith("'")
+    ) {
+      sliced = `${sliced}${sliced[0]}`
+    }
+    return just(sliced)
   }
 }
 

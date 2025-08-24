@@ -1,6 +1,7 @@
 import * as vi from 'vitest'
 import * as path from 'node:path'
 import * as fs from 'node:fs'
+import prettier from '@prettier/sync'
 
 import {
   groupPluralKeys,
@@ -9,6 +10,8 @@ import {
   transformToTypeScript,
   writeFromSource,
 } from '@i18next-selector/vite-plugin'
+
+const format = (src: string) => prettier.format(src, { parser: 'typescript' })
 
 const defaultOptions = { contextSeparator: '_', pluralSeparator: '_' }
 
@@ -290,6 +293,43 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
   vi.it('〖⛳️〗› ❲transformToTypeScript❳', () => {
     vi.expect(transformToTypeScript(input, defaultOptions)).toMatchInlineSnapshot
       (`"export declare const resources: { "beverage": "beverage","beverage|beer": "beer","tea": "a cuppa tea and a lie down" | "two cups of tea" | "{{count}} cups of tea and a big sleep" | "many cups of tea","dessert|cake": "a nice cake","dessert|muffin": "a nice muffin" | "{{count}} nice muffins","coffee": { "drip": { "black": "a strong cup of black coffee" },"bar": { "shot": "a shot of espresso","espresso|americano": "a hot americano","espresso|latte": "a foamy latte" | "{{count}} foamy lattes","espresso|cappuccino": "a dry cappuccino" | "two dry cappuccinos" | "{{count}} dry cappuccinos" | "many dry cappuccinos" } },"sodas": { "coca_cola": { "coke": "a can of coke","coke|diet": "a can of diet coke" | "{{count}} cans of diet coke" },"faygo": { "purple": "purple faygo","orange": "one orange faygo" | "{{count}} orange faygo" } },"interpolation": { "val": "Interpolated {{val}}" },"array": ["element one",{ "elementTwo": "element two" },{ "elementThree": [{ "nestedElementThree": "element three" }] }] }"`)
+
+    vi.expect.soft(format(
+      transformToTypeScript({
+        time: 'время',
+        since: {
+          now: 'прямо сейчас',
+          ago: 'назад',
+          'seconds##one': '{{count}} секунду',
+          'seconds##few': '{{count}} секунды',
+          'seconds##many': '{{count}} секунд',
+          'minutes##one': '{{count}} минуту',
+          'minutes##few': '{{count}} минуты',
+          'minutes##many': '{{count}} минут',
+          'hours##one': '{{count}} час',
+          'hours##few': '{{count}} часа',
+          'hours##many': '{{count}} часов',
+          'days##one': '{{count}} день',
+          'days##few': '{{count}} дня',
+          'days##many': '{{count}} дней',
+        },
+      }, { pluralSeparator: '##' }
+      )
+    )).toMatchInlineSnapshot
+      (`
+      "export declare const resources: {
+        time: "время";
+        since: {
+          now: "прямо сейчас";
+          ago: "назад";
+          seconds: "{{count}} секунду" | "{{count}} секунды" | "{{count}} секунд";
+          minutes: "{{count}} минуту" | "{{count}} минуты" | "{{count}} минут";
+          hours: "{{count}} час" | "{{count}} часа" | "{{count}} часов";
+          days: "{{count}} день" | "{{count}} дня" | "{{count}} дней";
+        };
+      };
+      "
+    `)
   })
 
   vi.it('〖⛳️〗› ❲writeFromSource❳', () => {
