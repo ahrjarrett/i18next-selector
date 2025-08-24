@@ -1,14 +1,14 @@
 export default {
   "name": "@i18next-selector/vite-plugin",
   "type": "module",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "private": false,
   "description": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahrjarrett/i18next-selector.git",
-    "directory": "packages/"
+    "url": "git+https://github.com/ahrjarrett/i18next-selector.git",
+    "directory": "packages/vite-plugin"
   },
   "bugs": {
     "url": "https://github.com/ahrjarrett/i18next-selector/issues",

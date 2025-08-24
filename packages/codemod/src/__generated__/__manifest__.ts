@@ -1,10 +1,15 @@
 export default {
   "name": "i18next-selector-codemod",
   "type": "module",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "private": false,
   "description": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahrjarrett/i18next-selector.git",
+    "directory": "packages/codemod"
+  },
   "bin": {
     "i18next-selector-codemod": "./src/bin.ts"
   },
