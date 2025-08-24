@@ -56,7 +56,7 @@ export declare namespace transform {
 
 export const isPluralKey = (key: string, { pluralSeparator = defaultOptions.pluralSeparator }: TOptions) => pluralSuffixes
   .map((suffix) => `${pluralSeparator}${suffix}`)
-  .some((suffix) => key.endsWith(suffix))
+  .some((suffix) => key.endsWith(suffix) || key.slice(1, -1).endsWith(suffix))
 
 export const isPluralEntry
   : (options: transform.Options) => (entry: [string, unknown]) => entry is [string, Json.Scalar]
