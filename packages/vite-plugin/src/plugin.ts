@@ -175,7 +175,7 @@ export function transformTypeScript(
       case ts.isPropertyAssignment(x): {
         const children = x.getChildren()
         const jsdoc = children.find(ts.isJSDoc)?.getText() ?? null
-        const key = children.find(ts.isIdentifier)?.escapedText
+        const key = children[0].getText()
         const valueIndex = children.findIndex(ts.isColonToken) + 1
         const value = go(children[valueIndex], offset)
         return { jsdoc, key, value }

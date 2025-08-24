@@ -372,11 +372,9 @@ export function transform(
           selectorFn = j.arrowFunctionExpression(
             [j.identifier("$")],
             tokensToSelector(tokens.path, j)
-          )
-          console.log('HERE', tokens);
+          );
 
           (i18nAttr as { value: unknown }).value = j.jsxExpressionContainer(selectorFn)
-          // const ns = 
 
           if (tokens.ns && !attrs.some(a => a.type === "JSXAttribute" && a.name.name === "ns")) {
             attrs.push(j.jsxAttribute(j.jsxIdentifier("ns"), j.literal(tokens.ns)))
