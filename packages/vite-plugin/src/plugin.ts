@@ -259,7 +259,7 @@ export declare namespace i18nextVitePlugin {
   type Options = {
     sourceDir: string
     formatCmd?: string
-    i18nextConfig?: TOptions
+    i18nextConfig?: TOptions & { pluralSeparator?: string }
     timeout?: number
     silent?: boolean
   }

@@ -28,6 +28,8 @@ jobs:
         run: pnpm check && pnpm test:cov
       - name: Pack
         run: production=true pnpm build:dist
+      - name: Preview
+        run: npx pkg-pr-new publish './packages/*'
   release:
     name: Release Packages
     runs-on: ubuntu-latest
