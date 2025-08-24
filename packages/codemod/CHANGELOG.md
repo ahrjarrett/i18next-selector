@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.16
+
+### Patch Changes
+
+- [#112](https://github.com/ahrjarrett/i18next-selector/pull/112) [`01a07aa`](https://github.com/ahrjarrett/i18next-selector/commit/01a07aaec5880d24c61b61710b99d54036d417e6) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): adds support for custom, non-identifier syntax in pluralSeparator
+
 ## 0.0.15
 
 ### Patch Changes

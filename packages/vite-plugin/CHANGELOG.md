@@ -1,5 +1,13 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.14
+
+### Patch Changes
+
+- [#112](https://github.com/ahrjarrett/i18next-selector/pull/112) [`01a07aa`](https://github.com/ahrjarrett/i18next-selector/commit/01a07aaec5880d24c61b61710b99d54036d417e6) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): adds support for custom, non-identifier syntax in pluralSeparator
+
+- [#116](https://github.com/ahrjarrett/i18next-selector/pull/116) [`5c3d353`](https://github.com/ahrjarrett/i18next-selector/commit/5c3d3533ae88469a830a7ba0023b815f2433f9eb) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - docs(vite-plugin): documents that spread operators are not currently supported
+
 ## 0.0.13
 
 ### Patch Changes
