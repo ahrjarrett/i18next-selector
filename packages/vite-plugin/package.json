@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ahrjarrett/i18next-selector.git",
-    "directory": "packages/"
+    "directory": "packages/vite-plugin"
   },
   "bugs": {
     "url": "https://github.com/ahrjarrett/i18next-selector/issues",

@@ -5,6 +5,11 @@
   "private": false,
   "description": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahrjarrett/i18next-selector.git",
+    "directory": "packages/codemod"
+  },
   "bin": {
     "i18next-selector-codemod": "./src/bin.ts"
   },
