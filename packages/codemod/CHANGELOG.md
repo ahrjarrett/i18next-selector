@@ -1,5 +1,11 @@
 # @i18next-selector/codemod
 
+## 0.0.18
+
+### Patch Changes
+
+- [#123](https://github.com/ahrjarrett/i18next-selector/pull/123) [`42f44ab`](https://github.com/ahrjarrett/i18next-selector/commit/42f44ab27c9f55cec143183765247e0af0bd93f6) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(codemod): preserve property punning in options object (#121)
+
 ## 0.0.17
 
 ### Patch Changes
