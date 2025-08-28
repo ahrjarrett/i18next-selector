@@ -1,5 +1,5 @@
 import type * as j from 'jscodeshift'
-import type { ExpressionKind, IdentifierKind, TSTypeKind } from 'ast-types/lib/gen/kinds'
+import type { ExpressionKind, IdentifierKind, PatternKind, TSTypeKind } from 'ast-types/lib/gen/kinds'
 import type { namedTypes } from 'ast-types'
 
 const Object_hasOwnProperty = globalThis.Object.prototype.hasOwnProperty
@@ -124,6 +124,14 @@ function isCallExpressionNode(x: unknown): x is j.CallExpression {
 
 function isObjectPatternNode(x: unknown): x is j.ObjectPattern {
   return has('type', type => type === 'ObjectPattern')(x)
+}
+
+function isPun(key: unknown, value: unknown) {
+  return has('type', (type) => type === 'Identifier')(key)
+    && has('type', (type) => type === 'Identifier')(value)
+    && has('name')(key)
+    && has('name')(value)
+    && key.name === value.name
 }
 
 function keyToSelector(key: string, j: j.JSCodeshift, options: Options) {
@@ -526,28 +534,39 @@ export function transform(
           const props = []
 
           if (ns) {
-            props.push(j.property(
-              'init',
-              j.identifier('ns'),
-              j.literal(ns)
-            ))
+            const key = j.identifier('ns')
+            const value = j.literal(ns)
+            props.push(
+              j.property.from({
+                kind: 'init',
+                key,
+                value,
+                shorthand: isPun(key, value),
+              })
+            )
           }
 
           if (idx < keys.length - 1) {
+            const key = j.identifier('defaultValue')
+            const value = buildCall(idx + 1)
             props.push(
-              j.property(
-                'init',
-                j.identifier('defaultValue'),
-                buildCall(idx + 1)
-              )
+              j.property.from({
+                kind: 'init',
+                key,
+                value,
+                shorthand: isPun(key, value),
+              })
             )
           } else if (finalDefault) {
+            const key = j.identifier('defaultValue')
+            const value = finalDefault
             props.push(
-              j.property(
-                'init',
-                j.identifier('defaultValue'),
-                finalDefault
-              )
+              j.property.from({
+                kind: 'init',
+                key,
+                value,
+                shorthand: isPun(key, value),
+              })
             )
           }
 
@@ -620,8 +639,16 @@ export function transform(
                     ...spreads,
                     j.spreadElement(arg1),
                     ...Object.entries(opts).map(
-                      ([k, v]) => j.property('init', j.identifier(k), v as never)
-                    )
+                      ([k, v]) => {
+                        const key = j.identifier(k)
+                        const value = v as ExpressionKind | PatternKind
+                        return j.property.from({
+                          kind: 'init',
+                          key,
+                          value,
+                          shorthand: isPun(key, value),
+                        })
+                      })
                   ])
                 )
               } else {
@@ -633,8 +660,16 @@ export function transform(
                   ...spreads,
                   j.spreadElement(arg2),
                   ...Object.entries(opts).map(
-                    ([k, v]) => j.property('init', j.identifier(k), v as never)
-                  )
+                    ([k, v]) => {
+                      const key = j.identifier(k)
+                      const value = v as ExpressionKind | PatternKind
+                      return j.property.from({
+                        kind: 'init',
+                        key,
+                        value,
+                        shorthand: isPun(key, value),
+                      })
+                    })
                 ])
               )
             } else if (hasOpts) {
@@ -642,8 +677,16 @@ export function transform(
                 j.objectExpression([
                   ...spreads,
                   ...Object.entries(opts).map(
-                    ([k, v]) => j.property('init', j.identifier(k), v as never)
-                  )
+                    ([k, v]) => {
+                      const key = j.identifier(k)
+                      const value = v as ExpressionKind | PatternKind
+                      return j.property.from({
+                        kind: 'init',
+                        key,
+                        value,
+                        shorthand: isPun(key, value),
+                      })
+                    })
                 ])
               )
             } else {
@@ -707,8 +750,16 @@ export function transform(
                     ...spreads,
                     j.spreadElement(arg1),
                     ...Object.entries(opts).map(
-                      ([k, v]) => j.property('init', j.identifier(k), v as never)
-                    ),
+                      ([k, v]) => {
+                        const key = j.identifier(k)
+                        const value = v as ExpressionKind | PatternKind
+                        return j.property.from({
+                          kind: 'init',
+                          key,
+                          value,
+                          shorthand: isPun(key, value),
+                        })
+                      }),
                   ])
                 )
               } else {
@@ -720,8 +771,16 @@ export function transform(
                   ...spreads,
                   j.spreadElement(arg2),
                   ...Object.entries(opts).map(
-                    ([k, v]) => j.property('init', j.identifier(k), v as never)
-                  )
+                    ([k, v]) => {
+                      const key = j.identifier(k)
+                      const value = v as ExpressionKind | PatternKind
+                      return j.property.from({
+                        kind: 'init',
+                        key,
+                        value,
+                        shorthand: isPun(key, value),
+                      })
+                    })
                 ])
               )
             } else if (hasOpts) {
@@ -729,8 +788,16 @@ export function transform(
                 j.objectExpression([
                   ...spreads,
                   ...Object.entries(opts).map(
-                    ([k, v]) => j.property('init', j.identifier(k), v as never)
-                  )
+                    ([k, v]) => {
+                      const key = j.identifier(k)
+                      const value = v as ExpressionKind | PatternKind
+                      return j.property.from({
+                        kind: 'init',
+                        key,
+                        value,
+                        shorthand: isPun(key, value),
+                      })
+                    })
                 ])
               )
             } else if (spreads.length > 0) {
@@ -787,8 +854,16 @@ export function transform(
               ...spreads,
               j.spreadElement(arg1),
               ...Object.entries(opts).map(
-                ([k, v]) => j.property('init', j.identifier(k), v as never)
-              )
+                ([k, v]) => {
+                  const key = j.identifier(k)
+                  const value = v as ExpressionKind | PatternKind
+                  return j.property.from({
+                    kind: 'init',
+                    key,
+                    value,
+                    shorthand: isPun(key, value),
+                  })
+                })
             ])
           )
         } else {
@@ -800,8 +875,16 @@ export function transform(
             ...spreads,
             j.spreadElement(arg2),
             ...Object.entries(opts).map(
-              ([k, v]) => j.property('init', j.identifier(k), v as never)
-            )
+              ([k, v]) => {
+                const key = j.identifier(k)
+                const value = v as ExpressionKind | PatternKind
+                return j.property.from({
+                  kind: 'init',
+                  key,
+                  value,
+                  shorthand: isPun(key, value),
+                })
+              })
           ])
         )
       } else if (hasOpts) {
@@ -809,8 +892,16 @@ export function transform(
           j.objectExpression([
             ...spreads,
             ...Object.entries(opts).map(
-              ([k, v]) => j.property('init', j.identifier(k), v as never)
-            )
+              ([k, v]) => {
+                const key = j.identifier(k)
+                const value = v as ExpressionKind | PatternKind
+                return j.property.from({
+                  kind: 'init',
+                  key,
+                  value,
+                  shorthand: isPun(key, value),
+                })
+              })
           ])
         )
       }
