@@ -342,4 +342,41 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
 
     write()
   })
+
+  vi.it('〖⛳️〗› ❲transformToTypeScript❳: handles special characters correctly', () => {
+    const inputWithSpecialChars = {
+      doubleQuotes: 'Hello "world"',
+      backslashes: 'Path\\to\\file',
+      newlines: 'Line 1\nLine 2',
+      unicode: 'Café 🚀 你好',
+      mixed: 'Quote "test" with\nnewline and \\backslash',
+      'key with "quotes"': 'value with "quotes"',
+      'key with\nnewlines': 'value with\nnewlines'
+    }
+
+    const result = transformToTypeScript(inputWithSpecialChars, defaultOptions)
+    
+    // Verify the result is valid TypeScript and properly escaped
+    vi.expect(result).toContain('"Hello \\"world\\""')
+    vi.expect(result).toContain('"Path\\\\to\\\\file"')
+    vi.expect(result).toContain('"Line 1\\nLine 2"')
+    vi.expect(result).toContain('"Café 🚀 你好"')
+    vi.expect(result).toContain('"Quote \\"test\\" with\\nnewline and \\\\backslash"')
+    vi.expect(result).toContain('"key with \\"quotes\\"":')
+    vi.expect(result).toContain('"key with\\nnewlines":')
+  })
+
+  vi.it('〖⛳️〗› ❲parse❳: handles special characters in values', () => {
+    const inputWithSpecialChars = {
+      quotes: 'Say "hello"',
+      escapes: 'Tab\tand\nnewline'
+    }
+
+    const result = parse(inputWithSpecialChars, defaultOptions)
+    
+    vi.expect(result).toEqual({
+      quotes: '"Say \\"hello\\""',
+      escapes: '"Tab\\tand\\nnewline"'
+    })
+  })
 })
