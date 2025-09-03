@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.16
+
+### Patch Changes
+
+- [#126](https://github.com/ahrjarrett/i18next-selector/pull/126) [`b4228ee`](https://github.com/ahrjarrett/i18next-selector/commit/b4228ee945a82e011e0344ca92857ecdd374074f) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): Fix/escape special characters in dts (#125) - thanks @TrGiLong!
+
 ## 0.0.15
 
 ### Patch Changes
