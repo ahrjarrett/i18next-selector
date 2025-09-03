@@ -1,6 +1,7 @@
 export {
   i18nextVitePlugin,
   tsFileToDeclarationFile,
+  jsonFileToDeclarationFile,
 } from './plugin.js'
 export {
   groupPluralKeys,
