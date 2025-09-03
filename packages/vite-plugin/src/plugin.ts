@@ -31,7 +31,7 @@ export function parseJson(x: Json, $: transform.Options) {
   return unparseJson(Json.fold((x) => {
     switch (true) {
       default: return x satisfies never
-      case Json.isScalar(x): return typeof x === 'string' ? `"${x}"` : String(x)
+      case Json.isScalar(x): return typeof x === 'string' ? JSON.stringify(x) : String(x)
       case Json.isArray(x): return x
       case Json.isObject(x): {
         return groupJsonPluralKeys(Object.entries(x), $)
@@ -73,7 +73,7 @@ export const stringifyJson = Json.fold<string>((xs) => {
     case Json.isArray(xs):
       return `[${xs.map((x, i) => `${i === 0 ? '  ' : ''}${x}`).join(',')}]`
     case Json.isObject(xs):
-      return `{${Object.entries(xs).map(([k, v], i) => `${i === 0 ? '  ' : ''}"${k}": ${v}`).join(',')}}`
+      return `{${Object.entries(xs).map(([k, v], i) => `${i === 0 ? '  ' : ''}${JSON.stringify(k)}: ${v}`).join(',')}}`
   }
 })
 
