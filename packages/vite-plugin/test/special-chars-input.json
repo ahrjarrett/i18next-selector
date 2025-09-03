@@ -1,0 +1,8 @@
+{
+  "title with \"quotes\"": "Hello \"world\"",
+  "key\nwith\nnewlines": "Value\nwith\nnewlines", 
+  "unicode": "Café 🚀 你好",
+  "backslashes": "Path\\to\\file",
+  "mixed": "Quote \"test\" with\nnewline and \\backslash",
+  "simple": "Normal text"
+}
