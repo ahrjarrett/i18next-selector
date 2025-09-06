@@ -5,6 +5,7 @@ import * as path from 'node:path'
 import { execSync } from 'node:child_process'
 import ts from 'typescript'
 import { Json } from '@traversable/json'
+import { load as loadYaml } from 'js-yaml'
 
 import { defaultOptions, PLUGIN_HEADER } from './constants.js'
 import { groupTypeScriptPluralKeys } from './group-keys-ts.js'
@@ -12,7 +13,7 @@ import { groupJsonPluralKeys } from './group-keys-json.js'
 import { foldWithIndex } from './functor.js'
 import { walk } from './walk.js'
 import type { Either, transform } from './utils.js'
-import { mergeJsdocs, isRight, isLeft, isJsonFile, isTsFile } from './utils.js'
+import { mergeJsdocs, isRight, isLeft, isJsonFile, isTsFile, isYamlFile } from './utils.js'
 
 interface SourceToTargetMap {
   sourceFile: string
@@ -195,6 +196,15 @@ export function jsonFileToDeclarationFile(
   return `export declare const resources: ${transformJson(sourceFile, options)}`
 }
 
+export function yamlFileToDeclarationFile(
+    mapping: SourceToTargetMap,
+    options?: transform.Options
+) {
+  const sourceFile = fs.readFileSync(mapping.sourceFile).toString('utf8')
+  const json = loadYaml(sourceFile) as string
+  return `export declare const resources: ${transformJson(json, options)}`
+}
+
 export function tsFileToDeclarationFile(
   mapping: SourceToTargetMap,
   options: transform.Options
@@ -235,7 +245,7 @@ export function tsFileToDeclarationFile(
 }
 
 function getMappings(sourceDir: string): SourceToTargetMap[] {
-  return walk(sourceDir, { match: (path) => isJsonFile(path) || isTsFile(path) })
+  return walk(sourceDir, { match: (path) => isJsonFile(path) || isTsFile(path) || isYamlFile(path) })
     .map((sourceFile) => {
       const dirname = path.dirname(sourceFile)
       const split = sourceFile.split('/')
@@ -246,7 +256,9 @@ function getMappings(sourceDir: string): SourceToTargetMap[] {
           ? filename.slice(0, -'.json'.length).concat('.d.ts')
           : isTsFile(filename)
             ? filename.slice(0, -'.ts'.length).concat('.d.ts')
-            : filename.concat('.d.ts')
+            : isYamlFile(filename)
+              ? filename.replace(/(\.yaml|\.yml)$/, '').concat('.d.ts')
+              : filename.concat('.d.ts')
       )
       return {
         sourceFile,
@@ -282,13 +294,15 @@ export function i18nextVitePlugin({
     name: 'vite-i18next-plugin',
     async buildStart() {
       mappings.forEach((m) => {
-        const FILE_TYPE = isJsonFile(m.sourceFile) ? 'JSON' : 'TS'
+        const FILE_TYPE = isJsonFile(m.sourceFile) ? 'JSON' : isYamlFile(m.sourceFile) ? 'YAML' : 'TS'
         if (!silent) log(`source file detected: ${m.sourceFile}`)
         fs.writeFileSync(
           m.targetFile,
           FILE_TYPE === 'JSON'
             ? jsonFileToDeclarationFile(m, config)
-            : tsFileToDeclarationFile(m, config)
+            : FILE_TYPE === 'YAML'
+              ? yamlFileToDeclarationFile(m, config)
+              : tsFileToDeclarationFile(m, config)
         )
       })
       if (formatCmd && mappings.length > 0) {
@@ -301,13 +315,15 @@ export function i18nextVitePlugin({
         watcher.add(m.sourceFile)
         watcher.on('change', async (file) => {
           if (file === m.sourceFile) {
-            const FILE_TYPE = isJsonFile(file) ? 'JSON' : 'TS'
+            const FILE_TYPE = isJsonFile(file) ? 'JSON' : isYamlFile(file) ? 'YAML' : 'TS'
             if (!silent) log(`change detected: ${m.sourceFile}`)
             fs.writeFileSync(
               m.targetFile,
               FILE_TYPE === 'JSON'
                 ? jsonFileToDeclarationFile(m, config)
-                : tsFileToDeclarationFile(m, config)
+                : FILE_TYPE === 'YAML'
+                  ? yamlFileToDeclarationFile(m, config)
+                  : tsFileToDeclarationFile(m, config)
             )
           }
         })
