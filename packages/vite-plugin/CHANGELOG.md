@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.17
+
+### Patch Changes
+
+- [#130](https://github.com/ahrjarrett/i18next-selector/pull/130) [`d066b3d`](https://github.com/ahrjarrett/i18next-selector/commit/d066b3ddaaa9feb7af46069f75f804d8dc443fb0) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - feat(vite-plugin): adds Yaml support (added in #129 -- thanks @KazimirPodolski!)
+
 ## 0.0.16
 
 ### Patch Changes

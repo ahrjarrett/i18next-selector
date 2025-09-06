@@ -1,7 +1,7 @@
 export default {
   "name": "@i18next-selector/vite-plugin",
   "type": "module",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "private": false,
   "description": "",
   "license": "MIT",
@@ -41,11 +41,13 @@ export default {
   },
   "devDependencies": {
     "@prettier/sync": "^0.6.1",
+    "@types/js-yaml": "^4.0.9",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@traversable/json": "^0.0.26",
-    "@traversable/registry": "^0.0.25"
+    "@traversable/registry": "^0.0.25",
+    "js-yaml": "^4.1.0"
   },
   "peerDependencies": {
     "vite": "6 - 7"
