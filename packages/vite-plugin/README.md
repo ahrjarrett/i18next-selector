@@ -54,15 +54,15 @@ export default translation
 
 - `.ts` files
 
-![i18next-selector-vite-plugin typescript demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+![i18next-selector-vite-plugin: TypeScript demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
 
 - `.json` files
 
-![i18next-selector-vite-plugin json demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
+![i18next-selector-vite-plugin: JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
 
 - `.json` files
 
-![i18next-selector-vite-plugin yaml demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-yaml.gif)
+![i18next-selector-vite-plugin: Yaml demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-yaml.gif)
 
 ## Installation
 
