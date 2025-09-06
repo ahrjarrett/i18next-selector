@@ -60,7 +60,7 @@ export default translation
 
 ![i18next-selector-vite-plugin: JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
 
-- `.json` files
+- `.yaml` files
 
 ![i18next-selector-vite-plugin: Yaml demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-yaml.gif)
 
