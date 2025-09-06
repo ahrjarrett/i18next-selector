@@ -78,8 +78,12 @@ The plugin will transform any `.json` or `.ts` files into `.d.ts` files, and wor
 
 - `.ts` files
 
-![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+![i18next-selector-vite-plugin: TypeScript demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
 
 - `.json` files
 
-![i18next-selector-codemod demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
+![i18next-selector-vite-plugin: JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
+
+- `.yaml` files
+
+![18next-selector-vite-plugin: Yaml demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-yaml.gif)

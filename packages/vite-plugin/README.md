@@ -54,11 +54,15 @@ export default translation
 
 - `.ts` files
 
-![i18next-selector-vite-plugin TS demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
+![i18next-selector-vite-plugin: TypeScript demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-ts.gif)
 
 - `.json` files
 
-![i18next-selector-vite-plugin JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
+![i18next-selector-vite-plugin: JSON demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-json.gif)
+
+- `.json` files
+
+![i18next-selector-vite-plugin: Yaml demo](https://github.com/ahrjarrett/i18next-selector/blob/main/bin/assets/i18next-selector-vite-plugin-yaml.gif)
 
 ## Installation
 
@@ -82,7 +86,7 @@ $ pnpm add -D @i18next-selector/vite-plugin
 
 ## Usage
 
-In your vite config file, import the `i18nextVitePlugin` from `"@i18next-selector/vite-plugin"`.
+In your vite config file, import the `i18nextVitePlugin` from `@i18next-selector/vite-plugin`.
 
 Add a new entry to your `config.plugins` array, and call `i18nextVitePlugin` with your configuration.
 The plugin will automatically read your locales from `sourceDir`, and generate the corresponding `.d.ts`
@@ -96,15 +100,16 @@ in real-time, without having to reload your browser tab.
 ```typescript
 // vite.config.ts
 import type { UserConfig } from 'vite'
-import { i18nextVitePlugin } from "@i18next-selector/vite-plugin"
+import * as path from 'node:path'
+import { i18nextVitePlugin } from '@i18next-selector/vite-plugin'
 
 export default {
   plugins: [
     i18nextVitePlugin({
       // required:
-      sourceDir: Locales.sourceDir,
+      sourceDir: path.join(path.resolve(), 'public', 'assets', 'locales'),
       // optional:
-      formatCmd: "yarn format:write",
+      formatCmd: 'yarn format:write',
       silent: true, // default: false
     })
   ]
