@@ -79,6 +79,7 @@ export function rmPluralization(entry: [string, unknown], options: transform.Opt
 }
 
 export const isJsonFile = (x: string) => x.endsWith('.json')
+export const isYamlFile = (x: string) => x.endsWith('.yml') || x.endsWith('.yaml')
 export const isTsDeclarationFile = (x: string) => x.endsWith('.d.ts')
 export const isTsFile = (x: string) => x.endsWith('.ts') && !isTsDeclarationFile(x)
 

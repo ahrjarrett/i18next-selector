@@ -4,6 +4,7 @@ import prettier from '@prettier/sync'
 import {
   tsFileToDeclarationFile,
   jsonFileToDeclarationFile,
+  yamlFileToDeclarationFile,
 } from '@i18next-selector/vite-plugin'
 
 const format = (src: string) => prettier.format(src, { parser: 'typescript', semi: false })
@@ -39,6 +40,19 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
         mixed: 'Quote "test" with\\nnewline and \\\\backslash'
         simple: "Normal text"
       }
+      "
+    `)
+  })
+
+  vi.it('〖⛳️〗› ❲yamlFileToDeclarationFile❳: generates valid d.ts from yaml (though conversion to json)', () => {
+    vi.expect(format(
+      yamlFileToDeclarationFile({
+        sourceFile: path.join(DIR_PATH, 'yaml_input.yaml'),
+        targetFile: path.join(DIR_PATH, '__generated__', 'yaml_input.d.ts')
+      }, defaultOptions)
+    )).toMatchInlineSnapshot
+      (`
+      "export declare const resources: { ok: "Ok"; main: { hello: "Hello world" } }
       "
     `)
   })
