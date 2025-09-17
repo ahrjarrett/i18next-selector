@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.18
+
+### Patch Changes
+
+- [#135](https://github.com/ahrjarrett/i18next-selector/pull/135) [`f961afe`](https://github.com/ahrjarrett/i18next-selector/commit/f961afeb2b225f44e8aa2835e6ffd88ee192e837) Thanks [@ahrjarrett](https://github.com/ahrjarrett)! - fix(vite-plugin): fixes Windows compat issue with directory separators (#134)
+
 ## 0.0.17
 
 ### Patch Changes
