@@ -197,8 +197,8 @@ export function jsonFileToDeclarationFile(
 }
 
 export function yamlFileToDeclarationFile(
-    mapping: SourceToTargetMap,
-    options?: transform.Options
+  mapping: SourceToTargetMap,
+  options?: transform.Options
 ) {
   const sourceFile = fs.readFileSync(mapping.sourceFile).toString('utf8')
   const json = loadYaml(sourceFile) as string
@@ -248,8 +248,7 @@ function getMappings(sourceDir: string): SourceToTargetMap[] {
   return walk(sourceDir, { match: (path) => isJsonFile(path) || isTsFile(path) || isYamlFile(path) })
     .map((sourceFile) => {
       const dirname = path.dirname(sourceFile)
-      const split = sourceFile.split('/')
-      const filename = split[split.length - 1]
+      const filename = path.basename(sourceFile)
       const targetFile = path.join(
         dirname,
         isJsonFile(filename)
