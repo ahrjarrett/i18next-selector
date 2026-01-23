@@ -2,7 +2,8 @@ export {
   i18nextVitePlugin,
   tsFileToDeclarationFile,
   jsonFileToDeclarationFile,
-  yamlFileToDeclarationFile
+  yamlFileToDeclarationFile,
+  getMappings,
 } from './plugin.js'
 export {
   groupPluralKeys,

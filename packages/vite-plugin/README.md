@@ -90,7 +90,8 @@ In your vite config file, import the `i18nextVitePlugin` from `@i18next-selector
 
 Add a new entry to your `config.plugins` array, and call `i18nextVitePlugin` with your configuration.
 The plugin will automatically read your locales from `sourceDir`, and generate the corresponding `.d.ts`
-files in the same directory.
+files. By default, `.d.ts` files are generated next to the source files. You can customize this by
+setting `outputDir` to a different directory, which will preserve the directory structure relative to `sourceDir`.
 
 The plugin works with hot module reloading, so you can edit your translations and see them update
 in real-time, without having to reload your browser tab.
@@ -109,6 +110,7 @@ export default {
       // required:
       sourceDir: path.join(path.resolve(), 'public', 'assets', 'locales'),
       // optional:
+      outputDir: path.join(path.resolve(), '__generated__', 'locales'),
       formatCmd: 'yarn format:write',
       silent: true, // default: false
     })

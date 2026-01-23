@@ -244,21 +244,23 @@ export function tsFileToDeclarationFile(
   return out.join('\n')
 }
 
-function getMappings(sourceDir: string): SourceToTargetMap[] {
+export function getMappings(sourceDir: string, outputDir?: string): SourceToTargetMap[] {
   return walk(sourceDir, { match: (path) => isJsonFile(path) || isTsFile(path) || isYamlFile(path) })
     .map((sourceFile) => {
-      const dirname = path.dirname(sourceFile)
       const filename = path.basename(sourceFile)
-      const targetFile = path.join(
-        dirname,
-        isJsonFile(filename)
-          ? filename.slice(0, -'.json'.length).concat('.d.ts')
-          : isTsFile(filename)
-            ? filename.slice(0, -'.ts'.length).concat('.d.ts')
-            : isYamlFile(filename)
-              ? filename.replace(/(\.yaml|\.yml)$/, '').concat('.d.ts')
-              : filename.concat('.d.ts')
-      )
+      const dtsFilename = isJsonFile(filename)
+        ? filename.slice(0, -'.json'.length).concat('.d.ts')
+        : isTsFile(filename)
+          ? filename.slice(0, -'.ts'.length).concat('.d.ts')
+          : isYamlFile(filename)
+            ? filename.replace(/(\.yaml|\.yml)$/, '').concat('.d.ts')
+            : filename.concat('.d.ts')
+
+      const targetDir = outputDir
+        ? path.join(outputDir, path.relative(sourceDir, path.dirname(sourceFile)))
+        : path.dirname(sourceFile)
+      const targetFile = path.join(targetDir, dtsFilename)
+
       return {
         sourceFile,
         targetFile,
@@ -269,6 +271,7 @@ function getMappings(sourceDir: string): SourceToTargetMap[] {
 export declare namespace i18nextVitePlugin {
   type Options = {
     sourceDir: string
+    outputDir?: string
     formatCmd?: string
     i18nextConfig?: TOptions & { pluralSeparator?: string }
     timeout?: number
@@ -278,31 +281,36 @@ export declare namespace i18nextVitePlugin {
 
 export function i18nextVitePlugin({
   sourceDir,
+  outputDir,
   i18nextConfig,
   formatCmd,
   silent = false,
   timeout = 300,
 }: i18nextVitePlugin.Options): Plugin {
   let throttled = false
-  const mappings = getMappings(sourceDir)
+  const mappings = getMappings(sourceDir, outputDir)
   const config = {
     ...i18nextConfig,
   } satisfies transform.Options
+
+  function writeDeclarationFile(m: SourceToTargetMap) {
+    fs.mkdirSync(path.dirname(m.targetFile), { recursive: true })
+    fs.writeFileSync(
+      m.targetFile,
+      isJsonFile(m.sourceFile)
+        ? jsonFileToDeclarationFile(m, config)
+        : isYamlFile(m.sourceFile)
+          ? yamlFileToDeclarationFile(m, config)
+          : tsFileToDeclarationFile(m, config)
+    )
+  }
 
   return {
     name: 'vite-i18next-plugin',
     async buildStart() {
       mappings.forEach((m) => {
-        const FILE_TYPE = isJsonFile(m.sourceFile) ? 'JSON' : isYamlFile(m.sourceFile) ? 'YAML' : 'TS'
         if (!silent) log(`source file detected: ${m.sourceFile}`)
-        fs.writeFileSync(
-          m.targetFile,
-          FILE_TYPE === 'JSON'
-            ? jsonFileToDeclarationFile(m, config)
-            : FILE_TYPE === 'YAML'
-              ? yamlFileToDeclarationFile(m, config)
-              : tsFileToDeclarationFile(m, config)
-        )
+        writeDeclarationFile(m)
       })
       if (formatCmd && mappings.length > 0) {
         if (!silent) log('executing command:', formatCmd)
@@ -314,16 +322,8 @@ export function i18nextVitePlugin({
         watcher.add(m.sourceFile)
         watcher.on('change', async (file) => {
           if (file === m.sourceFile) {
-            const FILE_TYPE = isJsonFile(file) ? 'JSON' : isYamlFile(file) ? 'YAML' : 'TS'
             if (!silent) log(`change detected: ${m.sourceFile}`)
-            fs.writeFileSync(
-              m.targetFile,
-              FILE_TYPE === 'JSON'
-                ? jsonFileToDeclarationFile(m, config)
-                : FILE_TYPE === 'YAML'
-                  ? yamlFileToDeclarationFile(m, config)
-                  : tsFileToDeclarationFile(m, config)
-            )
+            writeDeclarationFile(m)
           }
         })
       })
