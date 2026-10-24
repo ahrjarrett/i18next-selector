@@ -5,6 +5,7 @@ import {
   tsFileToDeclarationFile,
   jsonFileToDeclarationFile,
   yamlFileToDeclarationFile,
+  getMappings,
 } from '@i18next-selector/vite-plugin'
 
 const format = (src: string) => prettier.format(src, { parser: 'typescript', semi: false })
@@ -55,5 +56,18 @@ vi.describe('〖⛳️〗‹‹‹ ❲@i18next-selector/vite-plugin❳', () => {
       "export declare const resources: { ok: "Ok"; main: { hello: "Hello world" } }
       "
     `)
+  })
+
+  vi.it('〖⛳️〗› ❲getMappings❳: outputs .d.ts next to source by default', () => {
+    const mappings = getMappings(DIR_PATH)
+    const yamlMapping = mappings.find(m => m.sourceFile.endsWith('yaml_input.yaml'))
+    vi.expect(yamlMapping?.targetFile).toBe(path.join(DIR_PATH, 'yaml_input.d.ts'))
+  })
+
+  vi.it('〖⛳️〗› ❲getMappings❳: outputs .d.ts to outputDir when specified', () => {
+    const outputDir = path.join(DIR_PATH, '__generated__')
+    const mappings = getMappings(DIR_PATH, outputDir)
+    const yamlMapping = mappings.find(m => m.sourceFile.endsWith('yaml_input.yaml'))
+    vi.expect(yamlMapping?.targetFile).toBe(path.join(outputDir, 'yaml_input.d.ts'))
   })
 })
