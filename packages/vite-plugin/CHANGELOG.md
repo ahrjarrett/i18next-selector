@@ -1,5 +1,11 @@
 # @i18next-selector/vite-plugin
 
+## 0.0.19
+
+### Patch Changes
+
+- [#138](https://github.com/ahrjarrett/i18next-selector/pull/138) [`fbc2ef3`](https://github.com/ahrjarrett/i18next-selector/commit/fbc2ef3264d142bcd26abc2b241a7f590a44c98b) Thanks [@dios-david](https://github.com/dios-david)! - Add outputDir option to configure where generated .d.ts files are placed
+
 ## 0.0.18
 
 ### Patch Changes
